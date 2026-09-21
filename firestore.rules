@@ -1,0 +1,347 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function textInRange(value, minimum, maximum) {
+      return value is string
+        && value == value.trim()
+        && value.size() >= minimum
+        && value.size() <= maximum;
+    }
+
+    function validDateKey(value) {
+      return value is string
+        && value.matches('[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])');
+    }
+
+    function twoDigits(value) {
+      return value < 10 ? '0' + string(value) : string(value);
+    }
+
+    function dateKeyFor(value) {
+      return string(value.year()) + '-' + twoDigits(value.month()) + '-' + twoDigits(value.day());
+    }
+
+    function taipeiNow() {
+      return request.time + duration.value(8, 'h');
+    }
+
+    function todayKey() {
+      return dateKeyFor(taipeiNow());
+    }
+
+    function earliestBackfillKey() {
+      return dateKeyFor(taipeiNow() - duration.value(7, 'd'));
+    }
+
+    function competitionData(competitionId) {
+      return get(/databases/$(database)/documents/competitions/$(competitionId)).data;
+    }
+
+    function competitionDataAfter(competitionId) {
+      return getAfter(/databases/$(database)/documents/competitions/$(competitionId)).data;
+    }
+
+    function isCompetitionMember(competitionId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/competitions/$(competitionId)/members/$(request.auth.uid));
+    }
+
+    function isCompetitionHost(competitionId) {
+      return signedIn() && competitionData(competitionId).createdBy == request.auth.uid;
+    }
+
+    function competitionIsActive(competitionId) {
+      return competitionData(competitionId).status == 'active'
+        && todayKey() <= competitionData(competitionId).endDate;
+    }
+
+    function validProfileData(uid, data) {
+      return data.keys().hasAll([
+          'uid', 'nickname', 'heightCm', 'avatarId', 'email', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid', 'nickname', 'heightCm', 'avatarId', 'email',
+          'achievementStats', 'createdAt', 'updatedAt'
+        ])
+        && data.uid == uid
+        && textInRange(data.nickname, 1, 24)
+        && data.heightCm is number
+        && data.heightCm >= 80
+        && data.heightCm <= 250
+        && textInRange(data.avatarId, 1, 128)
+        && data.email is string
+        && data.email == request.auth.token.email
+        && (!data.keys().hasAny(['achievementStats']) || data.achievementStats is map)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function validWeightRecordData(dateKey, data) {
+      return data.keys().hasAll([
+          'dateKey', 'weightKg', 'stickerId', 'source', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'dateKey', 'weightKg', 'stickerId', 'source', 'createdAt', 'updatedAt'
+        ])
+        && data.dateKey == dateKey
+        && validDateKey(data.dateKey)
+        && data.weightKg is number
+        && data.weightKg >= 20
+        && data.weightKg <= 500
+        && (data.stickerId == null || textInRange(data.stickerId, 1, 128))
+        && data.source in ['normal', 'backfill']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function validNewRecordDate(data) {
+      return (data.source == 'normal' && data.dateKey == todayKey())
+        || (data.source == 'backfill'
+          && data.dateKey < todayKey()
+          && data.dateKey >= earliestBackfillKey());
+    }
+
+    function validCompetitionData(competitionId, data) {
+      return data.keys().hasAll([
+          'id', 'name', 'startDate', 'endDate', 'inviteCode',
+          'createdBy', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'name', 'startDate', 'endDate', 'inviteCode',
+          'createdBy', 'status', 'createdAt', 'updatedAt'
+        ])
+        && data.id == competitionId
+        && textInRange(data.name, 1, 24)
+        && validDateKey(data.startDate)
+        && validDateKey(data.endDate)
+        && data.startDate <= data.endDate
+        && data.endDate >= todayKey()
+        && data.inviteCode is string
+        && data.inviteCode.matches('[A-Z]{6}')
+        && data.createdBy is string
+        && data.status == 'active'
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function validInviteData(inviteCode, data) {
+      return inviteCode.matches('[A-Z]{6}')
+        && data.keys().hasAll([
+          'competitionId', 'competitionName', 'startDate', 'endDate',
+          'createdBy', 'active', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'competitionId', 'competitionName', 'startDate', 'endDate',
+          'createdBy', 'active', 'createdAt', 'updatedAt'
+        ])
+        && data.competitionId is string
+        && textInRange(data.competitionName, 1, 24)
+        && validDateKey(data.startDate)
+        && validDateKey(data.endDate)
+        && data.startDate <= data.endDate
+        && data.createdBy is string
+        && data.active is bool
+        && data.createdAt is timestamp
+        && (!data.keys().hasAny(['updatedAt']) || data.updatedAt is timestamp);
+    }
+
+    function validMemberData(competitionId, uid, data) {
+      return data.keys().hasAll([
+          'uid', 'competitionId', 'nickname', 'avatarId', 'role',
+          'provisionalLossPct', 'provisionalRank', 'joinedAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid', 'competitionId', 'inviteCode', 'nickname', 'avatarId', 'role',
+          'provisionalLossPct', 'provisionalRank', 'provisionalAsOf',
+          'percentageCurve', 'joinedAt', 'updatedAt'
+        ])
+        && data.uid == uid
+        && data.competitionId == competitionId
+        && textInRange(data.nickname, 1, 24)
+        && textInRange(data.avatarId, 1, 128)
+        && data.role in ['host', 'member']
+        && (data.provisionalLossPct == null
+          || (data.provisionalLossPct is number
+            && data.provisionalLossPct >= -2500
+            && data.provisionalLossPct <= 100))
+        && (data.provisionalRank == null
+          || (data.provisionalRank is int && data.provisionalRank >= 1))
+        && (!data.keys().hasAny(['provisionalAsOf'])
+          || data.provisionalAsOf == null
+          || validDateKey(data.provisionalAsOf))
+        && (!data.keys().hasAny(['percentageCurve'])
+          || (data.percentageCurve is list && data.percentageCurve.size() <= 400))
+        && data.joinedAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function memberMatchesProfile(uid, data) {
+      return data.nickname == get(/databases/$(database)/documents/users/$(uid)).data.nickname
+        && data.avatarId == get(/databases/$(database)/documents/users/$(uid)).data.avatarId;
+    }
+
+    function validHostMemberCreate(competitionId, uid, data) {
+      return data.role == 'host'
+        && !data.keys().hasAny(['inviteCode'])
+        && competitionDataAfter(competitionId).createdBy == uid
+        && competitionDataAfter(competitionId).status == 'active';
+    }
+
+    function validParticipantMemberCreate(competitionId, data) {
+      return data.keys().hasAll(['inviteCode'])
+        && data.role == 'member'
+        && data.inviteCode.matches('[A-Z]{6}')
+        && competitionDataAfter(competitionId).status == 'active'
+        && todayKey() <= competitionDataAfter(competitionId).endDate
+        && get(/databases/$(database)/documents/competitionInviteCodes/$(data.inviteCode)).data.active == true
+        && get(/databases/$(database)/documents/competitionInviteCodes/$(data.inviteCode)).data.competitionId == competitionId;
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow list: if false;
+      allow create: if isOwner(uid)
+        && validProfileData(uid, request.resource.data)
+        && !request.resource.data.keys().hasAny(['achievementStats'])
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isOwner(uid)
+        && validProfileData(uid, request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nickname', 'heightCm', 'avatarId', 'email', 'updatedAt'
+        ])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+
+      match /weightRecords/{dateKey} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && validWeightRecordData(dateKey, request.resource.data)
+          && validNewRecordDate(request.resource.data)
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+        allow update: if isOwner(uid)
+          && validWeightRecordData(dateKey, request.resource.data)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'weightKg', 'stickerId', 'updatedAt'
+          ])
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if isOwner(uid);
+      }
+    }
+
+    match /competitionInviteCodes/{inviteCode} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && validInviteData(inviteCode, request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.active == true
+        && request.resource.data.createdAt == request.time
+        && !request.resource.data.keys().hasAny(['updatedAt'])
+        && competitionDataAfter(request.resource.data.competitionId).inviteCode == inviteCode
+        && competitionDataAfter(request.resource.data.competitionId).createdBy == request.auth.uid
+        && competitionDataAfter(request.resource.data.competitionId).name == request.resource.data.competitionName
+        && competitionDataAfter(request.resource.data.competitionId).startDate == request.resource.data.startDate
+        && competitionDataAfter(request.resource.data.competitionId).endDate == request.resource.data.endDate
+        && existsAfter(/databases/$(database)/documents/competitions/$(request.resource.data.competitionId)/members/$(request.auth.uid));
+      allow update: if signedIn()
+        && validInviteData(inviteCode, request.resource.data)
+        && isCompetitionHost(resource.data.competitionId)
+        && competitionIsActive(resource.data.competitionId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'competitionName', 'startDate', 'endDate', 'updatedAt'
+        ])
+        && request.resource.data.updatedAt == request.time
+        && competitionDataAfter(resource.data.competitionId).name == request.resource.data.competitionName
+        && competitionDataAfter(resource.data.competitionId).startDate == request.resource.data.startDate
+        && competitionDataAfter(resource.data.competitionId).endDate == request.resource.data.endDate;
+      allow delete: if false;
+    }
+
+    match /competitions/{competitionId} {
+      allow get: if isCompetitionMember(competitionId);
+      allow list: if false;
+      allow create: if signedIn()
+        && validCompetitionData(competitionId, request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(request.resource.data.inviteCode)).data.competitionId == competitionId
+        && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(request.resource.data.inviteCode)).data.createdBy == request.auth.uid
+        && existsAfter(/databases/$(database)/documents/competitions/$(competitionId)/members/$(request.auth.uid));
+      allow update: if isCompetitionHost(competitionId)
+        && competitionIsActive(competitionId)
+        && validCompetitionData(competitionId, request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name', 'startDate', 'endDate', 'updatedAt'
+        ])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            'startDate', 'endDate'
+          ]) || (todayKey() < resource.data.startDate
+            && request.resource.data.startDate >= todayKey()))
+        && request.resource.data.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.competitionName == request.resource.data.name
+        && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.startDate == request.resource.data.startDate
+        && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.endDate == request.resource.data.endDate;
+      allow delete: if false;
+
+      match /members/{uid} {
+        allow read: if isCompetitionMember(competitionId);
+        allow create: if isOwner(uid)
+          && validMemberData(competitionId, uid, request.resource.data)
+          && memberMatchesProfile(uid, request.resource.data)
+          && request.resource.data.joinedAt == request.time
+          && request.resource.data.updatedAt == request.time
+          && (validHostMemberCreate(competitionId, uid, request.resource.data)
+            || validParticipantMemberCreate(competitionId, request.resource.data));
+        allow update: if isOwner(uid)
+          && competitionIsActive(competitionId)
+          && validMemberData(competitionId, uid, request.resource.data)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'nickname', 'avatarId', 'provisionalLossPct', 'provisionalRank',
+            'provisionalAsOf', 'percentageCurve', 'updatedAt'
+          ])
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny([
+              'nickname', 'avatarId'
+            ]) || memberMatchesProfile(uid, request.resource.data))
+          && (request.resource.data.provisionalAsOf == null
+            || (request.resource.data.provisionalAsOf >= competitionData(competitionId).startDate
+              && request.resource.data.provisionalAsOf <= competitionData(competitionId).endDate
+              && request.resource.data.provisionalAsOf <= todayKey()))
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if todayKey() < competitionData(competitionId).startDate
+          && ((isOwner(uid) && resource.data.role == 'member')
+            || (isCompetitionHost(competitionId) && uid != request.auth.uid));
+      }
+
+      match /certificate/{documentId} {
+        allow read: if isCompetitionMember(competitionId);
+        allow write: if false;
+      }
+
+      match /certificateParticipants/{uid} {
+        allow read: if isCompetitionMember(competitionId);
+        allow write: if false;
+      }
+
+      match /certificatePrivate/{uid} {
+        allow get: if isOwner(uid) && isCompetitionMember(competitionId);
+        allow list, write: if false;
+      }
+    }
+
+    match /{path=**}/members/{memberId} {
+      allow list: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+  }
+}

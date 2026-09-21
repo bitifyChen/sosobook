@@ -1,0 +1,39 @@
+[
+  {
+    "id": "daily-record",
+    "question": "每天要記錄什麼？",
+    "answer": "每天最多記錄一次體重，單位是 kg。貼紙可以選擇，也可以選「無」。"
+  },
+  {
+    "id": "calendar-history",
+    "question": "日曆可以查看哪些資料？",
+    "answer": "點擊有紀錄的日期，可以查看當日體重、BMI、與前一次紀錄的差異，以及當天選擇的貼紙。"
+  },
+  {
+    "id": "backfill",
+    "question": "可以補登過去的體重嗎？",
+    "answer": "可以補登最近 7 天的空白日期，補登紀錄會在日曆與詳情中標示為「補登」。"
+  },
+  {
+    "id": "competition-ranking",
+    "question": "競賽如何計算排名？",
+    "answer": "競賽排名使用減重百分比計算；競賽結束後會依照正式結算結果保存完賽紀錄。"
+  },
+  {
+    "id": "badge",
+    "question": "徽章什麼時候會解鎖？",
+    "answer": "完成指定的體重紀錄、競賽完賽或冠軍次數後，系統會自動判斷並顯示對應徽章。"
+  },
+  {
+    "id": "iphone-add-to-home-screen",
+    "question": "如何把 SosoBook 加到 iPhone 主畫面？",
+    "answer": "請使用 Safari 開啟 SosoBook，加入主畫面後就能像 App 一樣快速啟動。",
+    "steps": [
+      "用 Safari 開啟 SosoBook 網站。",
+      "點擊分享按鈕，也就是方框加向上箭頭的圖示。",
+      "向上滑動分享選單，點選「加入主畫面」。如果沒有看到，請在選單底部點「編輯動作」後加入。",
+      "確認主畫面上的名稱後，點擊右上角「加入」。",
+      "回到 iPhone 主畫面，點擊 SosoBook 圖示即可開啟。"
+    ]
+  }
+]

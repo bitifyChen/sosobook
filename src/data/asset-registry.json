@@ -1,0 +1,823 @@
+{
+  "schemaVersion": 1,
+  "avatars": [
+    {
+      "key": "avatar-1",
+      "assetId": "fe452698-d6e3-42a9-95a5-be070fdeb316",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "1c4548911cb25fa944d29c872022668c3d0c0d431ab7258bbdc4a64fa0a52b0f",
+      "file": "avatar/fe452698-d6e3-42a9-95a5-be070fdeb316-v001.webp",
+      "alt": "人物角色一",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/fe452698-d6e3-42a9-95a5-be070fdeb316-v001.webp",
+          "contentSha256": "1c4548911cb25fa944d29c872022668c3d0c0d431ab7258bbdc4a64fa0a52b0f",
+          "createdAt": "2026-09-21T02:23:05.967Z"
+        }
+      ]
+    },
+    {
+      "key": "avatar-2",
+      "assetId": "0f83e7ea-d96b-41fd-bbaf-bed34101b293",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "66b621f771e0a418d42a12904ecb8467f044249a8ef58cdada463501e981256b",
+      "file": "avatar/0f83e7ea-d96b-41fd-bbaf-bed34101b293-v001.webp",
+      "alt": "人物角色二",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/0f83e7ea-d96b-41fd-bbaf-bed34101b293-v001.webp",
+          "contentSha256": "66b621f771e0a418d42a12904ecb8467f044249a8ef58cdada463501e981256b",
+          "createdAt": "2026-09-21T02:23:06.401Z"
+        }
+      ]
+    },
+    {
+      "key": "avatar-3",
+      "assetId": "ff63b89d-9b6f-48ba-a767-c28f9a0cfdd4",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "9e18000df174c34edcaff7a6eb136dc0903494866c6e4b69a53c44f87f19fb68",
+      "file": "avatar/ff63b89d-9b6f-48ba-a767-c28f9a0cfdd4-v001.webp",
+      "alt": "人物角色三",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/ff63b89d-9b6f-48ba-a767-c28f9a0cfdd4-v001.webp",
+          "contentSha256": "9e18000df174c34edcaff7a6eb136dc0903494866c6e4b69a53c44f87f19fb68",
+          "createdAt": "2026-09-21T02:23:06.856Z"
+        }
+      ]
+    },
+    {
+      "key": "avatar-4",
+      "assetId": "507ac27b-4150-4585-9db1-8678adb0bd8f",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "9e032191459babd6b9aeb0882bcc07b7f9b5dd85e25cc208bedff692c3e1f8c5",
+      "file": "avatar/507ac27b-4150-4585-9db1-8678adb0bd8f-v001.webp",
+      "alt": "人物角色四",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/507ac27b-4150-4585-9db1-8678adb0bd8f-v001.webp",
+          "contentSha256": "9e032191459babd6b9aeb0882bcc07b7f9b5dd85e25cc208bedff692c3e1f8c5",
+          "createdAt": "2026-09-21T02:23:07.335Z"
+        }
+      ]
+    },
+    {
+      "key": "avatar-5",
+      "assetId": "419f3a40-58e1-4a49-be6e-78345a951eca",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "3f70c9bbdd1df5e1d9f25d0f0d228c33a936a4da7b238e64465edabecf3dd6eb",
+      "file": "avatar/419f3a40-58e1-4a49-be6e-78345a951eca-v001.webp",
+      "alt": "人物角色 5",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/419f3a40-58e1-4a49-be6e-78345a951eca-v001.webp",
+          "contentSha256": "3f70c9bbdd1df5e1d9f25d0f0d228c33a936a4da7b238e64465edabecf3dd6eb",
+          "createdAt": "2026-09-21T02:48:11.221Z"
+        }
+      ]
+    },
+    {
+      "key": "avatar-6",
+      "assetId": "db1188e7-9a2c-4eb7-b07d-c1c193a602ec",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "f97fe5ab62d9d27dfb111fca9dd8e6709bb2a613dec0075f66cc4a2e4a030eb1",
+      "file": "avatar/db1188e7-9a2c-4eb7-b07d-c1c193a602ec-v001.webp",
+      "alt": "人物角色 6",
+      "versions": [
+        {
+          "version": 1,
+          "file": "avatar/db1188e7-9a2c-4eb7-b07d-c1c193a602ec-v001.webp",
+          "contentSha256": "f97fe5ab62d9d27dfb111fca9dd8e6709bb2a613dec0075f66cc4a2e4a030eb1",
+          "createdAt": "2026-09-21T02:35:09.039Z"
+        }
+      ]
+    }
+  ],
+  "stickers": [
+    {
+      "key": "dumbbell",
+      "assetId": "864d56e4-6169-48d7-a50d-5564d7fa047a",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "e5c7e5d544c33fc56f71dfcc0008faf8ae0d116d57fd003b29cf01be6ee1502d",
+      "file": "sticker/864d56e4-6169-48d7-a50d-5564d7fa047a-v001.webp",
+      "alt": "啞鈴貼紙",
+      "label": "今天有力量",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/864d56e4-6169-48d7-a50d-5564d7fa047a-v001.webp",
+          "contentSha256": "e5c7e5d544c33fc56f71dfcc0008faf8ae0d116d57fd003b29cf01be6ee1502d",
+          "createdAt": "2026-09-21T02:23:08.676Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-10",
+      "assetId": "d03b5d04-fe8a-44c6-8a15-0507c2c1a4b6",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "6c40e5226655d9b0b9f3b3f2fa092db00b340dae31696866e012d05c0102565a",
+      "file": "sticker/d03b5d04-fe8a-44c6-8a15-0507c2c1a4b6-v001.webp",
+      "alt": "心情貼紙十",
+      "label": "心情貼紙 10",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/d03b5d04-fe8a-44c6-8a15-0507c2c1a4b6-v001.webp",
+          "contentSha256": "6c40e5226655d9b0b9f3b3f2fa092db00b340dae31696866e012d05c0102565a",
+          "createdAt": "2026-09-21T02:23:08.941Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-2",
+      "assetId": "f5a3e6e4-382c-4d67-a665-26476d603f59",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "36e9744ba314a6bd55e32b59c3fa97cb6a11fb5424e0e2ca27be344a5a4eb7e7",
+      "file": "sticker/f5a3e6e4-382c-4d67-a665-26476d603f59-v001.webp",
+      "alt": "心情貼紙二",
+      "label": "心情貼紙 2",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/f5a3e6e4-382c-4d67-a665-26476d603f59-v001.webp",
+          "contentSha256": "36e9744ba314a6bd55e32b59c3fa97cb6a11fb5424e0e2ca27be344a5a4eb7e7",
+          "createdAt": "2026-09-21T02:23:09.251Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-3",
+      "assetId": "ebde79f3-d92f-4510-bf79-e65886bc6035",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "485232458ca3b0177cfae2c2f3c5d3a8650f1693a732b3a84e184d577c0d4367",
+      "file": "sticker/ebde79f3-d92f-4510-bf79-e65886bc6035-v001.webp",
+      "alt": "心情貼紙三",
+      "label": "心情貼紙 3",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/ebde79f3-d92f-4510-bf79-e65886bc6035-v001.webp",
+          "contentSha256": "485232458ca3b0177cfae2c2f3c5d3a8650f1693a732b3a84e184d577c0d4367",
+          "createdAt": "2026-09-21T02:23:09.589Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-4",
+      "assetId": "3b937410-c83c-4383-8a89-6a397c7261ae",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "0e523c03fbfdcd1b2b2894be8b6a9fb154c58dc77f9cd4f7d79f11893eff8252",
+      "file": "sticker/3b937410-c83c-4383-8a89-6a397c7261ae-v001.webp",
+      "alt": "心情貼紙四",
+      "label": "心情貼紙 4",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/3b937410-c83c-4383-8a89-6a397c7261ae-v001.webp",
+          "contentSha256": "0e523c03fbfdcd1b2b2894be8b6a9fb154c58dc77f9cd4f7d79f11893eff8252",
+          "createdAt": "2026-09-21T02:23:09.897Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-5",
+      "assetId": "828c817c-7d4c-4851-a449-ef16bc2ae1a1",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "86790eb3d220e18a9c513a2cdf5af1e564840dccb0e0cafda12d8a1f69e43b80",
+      "file": "sticker/828c817c-7d4c-4851-a449-ef16bc2ae1a1-v001.webp",
+      "alt": "心情貼紙五",
+      "label": "心情貼紙 5",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/828c817c-7d4c-4851-a449-ef16bc2ae1a1-v001.webp",
+          "contentSha256": "86790eb3d220e18a9c513a2cdf5af1e564840dccb0e0cafda12d8a1f69e43b80",
+          "createdAt": "2026-09-21T02:23:10.192Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-6",
+      "assetId": "0d66c3a4-517b-4d09-9a7b-007bab079566",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "2e1a42c45d0c0088780d985933d431a18337c34d5f40a7aa74cfcce2262c643f",
+      "file": "sticker/0d66c3a4-517b-4d09-9a7b-007bab079566-v001.webp",
+      "alt": "心情貼紙六",
+      "label": "心情貼紙 6",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/0d66c3a4-517b-4d09-9a7b-007bab079566-v001.webp",
+          "contentSha256": "2e1a42c45d0c0088780d985933d431a18337c34d5f40a7aa74cfcce2262c643f",
+          "createdAt": "2026-09-21T02:23:10.515Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-7",
+      "assetId": "9e3d92e4-e286-4679-8f44-dfd64453022f",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "04d075c381d6764df7b7f81e8ab83e49dd2795604b649f6e7b2712a43dd2a629",
+      "file": "sticker/9e3d92e4-e286-4679-8f44-dfd64453022f-v001.webp",
+      "alt": "心情貼紙七",
+      "label": "心情貼紙 7",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/9e3d92e4-e286-4679-8f44-dfd64453022f-v001.webp",
+          "contentSha256": "04d075c381d6764df7b7f81e8ab83e49dd2795604b649f6e7b2712a43dd2a629",
+          "createdAt": "2026-09-21T02:23:10.868Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-8",
+      "assetId": "2fa7fb0b-e0e8-4cd8-b3e5-c5917171e52a",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "2e0c7fa8ef6c2ff616045770eddadda69a0d2cbec1c2b044367bb3108d3bad9b",
+      "file": "sticker/2fa7fb0b-e0e8-4cd8-b3e5-c5917171e52a-v001.webp",
+      "alt": "心情貼紙八",
+      "label": "心情貼紙 8",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/2fa7fb0b-e0e8-4cd8-b3e5-c5917171e52a-v001.webp",
+          "contentSha256": "2e0c7fa8ef6c2ff616045770eddadda69a0d2cbec1c2b044367bb3108d3bad9b",
+          "createdAt": "2026-09-21T02:23:11.183Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-9",
+      "assetId": "0917f1b5-df11-416c-948c-6cbe82af4c8c",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "e60eccfbfd1448499d6a5f6113749488c2c3ba48250994ece6e65b3cf3c8467f",
+      "file": "sticker/0917f1b5-df11-416c-948c-6cbe82af4c8c-v001.webp",
+      "alt": "心情貼紙九",
+      "label": "心情貼紙 9",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/0917f1b5-df11-416c-948c-6cbe82af4c8c-v001.webp",
+          "contentSha256": "e60eccfbfd1448499d6a5f6113749488c2c3ba48250994ece6e65b3cf3c8467f",
+          "createdAt": "2026-09-21T02:23:11.605Z"
+        }
+      ]
+    }
+  ],
+  "badges": [
+    {
+      "key": "badge-1",
+      "assetId": "923a9ce1-a243-4187-9f5a-81682c0d7daa",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "44ae4728c1953af8fdef9052b4f552d1c0b53a4f2a318d8661c7657d72b5cd10",
+      "file": "badge/champion/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
+      "alt": "冠軍獎盃 1",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
+          "contentSha256": "44ae4728c1953af8fdef9052b4f552d1c0b53a4f2a318d8661c7657d72b5cd10",
+          "createdAt": "2026-09-21T06:08:50.101Z"
+        }
+      ],
+      "threshold": 1
+    },
+    {
+      "key": "badge-10",
+      "assetId": "5d9ec7b0-6995-4a7a-9753-4f6465c64ebd",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "d9c2d747e712677fa32a530d9292b1efdcddcc6dedb56897513bbc2ccc20cf1a",
+      "file": "badge/champion/5d9ec7b0-6995-4a7a-9753-4f6465c64ebd-v001.webp",
+      "alt": "成就徽章",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/5d9ec7b0-6995-4a7a-9753-4f6465c64ebd-v001.webp",
+          "contentSha256": "d9c2d747e712677fa32a530d9292b1efdcddcc6dedb56897513bbc2ccc20cf1a",
+          "createdAt": "2026-09-21T06:17:59.589Z"
+        }
+      ]
+    },
+    {
+      "key": "badge-11",
+      "assetId": "d6bf87d2-0813-4b48-9c7f-023efb972d6a",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "9d93545fadcf526f3fb823c983e544a01ae1da3648487f45bdc06b62f68a69d6",
+      "file": "badge/champion/d6bf87d2-0813-4b48-9c7f-023efb972d6a-v001.webp",
+      "alt": "成就徽章",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/d6bf87d2-0813-4b48-9c7f-023efb972d6a-v001.webp",
+          "contentSha256": "9d93545fadcf526f3fb823c983e544a01ae1da3648487f45bdc06b62f68a69d6",
+          "createdAt": "2026-09-21T06:17:59.967Z"
+        }
+      ]
+    },
+    {
+      "key": "badge-12",
+      "assetId": "58943449-a5a2-4c9f-b083-2d3fe89144a2",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "a153edd48983757734032e2f39768d005fb6cdc1d45e95b39ff1c4f8d7d9a56f",
+      "file": "badge/champion/58943449-a5a2-4c9f-b083-2d3fe89144a2-v001.webp",
+      "alt": "成就徽章",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/58943449-a5a2-4c9f-b083-2d3fe89144a2-v001.webp",
+          "contentSha256": "a153edd48983757734032e2f39768d005fb6cdc1d45e95b39ff1c4f8d7d9a56f",
+          "createdAt": "2026-09-21T06:18:00.312Z"
+        }
+      ]
+    },
+    {
+      "key": "badge-2",
+      "assetId": "7138c751-1ad8-41d5-8404-5532bafbeeab",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "f8c24bfcac424c4a5e67004e6eeb96a454563218b3d357ea8a994ca27351d333",
+      "file": "badge/champion/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
+      "alt": "冠軍獎盃 5",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
+          "contentSha256": "f8c24bfcac424c4a5e67004e6eeb96a454563218b3d357ea8a994ca27351d333",
+          "createdAt": "2026-09-21T06:08:50.789Z"
+        }
+      ],
+      "threshold": 5
+    },
+    {
+      "key": "badge-3",
+      "assetId": "e10ee956-0d36-46c7-9474-15e61ee337ae",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "8f1732ada3e688640955248d94ca9f68ea2c7ba7ce2d7c8805074a7335b50c85",
+      "file": "badge/champion/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp",
+      "alt": "冠軍獎盃 10",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp",
+          "contentSha256": "8f1732ada3e688640955248d94ca9f68ea2c7ba7ce2d7c8805074a7335b50c85",
+          "createdAt": "2026-09-21T06:08:51.250Z"
+        }
+      ],
+      "threshold": 10
+    },
+    {
+      "key": "badge-4",
+      "assetId": "233fff42-ba89-431a-8b75-0447c2cdd389",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "b2bdf3670db4874c231320e8823ec04c344bbe213b232f97ae958cb587553ce5",
+      "file": "badge/champion/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
+      "alt": "冠軍獎盃 30",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
+          "contentSha256": "b2bdf3670db4874c231320e8823ec04c344bbe213b232f97ae958cb587553ce5",
+          "createdAt": "2026-09-21T06:08:51.619Z"
+        }
+      ],
+      "threshold": 30
+    },
+    {
+      "key": "badge-5",
+      "assetId": "b2bbe965-d9ed-4b72-a63c-c75383a09e89",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "b5a56505ea1781ce03fe014b04181153dbf2978d9560b90a2e59d2cee201bb09",
+      "file": "badge/champion/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp",
+      "alt": "冠軍獎盃 50",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp",
+          "contentSha256": "b5a56505ea1781ce03fe014b04181153dbf2978d9560b90a2e59d2cee201bb09",
+          "createdAt": "2026-09-21T06:08:51.999Z"
+        }
+      ],
+      "threshold": 50
+    },
+    {
+      "key": "badge-6",
+      "assetId": "bf536f2e-38a6-4aee-98ca-c1776ddecbe5",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "23179e1e48f88b600da41b86c8ba134560f2abe2bc0eec53e8eec4b1606f7ecb",
+      "file": "badge/champion/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
+      "alt": "冠軍獎盃 100",
+      "series": "champion",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/champion/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
+          "contentSha256": "23179e1e48f88b600da41b86c8ba134560f2abe2bc0eec53e8eec4b1606f7ecb",
+          "createdAt": "2026-09-21T06:08:52.376Z"
+        }
+      ],
+      "threshold": 100
+    },
+    {
+      "key": "badge-7",
+      "assetId": "39ad2431-5e44-49b6-b9b6-4da67a2e86d9",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "9ad33bdd7a7bc7240e86b775fffbe05872c18873a07d6de462e812ac286c0288",
+      "file": "badge/finish/39ad2431-5e44-49b6-b9b6-4da67a2e86d9-v001.webp",
+      "alt": "成就徽章",
+      "series": "finish",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/39ad2431-5e44-49b6-b9b6-4da67a2e86d9-v001.webp",
+          "contentSha256": "9ad33bdd7a7bc7240e86b775fffbe05872c18873a07d6de462e812ac286c0288",
+          "createdAt": "2026-09-21T06:11:24.722Z"
+        }
+      ],
+      "legacyFiles": ["badge/finish/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp"]
+    },
+    {
+      "key": "badge-8",
+      "assetId": "fa8788ba-b884-4ade-8998-5f7a9e1a6c93",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "5b015083749974b39d7cc7a2592577cbe6a52f35dea920548ea1a71ce6ebaf34",
+      "file": "badge/finish/fa8788ba-b884-4ade-8998-5f7a9e1a6c93-v001.webp",
+      "alt": "成就徽章",
+      "series": "finish",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/fa8788ba-b884-4ade-8998-5f7a9e1a6c93-v001.webp",
+          "contentSha256": "5b015083749974b39d7cc7a2592577cbe6a52f35dea920548ea1a71ce6ebaf34",
+          "createdAt": "2026-09-21T06:11:25.088Z"
+        }
+      ],
+      "legacyFiles": [
+        "badge/finish/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
+        "badge/finish/100.webp"
+      ]
+    },
+    {
+      "key": "badge-9",
+      "assetId": "42f351d2-d740-42a8-b837-e98eb85882dc",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "596f136c7dcda69dac60beb7c7d16be4206986226102bb8a4e75c16fb66ca8e6",
+      "file": "badge/finish/42f351d2-d740-42a8-b837-e98eb85882dc-v001.webp",
+      "alt": "成就徽章",
+      "series": "finish",
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/42f351d2-d740-42a8-b837-e98eb85882dc-v001.webp",
+          "contentSha256": "596f136c7dcda69dac60beb7c7d16be4206986226102bb8a4e75c16fb66ca8e6",
+          "createdAt": "2026-09-21T06:11:25.522Z"
+        }
+      ],
+      "legacyFiles": ["badge/finish/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp"]
+    },
+    {
+      "key": "finish-1",
+      "assetId": "cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "48d312aa6b5044018d26e07562d5b2568d2d49f72e6dc62b3271fddf90819a1b",
+      "file": "badge/finish/cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177-v001.webp",
+      "alt": "完賽徽章 1",
+      "series": "finish",
+      "threshold": 1,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177-v001.webp",
+          "contentSha256": "48d312aa6b5044018d26e07562d5b2568d2d49f72e6dc62b3271fddf90819a1b",
+          "createdAt": "2026-09-21T06:11:23.416Z"
+        }
+      ],
+      "legacyFiles": [
+        "badge/finish/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
+        "badge/finish/30.webp"
+      ]
+    },
+    {
+      "key": "finish-10",
+      "assetId": "f63fdac8-d600-43b0-b7ba-a01a80e9c1d7",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "6cd4b62846da64bb9ab4f0aab23ef665a48e790a5f9eb2cb0ea7b52f04f78792",
+      "file": "badge/finish/f63fdac8-d600-43b0-b7ba-a01a80e9c1d7-v001.webp",
+      "alt": "完賽徽章 10",
+      "series": "finish",
+      "threshold": 10,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/f63fdac8-d600-43b0-b7ba-a01a80e9c1d7-v001.webp",
+          "contentSha256": "6cd4b62846da64bb9ab4f0aab23ef665a48e790a5f9eb2cb0ea7b52f04f78792",
+          "createdAt": "2026-09-21T06:11:24.168Z"
+        }
+      ],
+      "legacyFiles": [
+        "badge/finish/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
+        "badge/finish/1.webp"
+      ]
+    },
+    {
+      "key": "finish-10",
+      "assetId": "9b83e8d8-d999-4419-a23d-04058e74f552",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "5c50bd8f515ed5dc26e5674dca5e55089d3546421b6a827c42bf7227fd105161",
+      "file": "badge/finish/9b83e8d8-d999-4419-a23d-04058e74f552-v001.webp",
+      "alt": "完賽徽章 10",
+      "series": "finish",
+      "threshold": 10,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/9b83e8d8-d999-4419-a23d-04058e74f552-v001.webp",
+          "contentSha256": "5c50bd8f515ed5dc26e5674dca5e55089d3546421b6a827c42bf7227fd105161",
+          "createdAt": "2026-09-21T06:18:00.733Z"
+        }
+      ],
+      "legacyFiles": ["badge/finish/10.webp"]
+    },
+    {
+      "key": "finish-5",
+      "assetId": "b52beea4-2621-4eb3-bdb6-f7903d1b6b47",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "12dbd7f15364d16262b57b0a6f250afa09543a082615a98c1609d6e2fb92005c",
+      "file": "badge/finish/b52beea4-2621-4eb3-bdb6-f7903d1b6b47-v001.webp",
+      "alt": "完賽徽章 5",
+      "series": "finish",
+      "threshold": 5,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/b52beea4-2621-4eb3-bdb6-f7903d1b6b47-v001.webp",
+          "contentSha256": "12dbd7f15364d16262b57b0a6f250afa09543a082615a98c1609d6e2fb92005c",
+          "createdAt": "2026-09-21T06:11:23.783Z"
+        }
+      ],
+      "legacyFiles": [
+        "badge/finish/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
+        "badge/finish/5.webp"
+      ]
+    },
+    {
+      "key": "finish-50",
+      "assetId": "b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "6898f5f02c93946964c05e029f1e054a51a18d61de2e7fa1a3b9438932ac94d7",
+      "file": "badge/finish/b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b-v001.webp",
+      "alt": "完賽徽章 50",
+      "series": "finish",
+      "threshold": 50,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/finish/b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b-v001.webp",
+          "contentSha256": "6898f5f02c93946964c05e029f1e054a51a18d61de2e7fa1a3b9438932ac94d7",
+          "createdAt": "2026-09-21T06:18:01.172Z"
+        }
+      ],
+      "legacyFiles": ["badge/finish/50.webp"]
+    },
+    {
+      "key": "record-1",
+      "assetId": "ddbfbe72-f4f9-424b-8102-f2e81ac62249",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "5d2fb7da95d35e624e4d0faf885f771f50868e34bea755f212f301bd04f63bf3",
+      "file": "badge/record/ddbfbe72-f4f9-424b-8102-f2e81ac62249-v001.webp",
+      "alt": "體重紀錄徽章 1",
+      "series": "record",
+      "threshold": 1,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/ddbfbe72-f4f9-424b-8102-f2e81ac62249-v001.webp",
+          "contentSha256": "5d2fb7da95d35e624e4d0faf885f771f50868e34bea755f212f301bd04f63bf3",
+          "createdAt": "2026-09-21T04:38:44.243Z"
+        }
+      ]
+    },
+    {
+      "key": "record-1",
+      "assetId": "4d91f871-4388-4ed2-9828-b5fd757b8a9d",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "0a4060c8bd385892edaf0474b6da96e507a25621521f1643f7652c7effa94af3",
+      "file": "badge/record/4d91f871-4388-4ed2-9828-b5fd757b8a9d-v001.webp",
+      "alt": "體重紀錄徽章 1",
+      "series": "record",
+      "threshold": 1,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/4d91f871-4388-4ed2-9828-b5fd757b8a9d-v001.webp",
+          "contentSha256": "0a4060c8bd385892edaf0474b6da96e507a25621521f1643f7652c7effa94af3",
+          "createdAt": "2026-09-21T06:18:01.522Z"
+        }
+      ],
+      "legacyFiles": ["badge/record/1.webp"]
+    },
+    {
+      "key": "record-30",
+      "assetId": "2251afdd-71bf-4398-be06-a5e706b1d1df",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "1e6aa381bfd79ed9f74244ae9b9eae9912ded08e06cf7117c361ed319b8c022d",
+      "file": "badge/record/2251afdd-71bf-4398-be06-a5e706b1d1df-v001.webp",
+      "alt": "體重紀錄徽章 30",
+      "series": "record",
+      "threshold": 30,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/2251afdd-71bf-4398-be06-a5e706b1d1df-v001.webp",
+          "contentSha256": "1e6aa381bfd79ed9f74244ae9b9eae9912ded08e06cf7117c361ed319b8c022d",
+          "createdAt": "2026-09-21T04:38:45.080Z"
+        }
+      ]
+    },
+    {
+      "key": "record-30",
+      "assetId": "bddb8a00-e4f9-4e4b-9701-3e4da8b4297f",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "8fbdb282a88a63371aaa1e3e5d1cb56207cff15abbd463cd164b7d9e2c2e06d7",
+      "file": "badge/record/bddb8a00-e4f9-4e4b-9701-3e4da8b4297f-v001.webp",
+      "alt": "體重紀錄徽章 30",
+      "series": "record",
+      "threshold": 30,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/bddb8a00-e4f9-4e4b-9701-3e4da8b4297f-v001.webp",
+          "contentSha256": "8fbdb282a88a63371aaa1e3e5d1cb56207cff15abbd463cd164b7d9e2c2e06d7",
+          "createdAt": "2026-09-21T06:18:01.973Z"
+        }
+      ],
+      "legacyFiles": ["badge/record/30.webp"]
+    },
+    {
+      "key": "record-5",
+      "assetId": "77ca7955-f3a0-4cea-b7bc-d4088cad2501",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "2b9c618375e7d4a7ca5e37222f154782f4e5e4531164d491a4a51869c3ea7ca6",
+      "file": "badge/record/77ca7955-f3a0-4cea-b7bc-d4088cad2501-v001.webp",
+      "alt": "體重紀錄徽章 5",
+      "series": "record",
+      "threshold": 5,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/77ca7955-f3a0-4cea-b7bc-d4088cad2501-v001.webp",
+          "contentSha256": "2b9c618375e7d4a7ca5e37222f154782f4e5e4531164d491a4a51869c3ea7ca6",
+          "createdAt": "2026-09-21T04:38:44.675Z"
+        }
+      ]
+    },
+    {
+      "key": "record-5",
+      "assetId": "cbc12826-62f0-4dc6-b3b6-b59d3bc5a477",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "e125947b767b96568c17a7142bc04d68be82eab01d0d891148044716b3c8690f",
+      "file": "badge/record/cbc12826-62f0-4dc6-b3b6-b59d3bc5a477-v001.webp",
+      "alt": "體重紀錄徽章 5",
+      "series": "record",
+      "threshold": 5,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/cbc12826-62f0-4dc6-b3b6-b59d3bc5a477-v001.webp",
+          "contentSha256": "e125947b767b96568c17a7142bc04d68be82eab01d0d891148044716b3c8690f",
+          "createdAt": "2026-09-21T06:18:02.427Z"
+        }
+      ],
+      "legacyFiles": ["badge/record/5.webp"]
+    },
+    {
+      "key": "record-60",
+      "assetId": "5f76b36b-620b-472e-9c3b-c088a65ee0da",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "d8af7e9666cd95ca78e9bcf9613ba7bcb41c4edc7c75adb649a8a8f5a4627fb2",
+      "file": "badge/record/5f76b36b-620b-472e-9c3b-c088a65ee0da-v001.webp",
+      "alt": "體重紀錄徽章 60",
+      "series": "record",
+      "threshold": 60,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/5f76b36b-620b-472e-9c3b-c088a65ee0da-v001.webp",
+          "contentSha256": "d8af7e9666cd95ca78e9bcf9613ba7bcb41c4edc7c75adb649a8a8f5a4627fb2",
+          "createdAt": "2026-09-21T04:38:45.523Z"
+        }
+      ]
+    },
+    {
+      "key": "record-60",
+      "assetId": "226393d3-0650-4063-b59e-10a812c443c3",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "402f920a2ab47eefcbef73988dec2407378624d31cb204c0eadc9ac4aab7aa99",
+      "file": "badge/record/226393d3-0650-4063-b59e-10a812c443c3-v001.webp",
+      "alt": "體重紀錄徽章 60",
+      "series": "record",
+      "threshold": 60,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/226393d3-0650-4063-b59e-10a812c443c3-v001.webp",
+          "contentSha256": "402f920a2ab47eefcbef73988dec2407378624d31cb204c0eadc9ac4aab7aa99",
+          "createdAt": "2026-09-21T06:18:02.888Z"
+        }
+      ],
+      "legacyFiles": ["badge/record/60.webp"]
+    },
+    {
+      "key": "record-90",
+      "assetId": "faf95efb-eca2-4fdb-aca8-54e9218d6532",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "b292a336aa55a5e2c6996bc64ed0cf8b6271ea6551abc00c77af8ceb95e5f5fa",
+      "file": "badge/record/faf95efb-eca2-4fdb-aca8-54e9218d6532-v001.webp",
+      "alt": "體重紀錄徽章 90",
+      "series": "record",
+      "threshold": 90,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/faf95efb-eca2-4fdb-aca8-54e9218d6532-v001.webp",
+          "contentSha256": "b292a336aa55a5e2c6996bc64ed0cf8b6271ea6551abc00c77af8ceb95e5f5fa",
+          "createdAt": "2026-09-21T04:38:45.788Z"
+        }
+      ]
+    },
+    {
+      "key": "record-90",
+      "assetId": "546a3e5f-cfe3-4a70-be26-919d56912c92",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "2442c7115cdeb606d9baca39a8444337c72cb876d8f637de52c8f387dcd46e59",
+      "file": "badge/record/546a3e5f-cfe3-4a70-be26-919d56912c92-v001.webp",
+      "alt": "體重紀錄徽章 90",
+      "series": "record",
+      "threshold": 90,
+      "versions": [
+        {
+          "version": 1,
+          "file": "badge/record/546a3e5f-cfe3-4a70-be26-919d56912c92-v001.webp",
+          "contentSha256": "2442c7115cdeb606d9baca39a8444337c72cb876d8f637de52c8f387dcd46e59",
+          "createdAt": "2026-09-21T06:18:03.187Z"
+        }
+      ],
+      "legacyFiles": ["badge/record/90.webp"]
+    }
+  ]
+}
