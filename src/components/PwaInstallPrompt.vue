@@ -153,9 +153,9 @@ onBeforeUnmount(() => {
         <strong id="pwa-install-title">先把 SosoBook 加到主畫面</strong>
         <p>加入後請從主畫面開啟，再使用 Google 登入一次即可。</p>
         <ol v-if="showIosSteps" class="pwa-install-steps">
-          <li>點選瀏覽器的「分享」按鈕。</li>
-          <li>選擇「加入主畫面」。</li>
-          <li>點選「新增」，再從主畫面開啟 SosoBook。</li>
+          <li><span aria-hidden="true">1</span>點選瀏覽器的「分享」按鈕。</li>
+          <li><span aria-hidden="true">2</span>選擇「加入主畫面」。</li>
+          <li><span aria-hidden="true">3</span>點選「新增」，再從主畫面開啟 SosoBook。</li>
         </ol>
       </div>
       <div class="pwa-install-actions">

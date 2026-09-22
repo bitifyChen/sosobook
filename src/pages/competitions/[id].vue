@@ -202,7 +202,16 @@ const leave = async () => {
 </script>
 
 <template>
-  <section v-if="item && !isEditRoute" class="page-section">
+  <section v-if="!store.state.competitionsReady && !isEditRoute" class="page-section">
+    <div class="paper-card competition-loading-state">
+      <div class="loader" aria-hidden="true"></div>
+      <div>
+        <h1>正在同步競賽</h1>
+        <p>手帳已經開啟，這場競賽的資料正在背景載入。</p>
+      </div>
+    </div>
+  </section>
+  <section v-else-if="item && !isEditRoute" class="page-section">
     <header class="page-header competition-detail-header">
       <div>
         <button class="back-button" @click="router.back()"><ArrowLeft />返回</button>

@@ -85,7 +85,14 @@ const openCompetition = (item) => {
 </script>
 
 <template>
-  <div v-if="items.length" class="competition-list">
+  <div v-if="!store.state.competitionsReady" class="paper-card competition-loading-state">
+    <div class="loader" aria-hidden="true"></div>
+    <div>
+      <h2>正在同步競賽</h2>
+      <p>手帳已經可以使用，競賽資料會在背景補上。</p>
+    </div>
+  </div>
+  <div v-else-if="items.length" class="competition-list">
     <RouterLink
       v-for="item in items"
       :key="item.id"

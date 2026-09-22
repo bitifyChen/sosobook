@@ -59,10 +59,38 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,png,svg,webp}'],
+          globPatterns: ['**/*.{js,css,html,svg}'],
           globIgnores: ['img/reference/**', 'app-icon.*', '**/*.{png,jpg,jpeg}'],
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
           navigateFallback: 'index.html',
+          runtimeCaching: [
+            {
+              urlPattern: ({ request, url }) =>
+                request.destination === 'image' && url.origin === self.location.origin,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'sosobook-images-v1',
+                cacheableResponse: { statuses: [0, 200] },
+                expiration: {
+                  maxEntries: 180,
+                  maxAgeSeconds: 60 * 60 * 24 * 90,
+                },
+              },
+            },
+            {
+              urlPattern: ({ request, url }) =>
+                request.destination === 'font' && url.origin === self.location.origin,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'sosobook-fonts-v1',
+                cacheableResponse: { statuses: [0, 200] },
+                expiration: {
+                  maxEntries: 32,
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                },
+              },
+            },
+          ],
         },
       }),
     ],

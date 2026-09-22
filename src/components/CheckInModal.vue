@@ -17,12 +17,27 @@ const weightInput = ref(null);
 const weightValue = ref(null);
 const stickerPanel = ref(null);
 const closeButton = ref(null);
+const loadedStickerSources = reactive(new Set());
+const failedStickerSources = reactive(new Set());
 const isToday = computed(() => dateKey.value === toDateKey());
 const userId = computed(() => store.state.user?.uid || 'guest');
 const stickerIds = stickers.map((sticker) => sticker.id);
 const selectedSticker = computed(
   () => stickers.find((sticker) => sticker.id === form.stickerId) || null
 );
+
+const stickerImageState = (source) => ({
+  'is-loading': !loadedStickerSources.has(source) && !failedStickerSources.has(source),
+  'is-error': failedStickerSources.has(source),
+});
+const markStickerLoaded = (source) => {
+  failedStickerSources.delete(source);
+  loadedStickerSources.add(source);
+};
+const markStickerFailed = (source) => {
+  loadedStickerSources.delete(source);
+  failedStickerSources.add(source);
+};
 
 const loadRecentStickers = () => {
   recentStickerIds.value = readRecentStickerIds(userId.value, stickerIds);
@@ -310,11 +325,23 @@ const remove = async () => {
                   <label
                     v-for="sticker in visibleStickers"
                     :key="sticker.id"
-                    :class="['sticker-option', { selected: form.stickerId === sticker.id }]"
+                    :class="[
+                      'sticker-option',
+                      stickerImageState(sticker.src),
+                      { selected: form.stickerId === sticker.id },
+                    ]"
                     :title="sticker.name"
+                    :aria-busy="!loadedStickerSources.has(sticker.src)"
                   >
                     <input v-model="form.stickerId" type="radio" :value="sticker.id" />
-                    <img :src="sticker.src" :alt="sticker.alt" />
+                    <img
+                      :src="sticker.src"
+                      :alt="sticker.alt"
+                      loading="lazy"
+                      decoding="async"
+                      @load="markStickerLoaded(sticker.src)"
+                      @error="markStickerFailed(sticker.src)"
+                    />
                   </label>
                 </div>
               </div>
@@ -332,10 +359,21 @@ const remove = async () => {
                 <label
                   v-for="sticker in recentStickers"
                   :key="sticker.id"
-                  :class="['sticker-option', { selected: form.stickerId === sticker.id }]"
+                  :class="[
+                    'sticker-option',
+                    stickerImageState(sticker.src),
+                    { selected: form.stickerId === sticker.id },
+                  ]"
+                  :aria-busy="!loadedStickerSources.has(sticker.src)"
                 >
                   <input v-model="form.stickerId" type="radio" :value="sticker.id" />
-                  <img :src="sticker.src" :alt="sticker.alt" />
+                  <img
+                    :src="sticker.src"
+                    :alt="sticker.alt"
+                    decoding="async"
+                    @load="markStickerLoaded(sticker.src)"
+                    @error="markStickerFailed(sticker.src)"
+                  />
                 </label>
               </div>
             </div>

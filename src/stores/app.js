@@ -22,6 +22,9 @@ export const useAppStore = defineStore('app', () => {
     authReady: false,
     busy: false,
     loginPending: false,
+    startupProgress: 8,
+    startupLabel: '正在確認登入狀態…',
+    competitionsReady: false,
     authError: null,
     user: null,
     profile: null,
@@ -243,13 +246,23 @@ export const useAppStore = defineStore('app', () => {
         throw cause;
       });
     try {
-      const [profile, records, competitionResult] = await Promise.all([
+      const [profile, records] = await Promise.all([
         loadTask('會員資料', repository.getProfile(state.user.uid)),
         loadTask('體重紀錄', repository.listRecords(state.user.uid)),
-        loadCompetitionsWithFallback(),
       ]);
       state.profile = profile;
       state.records = Array.isArray(records) ? records : [];
+      await loadCompetitionData();
+    } finally {
+      state.busy = false;
+    }
+  };
+
+  const loadCompetitionData = async () => {
+    if (!state.user) return;
+    state.competitionsReady = false;
+    try {
+      const competitionResult = await loadCompetitionsWithFallback();
       if (competitionResult.indexPending) {
         state.competitions = [];
         notifyCompetitionIndexPending();
@@ -264,7 +277,7 @@ export const useAppStore = defineStore('app', () => {
         }
       }
     } finally {
-      state.busy = false;
+      state.competitionsReady = true;
     }
   };
 
@@ -272,16 +285,36 @@ export const useAppStore = defineStore('app', () => {
     state.authReady = false;
     state.user = user;
     state.authError = null;
+    state.competitionsReady = false;
+    state.startupProgress = user ? 32 : 82;
+    state.startupLabel = user ? '正在載入會員資料與手帳…' : '正在準備登入頁面…';
 
     try {
-      if (user) await loadAll();
-      else {
+      if (user) {
+        state.busy = true;
+        const loadTask = (operation, task) =>
+          task.catch((cause) => {
+            cause.sosoBookOperation = operation;
+            throw cause;
+          });
+        const [profile, records] = await Promise.all([
+          loadTask('會員資料', repository.getProfile(user.uid)),
+          loadTask('體重紀錄', repository.listRecords(user.uid)),
+        ]);
+        state.profile = profile;
+        state.records = Array.isArray(records) ? records : [];
+        state.startupProgress = 100;
+        state.startupLabel = '手帳準備完成';
+      } else {
         state.profile = null;
         state.records = [];
         state.competitions = [];
         closeCheckIn();
         state.badgeViewerQueue = [];
         state.competitionCompletionQueue = [];
+        state.competitionsReady = true;
+        state.startupProgress = 100;
+        state.startupLabel = '登入頁面準備完成';
       }
     } catch (cause) {
       state.profile = null;
@@ -294,6 +327,13 @@ export const useAppStore = defineStore('app', () => {
     } finally {
       state.busy = false;
       state.authReady = true;
+    }
+
+    if (user && !state.authError) {
+      void loadCompetitionData().catch((cause) => {
+        console.error('[SosoBook] 競賽背景同步失敗。', cause);
+        notify('手帳已載入，但競賽資料暫時無法同步。', 'warning');
+      });
     }
   };
 
@@ -384,42 +424,56 @@ export const useAppStore = defineStore('app', () => {
 
   const refreshScores = async () => {
     const today = toDateKey();
-    for (const competition of state.competitions) {
-      if (competition.status === 'settled' || today > competition.endDate) continue;
+    const updates = state.competitions.map(async (competition) => {
+      if (competition.status === 'settled' || today > competition.endDate) return false;
+      const currentMember = competition.members.find((member) => member.uid === state.user.uid);
       const baseline = state.records.find((record) => record.dateKey === competition.startDate);
       const current = pickLatestRecordOnOrBefore(
         state.records,
         today < competition.endDate ? today : competition.endDate
       );
+      let payload;
       if (!baseline || !current || current.dateKey < competition.startDate) {
-        await repository.updateProvisionalScore(state.user.uid, competition.id, {
+        payload = {
           provisionalLossPct: null,
           provisionalRank: null,
           provisionalAsOf: null,
           percentageCurve: [],
-        });
-        continue;
+        };
+      } else {
+        const provisionalLossPct = calculateLossPercent(baseline.weightKg, current.weightKg);
+        const percentageCurve = buildPercentageCurve(
+          recordsInRange(state.records, competition.startDate, current.dateKey),
+          baseline.weightKg
+        );
+        const entries = rankEntries(
+          competition.members.map((member) => ({
+            ...member,
+            lossPct: member.uid === state.user.uid ? provisionalLossPct : member.provisionalLossPct,
+          }))
+        );
+        const own = entries.find((entry) => entry.uid === state.user.uid);
+        payload = {
+          provisionalLossPct,
+          provisionalRank: own?.rank || null,
+          provisionalAsOf: current.dateKey,
+          percentageCurve,
+        };
       }
-      const provisionalLossPct = calculateLossPercent(baseline.weightKg, current.weightKg);
-      const percentageCurve = buildPercentageCurve(
-        recordsInRange(state.records, competition.startDate, current.dateKey),
-        baseline.weightKg
-      );
-      const entries = rankEntries(
-        competition.members.map((member) => ({
-          ...member,
-          lossPct: member.uid === state.user.uid ? provisionalLossPct : member.provisionalLossPct,
-        }))
-      );
-      const own = entries.find((entry) => entry.uid === state.user.uid);
-      await repository.updateProvisionalScore(state.user.uid, competition.id, {
-        provisionalLossPct,
-        provisionalRank: own?.rank || null,
-        provisionalAsOf: current.dateKey,
-        percentageCurve,
-      });
-    }
-    await refreshCompetitions();
+
+      const scoreUnchanged =
+        (currentMember?.provisionalLossPct ?? null) === payload.provisionalLossPct &&
+        (currentMember?.provisionalRank ?? null) === payload.provisionalRank &&
+        (currentMember?.provisionalAsOf ?? null) === payload.provisionalAsOf &&
+        JSON.stringify(currentMember?.percentageCurve || []) ===
+          JSON.stringify(payload.percentageCurve);
+      if (scoreUnchanged) return false;
+
+      await repository.updateProvisionalScore(state.user.uid, competition.id, payload);
+      return true;
+    });
+    const results = await Promise.all(updates);
+    if (results.some(Boolean)) await refreshCompetitions();
   };
 
   const saveRecord = async (record) => {

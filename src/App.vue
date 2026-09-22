@@ -61,10 +61,17 @@ watch(
 <template>
   <div class="app-viewport">
     <div v-if="!store.state.authReady" class="splash">
-      <div class="splash-progress" role="progressbar" aria-label="正在載入 SosoBook">
-        <span></span>
+      <div
+        class="splash-progress"
+        role="progressbar"
+        :aria-label="store.state.startupLabel"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        :aria-valuenow="store.state.startupProgress"
+      >
+        <span :style="{ width: `${store.state.startupProgress}%` }"></span>
       </div>
-      <p>正在翻開手帳…</p>
+      <p>{{ store.state.startupLabel }}</p>
     </div>
     <AppShell v-else><RouterView /></AppShell>
   </div>
