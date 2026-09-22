@@ -180,6 +180,8 @@ const summaryLines = [
   `- Competition documents scanned: ${settlementStats.totalCompetitions}`,
   `- Active competitions: ${settlementStats.activeCompetitions}`,
   `- Due for settlement: ${settlementStats.dueCompetitions}`,
+  `- Not yet due: ${settlementStats.notDueCompetitions}`,
+  `- Invalid or missing end date: ${settlementStats.invalidDateCompetitions}`,
   `- Settled this run: ${settlementStats.settledCompetitions}`,
   `- Skipped because certificate already exists: ${settlementStats.skippedExistingCertificate}`,
   `- Members scanned: ${settlementStats.membersScanned}`,
