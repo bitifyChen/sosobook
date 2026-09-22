@@ -5,6 +5,25 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import VueRouter from 'unplugin-vue-router/vite';
 import { fileURLToPath, URL } from 'node:url';
+import { APP_VERSION, MINIMUM_SUPPORTED_VERSION } from './src/config/appVersion.js';
+
+const releaseManifest = () => ({
+  name: 'sosobook-release-manifest',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'version.json',
+      source: JSON.stringify(
+        {
+          version: APP_VERSION,
+          minimumVersion: MINIMUM_SUPPORTED_VERSION,
+        },
+        null,
+        2
+      ),
+    });
+  },
+});
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -13,6 +32,7 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     plugins: [
+      releaseManifest(),
       VueRouter({
         routesFolder: 'src/pages',
         dts: 'src/typed-router.d.ts',

@@ -392,19 +392,12 @@ export const useAppStore = defineStore('app', () => {
         email: state.user.email,
       });
       state.profile = savedProfile;
-      try {
-        const competitionResult = await loadCompetitionsWithFallback();
-        if (competitionResult.indexPending) {
-          state.competitions = [];
-          notify('會員卡已保存；競賽索引正在建立，稍後重新整理即可載入競賽。', 'warning');
-        } else {
-          syncCompetitions(competitionResult.competitions);
-          notify('健身卡資料已保存！');
-        }
-      } catch (cause) {
-        console.error('[SosoBook] 會員卡已保存，但競賽列表更新失敗。', cause);
-        notify('會員卡已保存，但競賽資料暫時無法更新。', 'warning');
-      }
+      notify('健身卡資料已保存！');
+
+      // 會員卡保存不應被競賽索引或網路狀態拖住；競賽資料在背景更新即可。
+      void refreshCompetitions({ notifyOnIndexPending: false }).catch((cause) => {
+        console.error('[SosoBook] 會員卡已保存，但競賽列表背景更新失敗。', cause);
+      });
     } catch (cause) {
       const message =
         cause?.code === 'permission-denied'

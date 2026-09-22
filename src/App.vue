@@ -80,4 +80,5 @@ watch(
   <CompetitionCompletionViewer />
   <BadgeViewer />
   <PwaInstallPrompt />
+  <PwaUpdatePrompt />
 </template>
