@@ -166,6 +166,9 @@ export const useAppStore = defineStore('app', () => {
 
   const syncCompetitions = (competitions) => {
     const nextCompetitions = Array.isArray(competitions) ? competitions : [];
+    const previousCompetitions = new Map(
+      state.competitions.map((competition) => [competition.id, competition])
+    );
     const previousSnapshot = readCompetitionStatusSnapshot(state.user?.uid);
     const viewedIds = getViewedCompetitionResultIds(state.user?.uid);
     const newlySettled = findNewlySettledCompetitions(
@@ -190,6 +193,18 @@ export const useAppStore = defineStore('app', () => {
 
     state.competitions = nextCompetitions;
     writeCompetitionStatusSnapshot(state.user?.uid, nextCompetitions, currentStats);
+
+    const newlyJoinedCompetitionCount = nextCompetitions.filter((competition) => {
+      const previous = previousCompetitions.get(competition.id);
+      return previous && (competition.members?.length || 0) > (previous.members?.length || 0);
+    }).length;
+    if (newlyJoinedCompetitionCount) {
+      notify(
+        newlyJoinedCompetitionCount === 1
+          ? '有新成員加入你的競賽！'
+          : `${newlyJoinedCompetitionCount} 場競賽有新成員加入！`
+      );
+    }
 
     newlySettled.forEach(openCompetitionCompletion);
     revealNewBadges(

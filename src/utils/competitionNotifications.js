@@ -82,7 +82,8 @@ export const findNewlySettledCompetitions = (
     const previous = previousCompetitions[competition.id];
     if (previous) return previous.status !== 'settled';
 
-    // 新功能首次啟用時，只提醒尚未看過結果的已完賽競賽。
-    return !hasSnapshot || !viewed.has(competition.id);
+    // 新裝置第一次同步時只建立基準，不重播帳號既有的歷史結果。
+    // 之後若使用者在這台裝置上看過競賽，再由狀態變化觸發提示。
+    return hasSnapshot && !viewed.has(competition.id);
   });
 };
