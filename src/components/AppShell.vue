@@ -5,7 +5,7 @@ const route = useRoute();
 const isPublic = computed(
   () => route.name === 'login' || route.name === 'welcome' || route.path.startsWith('/setting')
 );
-const showCheckInFab = computed(() => !isPublic.value && route.name !== 'check-in');
+const showCheckInFab = computed(() => !isPublic.value);
 const navItems = [
   { to: '/', label: '日曆', image: navAssets.calendar, names: ['calendar'] },
   {
@@ -38,5 +38,6 @@ const navItems = [
       </RouterLink>
     </nav>
     <CheckInFab v-if="showCheckInFab" />
+    <CheckInModal />
   </main>
 </template>

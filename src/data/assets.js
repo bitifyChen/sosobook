@@ -10,6 +10,7 @@ const toAsset = (item, fallbackAlt) => ({
   src: asset(item.file),
   alt: item.alt || fallbackAlt,
   ...(item.series ? { series: item.series } : {}),
+  ...(item.category ? { category: item.category } : {}),
   ...(Number.isInteger(item.threshold) ? { threshold: item.threshold } : {}),
 });
 
@@ -20,7 +21,17 @@ export const avatars = registry.avatars.map((item, index) =>
 export const stickers = registry.stickers.map((item, index) => ({
   ...toAsset(item, `心情貼紙 ${index + 1}`),
   name: item.label || item.alt || `心情貼紙 ${index + 1}`,
+  category: item.category || 'other',
 }));
+
+export const stickerCategories = [
+  { id: 'all', label: '全部' },
+  { id: 'food', label: '食物' },
+  { id: 'fitness', label: '健身' },
+  { id: 'sport', label: '運動' },
+  { id: 'outdoors', label: '野孩子' },
+  { id: 'other', label: '其他' },
+];
 
 const badgeModules = import.meta.glob('../../public/img/badge/*/*.webp', {
   eager: true,

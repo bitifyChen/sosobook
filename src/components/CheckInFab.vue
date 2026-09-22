@@ -3,7 +3,6 @@ import { navAssets } from '@/data/assets';
 import { toDateKey } from '@/utils/date';
 
 const store = useAppStore();
-const router = useRouter();
 const FIRST_VISIT_TOOLTIP_KEY = 'sosobook.checkin-tooltip-seen.v1';
 const button = ref(null);
 const visible = ref(true);
@@ -14,7 +13,7 @@ const position = reactive({ left: null, top: null });
 let dragState = null;
 
 const missingToday = computed(() => !store.recordsByDate[toDateKey()]);
-const showFab = computed(() => visible.value && missingToday.value);
+const showFab = computed(() => visible.value && missingToday.value && !store.state.checkIn.open);
 const firstVisitTooltipKey = computed(() => {
   const uid = store.state.user?.uid;
   return uid ? `${FIRST_VISIT_TOOLTIP_KEY}:${uid}` : null;
@@ -46,7 +45,7 @@ const open = () => {
     dragged.value = false;
     return;
   }
-  router.push('/check-in');
+  store.openCheckIn(toDateKey());
 };
 const close = () => {
   visible.value = false;

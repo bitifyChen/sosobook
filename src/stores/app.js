@@ -29,6 +29,7 @@ export const useAppStore = defineStore('app', () => {
     competitions: [],
     toast: null,
     confirm: null,
+    checkIn: { open: false, dateKey: null },
     badgeViewerQueue: [],
     competitionCompletionQueue: [],
     mode: repository.repositoryMode,
@@ -47,6 +48,15 @@ export const useAppStore = defineStore('app', () => {
 
   const notify = (message, kind = 'success') => {
     state.toast = { message, kind, id: Date.now() };
+  };
+
+  const openCheckIn = (dateKey = toDateKey()) => {
+    state.checkIn.open = true;
+    state.checkIn.dateKey = dateKey || toDateKey();
+  };
+  const closeCheckIn = () => {
+    state.checkIn.open = false;
+    state.checkIn.dateKey = null;
   };
 
   const isCompetitionIndexPending = (cause) => {
@@ -269,6 +279,7 @@ export const useAppStore = defineStore('app', () => {
         state.profile = null;
         state.records = [];
         state.competitions = [];
+        closeCheckIn();
         state.badgeViewerQueue = [];
         state.competitionCompletionQueue = [];
       }
@@ -313,6 +324,7 @@ export const useAppStore = defineStore('app', () => {
     state.user = null;
     state.profile = null;
     state.authError = null;
+    closeCheckIn();
     state.badgeViewerQueue = [];
     state.competitionCompletionQueue = [];
   };
@@ -490,6 +502,8 @@ export const useAppStore = defineStore('app', () => {
     closeCompetitionCompletion,
     askConfirm,
     resolveConfirm,
+    openCheckIn,
+    closeCheckIn,
     init,
     login,
     logout,

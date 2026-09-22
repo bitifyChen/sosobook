@@ -82,6 +82,7 @@ const submit = async () => {
         ? await store.updateCompetition(route.params.id, form)
         : await store.createCompetition(form);
     let destination = `/competitions/${result.id}`;
+    let openCheckInAfterNavigation = false;
     if (joining.value && result.joinPrompt) {
       const shouldContinue = await store.askConfirm({
         title: result.joinPrompt.kind === 'first-day' ? '加入成功！今天是競賽第一天' : '加入成功！',
@@ -93,10 +94,12 @@ const submit = async () => {
         cancelText: '離開',
       });
       if (shouldContinue) {
-        destination = result.joinPrompt.kind === 'first-day' ? '/check-in' : '/';
+        destination = '/';
+        openCheckInAfterNavigation = result.joinPrompt.kind === 'first-day';
       }
     }
     await router.replace(destination);
+    if (openCheckInAfterNavigation) store.openCheckIn(toDateKey());
   } catch (cause) {
     if (joining.value && cause?.code === 'ALREADY_JOINED') {
       error.value = '你已經在這場競賽中，請直接前往競賽查看。';

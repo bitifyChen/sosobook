@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: 'SosoBook 體重日記',
           short_name: 'SosoBook',
+          lang: 'zh-Hant',
           description: '用貼紙記錄每日體重，和朋友一起參加減重競賽。',
           theme_color: '#fff7df',
           background_color: '#fff7df',

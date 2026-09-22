@@ -27,7 +27,10 @@ const legacyMetadata = new Map([
   ['avatar/image-gen-4(1).webp', { key: 'avatar-4', alt: '人物角色四' }],
   ['avatar/image-gen-5(1).webp', { key: 'avatar-5', alt: '人物角色五' }],
   ['avatar/image-gen-6(1).webp', { key: 'avatar-6', alt: '人物角色六' }],
-  ['sticker/彩繪質感彩色啞鈴貼紙.webp', { key: 'dumbbell', alt: '啞鈴貼紙', label: '今天有力量' }],
+  [
+    'sticker/彩繪質感彩色啞鈴貼紙.webp',
+    { key: 'dumbbell', alt: '啞鈴貼紙', label: '今天有力量', category: 'fitness' },
+  ],
   ['sticker/image-gen-2(5).webp', { key: 'sticker-2', alt: '心情貼紙二', label: '心情貼紙 2' }],
   ['sticker/image-gen-3(4).webp', { key: 'sticker-3', alt: '心情貼紙三', label: '心情貼紙 3' }],
   ['sticker/image-gen-4(3).webp', { key: 'sticker-4', alt: '心情貼紙四', label: '心情貼紙 4' }],
@@ -54,11 +57,10 @@ const readRegistry = async () => {
       schemaVersion: 1,
       avatars: Array.isArray(registry.avatars) ? registry.avatars : [],
       stickers: Array.isArray(registry.stickers) ? registry.stickers : [],
-      badges: Array.isArray(registry.badges) ? registry.badges : [],
     };
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
-    return { schemaVersion: 1, avatars: [], stickers: [], badges: [] };
+    return { schemaVersion: 1, avatars: [], stickers: [] };
   }
 };
 
@@ -68,7 +70,6 @@ const writeRegistry = async (registry) => {
     schemaVersion: 1,
     avatars: [...registry.avatars].sort((left, right) => left.key.localeCompare(right.key)),
     stickers: [...registry.stickers].sort((left, right) => left.key.localeCompare(right.key)),
-    badges: [...registry.badges],
   };
   await fs.writeFile(registryPath, `${JSON.stringify(normalized, null, 2)}\n`, 'utf8');
 };
@@ -96,7 +97,6 @@ const listFiles = async (kind, extensions = imageExtensions) => {
 const allEntries = (registry) => [
   ...registry.avatars.map((entry) => ({ kind: 'avatar', entry })),
   ...registry.stickers.map((entry) => ({ kind: 'sticker', entry })),
-  ...registry.badges.map((entry) => ({ kind: 'badge', entry })),
 ];
 
 const entryVersions = (entry) =>
@@ -130,6 +130,44 @@ const findByFile = (registry, relativePath) =>
       entry.legacyFiles?.includes(relativePath)
   );
 
+const findVersionByBasename = (registry, kind, relativePath) => {
+  const basename = path.posix.basename(relativePath);
+  return registry[collectionFor(kind)]
+    .flatMap((entry) => entryVersions(entry).map((version) => ({ entry, version })))
+    .find(({ version }) => path.posix.basename(version.file) === basename);
+};
+
+const pathExists = async (filePath) => {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const normalizeKnownWebpPaths = async (registry) => {
+  for (const kind of managedKinds) {
+    for (const filePath of await listFiles(kind, new Set(['.webp']))) {
+      const relativePath = relativeToImageRoot(filePath);
+      if (findByFile(registry, relativePath)) continue;
+
+      const match = findVersionByBasename(registry, kind, relativePath);
+      if (!match || match.version.file === relativePath) continue;
+
+      const canonicalPath = absoluteFromImagePath(match.version.file);
+      if (await pathExists(canonicalPath)) {
+        await removeSource(filePath);
+        console.log(`整理       ${relativePath} -> 已有正式檔，移除重複檔`);
+      } else {
+        await fs.mkdir(path.dirname(canonicalPath), { recursive: true });
+        await fs.rename(filePath, canonicalPath);
+        console.log(`整理       ${relativePath} -> ${match.version.file}`);
+      }
+    }
+  }
+};
+
 const nextKey = (registry, kind) => {
   const entries = registry[collectionFor(kind)];
   const prefix = `${kind}-`;
@@ -154,7 +192,12 @@ const defaultMetadata = (registry, kind, relativePath) => {
   return {
     key: nextKey(registry, kind),
     alt: kind === 'avatar' ? `人物角色 ${index}` : `心情貼紙 ${index}`,
-    ...(kind === 'sticker' ? { label: `心情貼紙 ${index}` } : {}),
+    ...(kind === 'sticker'
+      ? {
+          label: `心情貼紙 ${index}`,
+          category: 'other',
+        }
+      : {}),
   };
 };
 
@@ -207,6 +250,7 @@ const createEntry = (registry, kind, contentSha256, metadata, version = 1) => {
     file,
     ...(metadata.alt ? { alt: metadata.alt } : {}),
     ...(metadata.label ? { label: metadata.label } : {}),
+    ...(metadata.category ? { category: metadata.category } : {}),
     versions: [
       {
         version,
@@ -364,6 +408,7 @@ const replaceEntry = async (registry, candidate, target) => {
 
 const runNew = async () => {
   const registry = await readRegistry();
+  await normalizeKnownWebpPaths(registry);
   const result = await processNewSources(registry);
   await bootstrapExistingWebp(registry, result.sourceBindings);
   await writeRegistry(registry);
@@ -381,6 +426,7 @@ const runUpdate = async () => {
 
   const rl = createPrompt();
   try {
+    await normalizeKnownWebpPaths(registry);
     while (true) {
       const candidates = await findUpdateCandidates(registry);
       if (!candidates.length) {

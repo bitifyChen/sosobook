@@ -107,6 +107,7 @@
   "stickers": [
     {
       "key": "dumbbell",
+      "category": "fitness",
       "assetId": "864d56e4-6169-48d7-a50d-5564d7fa047a",
       "status": "active",
       "currentVersion": 1,
@@ -125,6 +126,7 @@
     },
     {
       "key": "sticker-10",
+      "category": "food",
       "assetId": "d03b5d04-fe8a-44c6-8a15-0507c2c1a4b6",
       "status": "active",
       "currentVersion": 1,
@@ -142,7 +144,179 @@
       ]
     },
     {
+      "key": "sticker-11",
+      "category": "food",
+      "assetId": "18367a5c-7817-4bc7-a3d0-d362f130b8c9",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "617565f444975610ae7505a50cc2d9b0605a5ef879e518cfde1a7277c99ee5ed",
+      "file": "sticker/18367a5c-7817-4bc7-a3d0-d362f130b8c9-v001.webp",
+      "alt": "心情貼紙 11",
+      "label": "心情貼紙 11",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/18367a5c-7817-4bc7-a3d0-d362f130b8c9-v001.webp",
+          "contentSha256": "617565f444975610ae7505a50cc2d9b0605a5ef879e518cfde1a7277c99ee5ed",
+          "createdAt": "2026-09-22T03:25:01.900Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-12",
+      "category": "food",
+      "assetId": "15412287-fc60-4005-8db1-97386884c22b",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "3ae9cbfff8416108ff48622bbb6600efe6baa5213fd62cacad49eaf777bcab58",
+      "file": "sticker/15412287-fc60-4005-8db1-97386884c22b-v001.webp",
+      "alt": "心情貼紙 12",
+      "label": "心情貼紙 12",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/15412287-fc60-4005-8db1-97386884c22b-v001.webp",
+          "contentSha256": "3ae9cbfff8416108ff48622bbb6600efe6baa5213fd62cacad49eaf777bcab58",
+          "createdAt": "2026-09-22T03:25:02.477Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-13",
+      "category": "food",
+      "assetId": "fa3e61a2-0248-4474-b766-21526e636dfd",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "c222e579d07a14ab39e49f4df9ac685fd5eb8ba62df6384c51d8686760ddae91",
+      "file": "sticker/fa3e61a2-0248-4474-b766-21526e636dfd-v001.webp",
+      "alt": "心情貼紙 13",
+      "label": "心情貼紙 13",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/fa3e61a2-0248-4474-b766-21526e636dfd-v001.webp",
+          "contentSha256": "c222e579d07a14ab39e49f4df9ac685fd5eb8ba62df6384c51d8686760ddae91",
+          "createdAt": "2026-09-22T03:25:03.005Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-14",
+      "category": "food",
+      "assetId": "f4c87480-b580-4af3-8d00-641a0789249c",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "ed1bac5ab51d4136373aa4f426dacfd59498df735f1574bfdeff9054dd3c8d73",
+      "file": "sticker/f4c87480-b580-4af3-8d00-641a0789249c-v001.webp",
+      "alt": "心情貼紙 14",
+      "label": "心情貼紙 14",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/f4c87480-b580-4af3-8d00-641a0789249c-v001.webp",
+          "contentSha256": "ed1bac5ab51d4136373aa4f426dacfd59498df735f1574bfdeff9054dd3c8d73",
+          "createdAt": "2026-09-22T03:25:03.639Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-15",
+      "category": "food",
+      "assetId": "647befd8-fe55-4b7d-ab27-89ecb45bd0d9",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "e882ccf7dc7463f957acea412be7d1958e47f9a1312d4d7c8ad6dccbe670bba2",
+      "file": "sticker/647befd8-fe55-4b7d-ab27-89ecb45bd0d9-v001.webp",
+      "alt": "心情貼紙 15",
+      "label": "心情貼紙 15",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/647befd8-fe55-4b7d-ab27-89ecb45bd0d9-v001.webp",
+          "contentSha256": "e882ccf7dc7463f957acea412be7d1958e47f9a1312d4d7c8ad6dccbe670bba2",
+          "createdAt": "2026-09-22T03:25:04.098Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-16",
+      "category": "sport",
+      "assetId": "b1f4bdc5-c145-4793-aefb-9404220fe9c6",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "50bcda7aeece7202204f65a4fd9059ada4ce8c894dd337a437d45c31fec176d6",
+      "file": "sticker/b1f4bdc5-c145-4793-aefb-9404220fe9c6-v001.webp",
+      "alt": "心情貼紙 16",
+      "label": "心情貼紙 16",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/b1f4bdc5-c145-4793-aefb-9404220fe9c6-v001.webp",
+          "contentSha256": "50bcda7aeece7202204f65a4fd9059ada4ce8c894dd337a437d45c31fec176d6",
+          "createdAt": "2026-09-22T03:36:25.539Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-17",
+      "category": "sport",
+      "assetId": "c9d1079f-2c3c-4ab5-a8f7-d4c565b12b63",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "4a6defdb184f0560f2f6780c7d05caf9377df5f0dcfb1c3d5360f8699a0b36dd",
+      "file": "sticker/c9d1079f-2c3c-4ab5-a8f7-d4c565b12b63-v001.webp",
+      "alt": "心情貼紙 17",
+      "label": "心情貼紙 17",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/c9d1079f-2c3c-4ab5-a8f7-d4c565b12b63-v001.webp",
+          "contentSha256": "4a6defdb184f0560f2f6780c7d05caf9377df5f0dcfb1c3d5360f8699a0b36dd",
+          "createdAt": "2026-09-22T03:36:25.892Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-18",
+      "category": "sport",
+      "assetId": "681f856d-5d49-4588-b3ac-fb079deb66b5",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "8c75955d60542eeb8fc5d3081c97c30b997967a5dff2f5e5a06f72b08b7651b6",
+      "file": "sticker/681f856d-5d49-4588-b3ac-fb079deb66b5-v001.webp",
+      "alt": "心情貼紙 18",
+      "label": "心情貼紙 18",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/681f856d-5d49-4588-b3ac-fb079deb66b5-v001.webp",
+          "contentSha256": "8c75955d60542eeb8fc5d3081c97c30b997967a5dff2f5e5a06f72b08b7651b6",
+          "createdAt": "2026-09-22T03:36:26.321Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-19",
+      "category": "sport",
+      "assetId": "d750a030-35ea-497e-93aa-ce19d8149867",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "1cb12d872b37094c07e032651a7cd714d0c291f0a79f52884935145a616d4bff",
+      "file": "sticker/d750a030-35ea-497e-93aa-ce19d8149867-v001.webp",
+      "alt": "心情貼紙 19",
+      "label": "心情貼紙 19",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/d750a030-35ea-497e-93aa-ce19d8149867-v001.webp",
+          "contentSha256": "1cb12d872b37094c07e032651a7cd714d0c291f0a79f52884935145a616d4bff",
+          "createdAt": "2026-09-22T03:36:26.809Z"
+        }
+      ]
+    },
+    {
       "key": "sticker-2",
+      "category": "fitness",
       "assetId": "f5a3e6e4-382c-4d67-a665-26476d603f59",
       "status": "active",
       "currentVersion": 1,
@@ -160,7 +334,198 @@
       ]
     },
     {
+      "key": "sticker-20",
+      "category": "fitness",
+      "assetId": "23a2da13-7ddc-47b9-94df-9bc1de8f3afa",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "bafdf1dfd70a5e9caf3bfd62aa6b567a3f0e431907d878392bc2d49362880a33",
+      "file": "sticker/23a2da13-7ddc-47b9-94df-9bc1de8f3afa-v001.webp",
+      "alt": "心情貼紙 20",
+      "label": "心情貼紙 20",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/23a2da13-7ddc-47b9-94df-9bc1de8f3afa-v001.webp",
+          "contentSha256": "bafdf1dfd70a5e9caf3bfd62aa6b567a3f0e431907d878392bc2d49362880a33",
+          "createdAt": "2026-09-22T03:36:27.401Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-21",
+      "category": "fitness",
+      "assetId": "42f37784-4b22-4de9-8722-322ead405fa9",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "89cd7962f6e10789b62bcc708489f4f512b1b43c6b91eff685f6deda636d9423",
+      "file": "sticker/42f37784-4b22-4de9-8722-322ead405fa9-v001.webp",
+      "alt": "心情貼紙 21",
+      "label": "心情貼紙 21",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/42f37784-4b22-4de9-8722-322ead405fa9-v001.webp",
+          "contentSha256": "89cd7962f6e10789b62bcc708489f4f512b1b43c6b91eff685f6deda636d9423",
+          "createdAt": "2026-09-22T03:36:27.787Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-22",
+      "category": "fitness",
+      "assetId": "6d71564d-483e-4be1-b350-f634aa7b0344",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "62d11c3adbd597fa7616d8300ca61b282e62a9b4938dc5557a3e18005d4f7125",
+      "file": "sticker/6d71564d-483e-4be1-b350-f634aa7b0344-v001.webp",
+      "alt": "心情貼紙 22",
+      "label": "心情貼紙 22",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/6d71564d-483e-4be1-b350-f634aa7b0344-v001.webp",
+          "contentSha256": "62d11c3adbd597fa7616d8300ca61b282e62a9b4938dc5557a3e18005d4f7125",
+          "createdAt": "2026-09-22T03:36:28.262Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-23",
+      "category": "fitness",
+      "assetId": "e590b0e0-00cc-43ad-aa00-65055261fb04",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "872f15501863bc75a4b5244c147438895c29f4083003d485d57efa3245e50a73",
+      "file": "sticker/e590b0e0-00cc-43ad-aa00-65055261fb04-v001.webp",
+      "alt": "心情貼紙 23",
+      "label": "心情貼紙 23",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/e590b0e0-00cc-43ad-aa00-65055261fb04-v001.webp",
+          "contentSha256": "872f15501863bc75a4b5244c147438895c29f4083003d485d57efa3245e50a73",
+          "createdAt": "2026-09-22T03:36:28.769Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-24",
+      "assetId": "6f3a0ec6-b01f-4223-9a35-87c2e438a195",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "e63f42fb2f84b708968b901f2234fa021fb100a57d2ded451154bb0c62aa3b8f",
+      "file": "sticker/6f3a0ec6-b01f-4223-9a35-87c2e438a195-v001.webp",
+      "alt": "心情貼紙 24",
+      "label": "心情貼紙 24",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/6f3a0ec6-b01f-4223-9a35-87c2e438a195-v001.webp",
+          "contentSha256": "e63f42fb2f84b708968b901f2234fa021fb100a57d2ded451154bb0c62aa3b8f",
+          "createdAt": "2026-09-22T04:25:22.492Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-25",
+      "assetId": "9253784f-13c6-4b34-aed1-d9896b6c8027",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "63fb64d703ee8ac96a008b543395fc5f7c32e7a154a7167135280515535aee5f",
+      "file": "sticker/9253784f-13c6-4b34-aed1-d9896b6c8027-v001.webp",
+      "alt": "心情貼紙 25",
+      "label": "心情貼紙 25",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/9253784f-13c6-4b34-aed1-d9896b6c8027-v001.webp",
+          "contentSha256": "63fb64d703ee8ac96a008b543395fc5f7c32e7a154a7167135280515535aee5f",
+          "createdAt": "2026-09-22T04:25:22.826Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-26",
+      "assetId": "0d8ea2f3-5db2-4ae3-ba22-90638375e77b",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "d9530d74cc79ada6f02d9d5a3a891e8573bcdf62ea5c6097faebbb4f2773ac1e",
+      "file": "sticker/0d8ea2f3-5db2-4ae3-ba22-90638375e77b-v001.webp",
+      "alt": "心情貼紙 26",
+      "label": "心情貼紙 26",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/0d8ea2f3-5db2-4ae3-ba22-90638375e77b-v001.webp",
+          "contentSha256": "d9530d74cc79ada6f02d9d5a3a891e8573bcdf62ea5c6097faebbb4f2773ac1e",
+          "createdAt": "2026-09-22T04:25:23.342Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-27",
+      "assetId": "6cb65e56-f8c8-4bbd-8c64-87a077075168",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "4c2de8dc2a12ab1a503f96e6237360cc06c210ef3861fe48194fb605f41e76d7",
+      "file": "sticker/6cb65e56-f8c8-4bbd-8c64-87a077075168-v001.webp",
+      "alt": "心情貼紙 27",
+      "label": "心情貼紙 27",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/6cb65e56-f8c8-4bbd-8c64-87a077075168-v001.webp",
+          "contentSha256": "4c2de8dc2a12ab1a503f96e6237360cc06c210ef3861fe48194fb605f41e76d7",
+          "createdAt": "2026-09-22T04:25:23.716Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-28",
+      "assetId": "1a2fa56d-feb9-43a5-8657-3ffb0cb6ff57",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "1da47c2db58d009dfaf74cc101858bd4cac9f2b068e506033dafbb22e01c7933",
+      "file": "sticker/1a2fa56d-feb9-43a5-8657-3ffb0cb6ff57-v001.webp",
+      "alt": "心情貼紙 28",
+      "label": "心情貼紙 28",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/1a2fa56d-feb9-43a5-8657-3ffb0cb6ff57-v001.webp",
+          "contentSha256": "1da47c2db58d009dfaf74cc101858bd4cac9f2b068e506033dafbb22e01c7933",
+          "createdAt": "2026-09-22T04:25:24.248Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-29",
+      "assetId": "a9ebfec0-490f-4420-b157-cc9d8d543725",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "304e47b95c66a9871dcad76e76761cbb7ecb5af6bd9eda0970ceefdfc28f2da9",
+      "file": "sticker/a9ebfec0-490f-4420-b157-cc9d8d543725-v001.webp",
+      "alt": "心情貼紙 29",
+      "label": "心情貼紙 29",
+      "category": "outdoors",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/a9ebfec0-490f-4420-b157-cc9d8d543725-v001.webp",
+          "contentSha256": "304e47b95c66a9871dcad76e76761cbb7ecb5af6bd9eda0970ceefdfc28f2da9",
+          "createdAt": "2026-09-22T04:25:24.944Z"
+        }
+      ]
+    },
+    {
       "key": "sticker-3",
+      "category": "fitness",
       "assetId": "ebde79f3-d92f-4510-bf79-e65886bc6035",
       "status": "active",
       "currentVersion": 1,
@@ -178,7 +543,198 @@
       ]
     },
     {
+      "key": "sticker-30",
+      "assetId": "fd8318f9-068e-4353-a23a-054e3f497305",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "fe084ab707b944df5edbedc59a5cb9278c8791066e2d41bf621c7a75f9a2c5e3",
+      "file": "sticker/fd8318f9-068e-4353-a23a-054e3f497305-v001.webp",
+      "alt": "心情貼紙 30",
+      "label": "心情貼紙 30",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/fd8318f9-068e-4353-a23a-054e3f497305-v001.webp",
+          "contentSha256": "fe084ab707b944df5edbedc59a5cb9278c8791066e2d41bf621c7a75f9a2c5e3",
+          "createdAt": "2026-09-22T04:44:18.605Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-31",
+      "assetId": "b89326a6-a7b0-4318-8005-388e4b457e86",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "ae64f9e0d0b35fd76096cc73aacc1cf8d2c74950a3e777882b895320cf855efb",
+      "file": "sticker/b89326a6-a7b0-4318-8005-388e4b457e86-v001.webp",
+      "alt": "心情貼紙 31",
+      "label": "心情貼紙 31",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/b89326a6-a7b0-4318-8005-388e4b457e86-v001.webp",
+          "contentSha256": "ae64f9e0d0b35fd76096cc73aacc1cf8d2c74950a3e777882b895320cf855efb",
+          "createdAt": "2026-09-22T04:44:19.311Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-32",
+      "assetId": "376f52bd-fd2d-4c70-812f-22e3b1084c60",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "0c5df978c02ae19e3e1a0f196e3e41317d775ff884e1dfe613f7ba46f22088e7",
+      "file": "sticker/376f52bd-fd2d-4c70-812f-22e3b1084c60-v001.webp",
+      "alt": "心情貼紙 32",
+      "label": "心情貼紙 32",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/376f52bd-fd2d-4c70-812f-22e3b1084c60-v001.webp",
+          "contentSha256": "0c5df978c02ae19e3e1a0f196e3e41317d775ff884e1dfe613f7ba46f22088e7",
+          "createdAt": "2026-09-22T04:44:19.916Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-33",
+      "assetId": "ac046086-0d4a-4feb-87fc-d35654886751",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "9e71a872db31ed1ff76fa46baa3e2855fd8784913448fce230829dc3ac27abc3",
+      "file": "sticker/ac046086-0d4a-4feb-87fc-d35654886751-v001.webp",
+      "alt": "心情貼紙 33",
+      "label": "心情貼紙 33",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/ac046086-0d4a-4feb-87fc-d35654886751-v001.webp",
+          "contentSha256": "9e71a872db31ed1ff76fa46baa3e2855fd8784913448fce230829dc3ac27abc3",
+          "createdAt": "2026-09-22T04:44:20.547Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-34",
+      "assetId": "996acb77-87d0-41a6-9c4c-fa841492cc42",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "7551257d9a536304c240844df582baac3dfe09d19d528482e072bbba9fd3c2a6",
+      "file": "sticker/996acb77-87d0-41a6-9c4c-fa841492cc42-v001.webp",
+      "alt": "心情貼紙 34",
+      "label": "心情貼紙 34",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/996acb77-87d0-41a6-9c4c-fa841492cc42-v001.webp",
+          "contentSha256": "7551257d9a536304c240844df582baac3dfe09d19d528482e072bbba9fd3c2a6",
+          "createdAt": "2026-09-22T04:44:21.301Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-35",
+      "assetId": "287a7cd3-5954-4397-8dd0-7f64fd8f1f2a",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "07d62ce1954ecbe95a093a4e2857674df054f2c016e84aa0cf48e115c78f709b",
+      "file": "sticker/287a7cd3-5954-4397-8dd0-7f64fd8f1f2a-v001.webp",
+      "alt": "心情貼紙 35",
+      "label": "心情貼紙 35",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/287a7cd3-5954-4397-8dd0-7f64fd8f1f2a-v001.webp",
+          "contentSha256": "07d62ce1954ecbe95a093a4e2857674df054f2c016e84aa0cf48e115c78f709b",
+          "createdAt": "2026-09-22T04:44:21.742Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-36",
+      "assetId": "76d14bb9-f34d-45f6-b07e-cbf78f68bbf2",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "ac72c1c93a12d47f515efafc4481c0107376ce0d8049687f082ca1239ed0c8f7",
+      "file": "sticker/76d14bb9-f34d-45f6-b07e-cbf78f68bbf2-v001.webp",
+      "alt": "心情貼紙 36",
+      "label": "心情貼紙 36",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/76d14bb9-f34d-45f6-b07e-cbf78f68bbf2-v001.webp",
+          "contentSha256": "ac72c1c93a12d47f515efafc4481c0107376ce0d8049687f082ca1239ed0c8f7",
+          "createdAt": "2026-09-22T04:44:23.012Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-37",
+      "assetId": "570e6adc-a04c-4dc2-a1d7-c995ea329f0c",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "3bca6d47a582839803253cb0b24a9ae3edfb3193eb480bbcf64cf03ef8d81031",
+      "file": "sticker/570e6adc-a04c-4dc2-a1d7-c995ea329f0c-v001.webp",
+      "alt": "心情貼紙 37",
+      "label": "心情貼紙 37",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/570e6adc-a04c-4dc2-a1d7-c995ea329f0c-v001.webp",
+          "contentSha256": "3bca6d47a582839803253cb0b24a9ae3edfb3193eb480bbcf64cf03ef8d81031",
+          "createdAt": "2026-09-22T04:44:23.902Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-38",
+      "assetId": "c8e03c89-eaca-4c1c-9c06-19ccc6b3dc65",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "54be037565296402c8f1f8f200269f6898e285726be897a1bf0b557e80b906ee",
+      "file": "sticker/c8e03c89-eaca-4c1c-9c06-19ccc6b3dc65-v001.webp",
+      "alt": "心情貼紙 38",
+      "label": "心情貼紙 38",
+      "category": "fitness",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/c8e03c89-eaca-4c1c-9c06-19ccc6b3dc65-v001.webp",
+          "contentSha256": "54be037565296402c8f1f8f200269f6898e285726be897a1bf0b557e80b906ee",
+          "createdAt": "2026-09-22T06:10:09.371Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-39",
+      "assetId": "65713c41-5a51-4fce-bc3a-3245f03ad0fb",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "2ee20840a89a01c1b2fd64bf3267f363c69c2b1dbee4fdafaf238d442f103153",
+      "file": "sticker/65713c41-5a51-4fce-bc3a-3245f03ad0fb-v001.webp",
+      "alt": "心情貼紙 39",
+      "label": "心情貼紙 39",
+      "category": "fitness",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/65713c41-5a51-4fce-bc3a-3245f03ad0fb-v001.webp",
+          "contentSha256": "2ee20840a89a01c1b2fd64bf3267f363c69c2b1dbee4fdafaf238d442f103153",
+          "createdAt": "2026-09-22T06:10:09.801Z"
+        }
+      ]
+    },
+    {
       "key": "sticker-4",
+      "category": "sport",
       "assetId": "3b937410-c83c-4383-8a89-6a397c7261ae",
       "status": "active",
       "currentVersion": 1,
@@ -196,7 +752,46 @@
       ]
     },
     {
+      "key": "sticker-40",
+      "assetId": "712043e0-71f3-4891-ae57-b2b60542890b",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "f3d3aead60fa6f3bb52ee4b3ebbc78a1b0fb8b20fb37f7abd205e158824b85d5",
+      "file": "sticker/712043e0-71f3-4891-ae57-b2b60542890b-v001.webp",
+      "alt": "心情貼紙 40",
+      "label": "心情貼紙 40",
+      "category": "fitness",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/712043e0-71f3-4891-ae57-b2b60542890b-v001.webp",
+          "contentSha256": "f3d3aead60fa6f3bb52ee4b3ebbc78a1b0fb8b20fb37f7abd205e158824b85d5",
+          "createdAt": "2026-09-22T06:10:10.210Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-41",
+      "assetId": "685410f0-a293-4c7b-af47-f3c37c30806d",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "5c0cd30af723795df8fb44960ef80db3d84efc992cef73dbc0789f40e61321b0",
+      "file": "sticker/685410f0-a293-4c7b-af47-f3c37c30806d-v001.webp",
+      "alt": "心情貼紙 41",
+      "label": "心情貼紙 41",
+      "category": "fitness",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/685410f0-a293-4c7b-af47-f3c37c30806d-v001.webp",
+          "contentSha256": "5c0cd30af723795df8fb44960ef80db3d84efc992cef73dbc0789f40e61321b0",
+          "createdAt": "2026-09-22T06:10:10.769Z"
+        }
+      ]
+    },
+    {
       "key": "sticker-5",
+      "category": "sport",
       "assetId": "828c817c-7d4c-4851-a449-ef16bc2ae1a1",
       "status": "active",
       "currentVersion": 1,
@@ -215,6 +810,7 @@
     },
     {
       "key": "sticker-6",
+      "category": "sport",
       "assetId": "0d66c3a4-517b-4d09-9a7b-007bab079566",
       "status": "active",
       "currentVersion": 1,
@@ -233,6 +829,7 @@
     },
     {
       "key": "sticker-7",
+      "category": "sport",
       "assetId": "9e3d92e4-e286-4679-8f44-dfd64453022f",
       "status": "active",
       "currentVersion": 1,
@@ -251,6 +848,7 @@
     },
     {
       "key": "sticker-8",
+      "category": "food",
       "assetId": "2fa7fb0b-e0e8-4cd8-b3e5-c5917171e52a",
       "status": "active",
       "currentVersion": 1,
@@ -269,6 +867,7 @@
     },
     {
       "key": "sticker-9",
+      "category": "other",
       "assetId": "0917f1b5-df11-416c-948c-6cbe82af4c8c",
       "status": "active",
       "currentVersion": 1,
@@ -284,540 +883,6 @@
           "createdAt": "2026-09-21T02:23:11.605Z"
         }
       ]
-    }
-  ],
-  "badges": [
-    {
-      "key": "badge-1",
-      "assetId": "923a9ce1-a243-4187-9f5a-81682c0d7daa",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "44ae4728c1953af8fdef9052b4f552d1c0b53a4f2a318d8661c7657d72b5cd10",
-      "file": "badge/champion/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
-      "alt": "冠軍獎盃 1",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
-          "contentSha256": "44ae4728c1953af8fdef9052b4f552d1c0b53a4f2a318d8661c7657d72b5cd10",
-          "createdAt": "2026-09-21T06:08:50.101Z"
-        }
-      ],
-      "threshold": 1
-    },
-    {
-      "key": "badge-10",
-      "assetId": "5d9ec7b0-6995-4a7a-9753-4f6465c64ebd",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "d9c2d747e712677fa32a530d9292b1efdcddcc6dedb56897513bbc2ccc20cf1a",
-      "file": "badge/champion/5d9ec7b0-6995-4a7a-9753-4f6465c64ebd-v001.webp",
-      "alt": "成就徽章",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/5d9ec7b0-6995-4a7a-9753-4f6465c64ebd-v001.webp",
-          "contentSha256": "d9c2d747e712677fa32a530d9292b1efdcddcc6dedb56897513bbc2ccc20cf1a",
-          "createdAt": "2026-09-21T06:17:59.589Z"
-        }
-      ]
-    },
-    {
-      "key": "badge-11",
-      "assetId": "d6bf87d2-0813-4b48-9c7f-023efb972d6a",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "9d93545fadcf526f3fb823c983e544a01ae1da3648487f45bdc06b62f68a69d6",
-      "file": "badge/champion/d6bf87d2-0813-4b48-9c7f-023efb972d6a-v001.webp",
-      "alt": "成就徽章",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/d6bf87d2-0813-4b48-9c7f-023efb972d6a-v001.webp",
-          "contentSha256": "9d93545fadcf526f3fb823c983e544a01ae1da3648487f45bdc06b62f68a69d6",
-          "createdAt": "2026-09-21T06:17:59.967Z"
-        }
-      ]
-    },
-    {
-      "key": "badge-12",
-      "assetId": "58943449-a5a2-4c9f-b083-2d3fe89144a2",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "a153edd48983757734032e2f39768d005fb6cdc1d45e95b39ff1c4f8d7d9a56f",
-      "file": "badge/champion/58943449-a5a2-4c9f-b083-2d3fe89144a2-v001.webp",
-      "alt": "成就徽章",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/58943449-a5a2-4c9f-b083-2d3fe89144a2-v001.webp",
-          "contentSha256": "a153edd48983757734032e2f39768d005fb6cdc1d45e95b39ff1c4f8d7d9a56f",
-          "createdAt": "2026-09-21T06:18:00.312Z"
-        }
-      ]
-    },
-    {
-      "key": "badge-2",
-      "assetId": "7138c751-1ad8-41d5-8404-5532bafbeeab",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "f8c24bfcac424c4a5e67004e6eeb96a454563218b3d357ea8a994ca27351d333",
-      "file": "badge/champion/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
-      "alt": "冠軍獎盃 5",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
-          "contentSha256": "f8c24bfcac424c4a5e67004e6eeb96a454563218b3d357ea8a994ca27351d333",
-          "createdAt": "2026-09-21T06:08:50.789Z"
-        }
-      ],
-      "threshold": 5
-    },
-    {
-      "key": "badge-3",
-      "assetId": "e10ee956-0d36-46c7-9474-15e61ee337ae",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "8f1732ada3e688640955248d94ca9f68ea2c7ba7ce2d7c8805074a7335b50c85",
-      "file": "badge/champion/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp",
-      "alt": "冠軍獎盃 10",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp",
-          "contentSha256": "8f1732ada3e688640955248d94ca9f68ea2c7ba7ce2d7c8805074a7335b50c85",
-          "createdAt": "2026-09-21T06:08:51.250Z"
-        }
-      ],
-      "threshold": 10
-    },
-    {
-      "key": "badge-4",
-      "assetId": "233fff42-ba89-431a-8b75-0447c2cdd389",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "b2bdf3670db4874c231320e8823ec04c344bbe213b232f97ae958cb587553ce5",
-      "file": "badge/champion/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
-      "alt": "冠軍獎盃 30",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
-          "contentSha256": "b2bdf3670db4874c231320e8823ec04c344bbe213b232f97ae958cb587553ce5",
-          "createdAt": "2026-09-21T06:08:51.619Z"
-        }
-      ],
-      "threshold": 30
-    },
-    {
-      "key": "badge-5",
-      "assetId": "b2bbe965-d9ed-4b72-a63c-c75383a09e89",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "b5a56505ea1781ce03fe014b04181153dbf2978d9560b90a2e59d2cee201bb09",
-      "file": "badge/champion/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp",
-      "alt": "冠軍獎盃 50",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp",
-          "contentSha256": "b5a56505ea1781ce03fe014b04181153dbf2978d9560b90a2e59d2cee201bb09",
-          "createdAt": "2026-09-21T06:08:51.999Z"
-        }
-      ],
-      "threshold": 50
-    },
-    {
-      "key": "badge-6",
-      "assetId": "bf536f2e-38a6-4aee-98ca-c1776ddecbe5",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "23179e1e48f88b600da41b86c8ba134560f2abe2bc0eec53e8eec4b1606f7ecb",
-      "file": "badge/champion/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
-      "alt": "冠軍獎盃 100",
-      "series": "champion",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/champion/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
-          "contentSha256": "23179e1e48f88b600da41b86c8ba134560f2abe2bc0eec53e8eec4b1606f7ecb",
-          "createdAt": "2026-09-21T06:08:52.376Z"
-        }
-      ],
-      "threshold": 100
-    },
-    {
-      "key": "badge-7",
-      "assetId": "39ad2431-5e44-49b6-b9b6-4da67a2e86d9",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "9ad33bdd7a7bc7240e86b775fffbe05872c18873a07d6de462e812ac286c0288",
-      "file": "badge/finish/39ad2431-5e44-49b6-b9b6-4da67a2e86d9-v001.webp",
-      "alt": "成就徽章",
-      "series": "finish",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/39ad2431-5e44-49b6-b9b6-4da67a2e86d9-v001.webp",
-          "contentSha256": "9ad33bdd7a7bc7240e86b775fffbe05872c18873a07d6de462e812ac286c0288",
-          "createdAt": "2026-09-21T06:11:24.722Z"
-        }
-      ],
-      "legacyFiles": ["badge/finish/b2bbe965-d9ed-4b72-a63c-c75383a09e89-v001.webp"]
-    },
-    {
-      "key": "badge-8",
-      "assetId": "fa8788ba-b884-4ade-8998-5f7a9e1a6c93",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "5b015083749974b39d7cc7a2592577cbe6a52f35dea920548ea1a71ce6ebaf34",
-      "file": "badge/finish/fa8788ba-b884-4ade-8998-5f7a9e1a6c93-v001.webp",
-      "alt": "成就徽章",
-      "series": "finish",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/fa8788ba-b884-4ade-8998-5f7a9e1a6c93-v001.webp",
-          "contentSha256": "5b015083749974b39d7cc7a2592577cbe6a52f35dea920548ea1a71ce6ebaf34",
-          "createdAt": "2026-09-21T06:11:25.088Z"
-        }
-      ],
-      "legacyFiles": [
-        "badge/finish/bf536f2e-38a6-4aee-98ca-c1776ddecbe5-v001.webp",
-        "badge/finish/100.webp"
-      ]
-    },
-    {
-      "key": "badge-9",
-      "assetId": "42f351d2-d740-42a8-b837-e98eb85882dc",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "596f136c7dcda69dac60beb7c7d16be4206986226102bb8a4e75c16fb66ca8e6",
-      "file": "badge/finish/42f351d2-d740-42a8-b837-e98eb85882dc-v001.webp",
-      "alt": "成就徽章",
-      "series": "finish",
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/42f351d2-d740-42a8-b837-e98eb85882dc-v001.webp",
-          "contentSha256": "596f136c7dcda69dac60beb7c7d16be4206986226102bb8a4e75c16fb66ca8e6",
-          "createdAt": "2026-09-21T06:11:25.522Z"
-        }
-      ],
-      "legacyFiles": ["badge/finish/e10ee956-0d36-46c7-9474-15e61ee337ae-v001.webp"]
-    },
-    {
-      "key": "finish-1",
-      "assetId": "cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "48d312aa6b5044018d26e07562d5b2568d2d49f72e6dc62b3271fddf90819a1b",
-      "file": "badge/finish/cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177-v001.webp",
-      "alt": "完賽徽章 1",
-      "series": "finish",
-      "threshold": 1,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/cdeceb7f-9ed5-4ba7-ad8d-f231ff2c7177-v001.webp",
-          "contentSha256": "48d312aa6b5044018d26e07562d5b2568d2d49f72e6dc62b3271fddf90819a1b",
-          "createdAt": "2026-09-21T06:11:23.416Z"
-        }
-      ],
-      "legacyFiles": [
-        "badge/finish/233fff42-ba89-431a-8b75-0447c2cdd389-v001.webp",
-        "badge/finish/30.webp"
-      ]
-    },
-    {
-      "key": "finish-10",
-      "assetId": "f63fdac8-d600-43b0-b7ba-a01a80e9c1d7",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "6cd4b62846da64bb9ab4f0aab23ef665a48e790a5f9eb2cb0ea7b52f04f78792",
-      "file": "badge/finish/f63fdac8-d600-43b0-b7ba-a01a80e9c1d7-v001.webp",
-      "alt": "完賽徽章 10",
-      "series": "finish",
-      "threshold": 10,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/f63fdac8-d600-43b0-b7ba-a01a80e9c1d7-v001.webp",
-          "contentSha256": "6cd4b62846da64bb9ab4f0aab23ef665a48e790a5f9eb2cb0ea7b52f04f78792",
-          "createdAt": "2026-09-21T06:11:24.168Z"
-        }
-      ],
-      "legacyFiles": [
-        "badge/finish/923a9ce1-a243-4187-9f5a-81682c0d7daa-v001.webp",
-        "badge/finish/1.webp"
-      ]
-    },
-    {
-      "key": "finish-10",
-      "assetId": "9b83e8d8-d999-4419-a23d-04058e74f552",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "5c50bd8f515ed5dc26e5674dca5e55089d3546421b6a827c42bf7227fd105161",
-      "file": "badge/finish/9b83e8d8-d999-4419-a23d-04058e74f552-v001.webp",
-      "alt": "完賽徽章 10",
-      "series": "finish",
-      "threshold": 10,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/9b83e8d8-d999-4419-a23d-04058e74f552-v001.webp",
-          "contentSha256": "5c50bd8f515ed5dc26e5674dca5e55089d3546421b6a827c42bf7227fd105161",
-          "createdAt": "2026-09-21T06:18:00.733Z"
-        }
-      ],
-      "legacyFiles": ["badge/finish/10.webp"]
-    },
-    {
-      "key": "finish-5",
-      "assetId": "b52beea4-2621-4eb3-bdb6-f7903d1b6b47",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "12dbd7f15364d16262b57b0a6f250afa09543a082615a98c1609d6e2fb92005c",
-      "file": "badge/finish/b52beea4-2621-4eb3-bdb6-f7903d1b6b47-v001.webp",
-      "alt": "完賽徽章 5",
-      "series": "finish",
-      "threshold": 5,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/b52beea4-2621-4eb3-bdb6-f7903d1b6b47-v001.webp",
-          "contentSha256": "12dbd7f15364d16262b57b0a6f250afa09543a082615a98c1609d6e2fb92005c",
-          "createdAt": "2026-09-21T06:11:23.783Z"
-        }
-      ],
-      "legacyFiles": [
-        "badge/finish/7138c751-1ad8-41d5-8404-5532bafbeeab-v001.webp",
-        "badge/finish/5.webp"
-      ]
-    },
-    {
-      "key": "finish-50",
-      "assetId": "b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "6898f5f02c93946964c05e029f1e054a51a18d61de2e7fa1a3b9438932ac94d7",
-      "file": "badge/finish/b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b-v001.webp",
-      "alt": "完賽徽章 50",
-      "series": "finish",
-      "threshold": 50,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/finish/b1f1fdc8-386f-4fd0-98ab-e5f20f8f217b-v001.webp",
-          "contentSha256": "6898f5f02c93946964c05e029f1e054a51a18d61de2e7fa1a3b9438932ac94d7",
-          "createdAt": "2026-09-21T06:18:01.172Z"
-        }
-      ],
-      "legacyFiles": ["badge/finish/50.webp"]
-    },
-    {
-      "key": "record-1",
-      "assetId": "ddbfbe72-f4f9-424b-8102-f2e81ac62249",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "5d2fb7da95d35e624e4d0faf885f771f50868e34bea755f212f301bd04f63bf3",
-      "file": "badge/record/ddbfbe72-f4f9-424b-8102-f2e81ac62249-v001.webp",
-      "alt": "體重紀錄徽章 1",
-      "series": "record",
-      "threshold": 1,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/ddbfbe72-f4f9-424b-8102-f2e81ac62249-v001.webp",
-          "contentSha256": "5d2fb7da95d35e624e4d0faf885f771f50868e34bea755f212f301bd04f63bf3",
-          "createdAt": "2026-09-21T04:38:44.243Z"
-        }
-      ]
-    },
-    {
-      "key": "record-1",
-      "assetId": "4d91f871-4388-4ed2-9828-b5fd757b8a9d",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "0a4060c8bd385892edaf0474b6da96e507a25621521f1643f7652c7effa94af3",
-      "file": "badge/record/4d91f871-4388-4ed2-9828-b5fd757b8a9d-v001.webp",
-      "alt": "體重紀錄徽章 1",
-      "series": "record",
-      "threshold": 1,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/4d91f871-4388-4ed2-9828-b5fd757b8a9d-v001.webp",
-          "contentSha256": "0a4060c8bd385892edaf0474b6da96e507a25621521f1643f7652c7effa94af3",
-          "createdAt": "2026-09-21T06:18:01.522Z"
-        }
-      ],
-      "legacyFiles": ["badge/record/1.webp"]
-    },
-    {
-      "key": "record-30",
-      "assetId": "2251afdd-71bf-4398-be06-a5e706b1d1df",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "1e6aa381bfd79ed9f74244ae9b9eae9912ded08e06cf7117c361ed319b8c022d",
-      "file": "badge/record/2251afdd-71bf-4398-be06-a5e706b1d1df-v001.webp",
-      "alt": "體重紀錄徽章 30",
-      "series": "record",
-      "threshold": 30,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/2251afdd-71bf-4398-be06-a5e706b1d1df-v001.webp",
-          "contentSha256": "1e6aa381bfd79ed9f74244ae9b9eae9912ded08e06cf7117c361ed319b8c022d",
-          "createdAt": "2026-09-21T04:38:45.080Z"
-        }
-      ]
-    },
-    {
-      "key": "record-30",
-      "assetId": "bddb8a00-e4f9-4e4b-9701-3e4da8b4297f",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "8fbdb282a88a63371aaa1e3e5d1cb56207cff15abbd463cd164b7d9e2c2e06d7",
-      "file": "badge/record/bddb8a00-e4f9-4e4b-9701-3e4da8b4297f-v001.webp",
-      "alt": "體重紀錄徽章 30",
-      "series": "record",
-      "threshold": 30,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/bddb8a00-e4f9-4e4b-9701-3e4da8b4297f-v001.webp",
-          "contentSha256": "8fbdb282a88a63371aaa1e3e5d1cb56207cff15abbd463cd164b7d9e2c2e06d7",
-          "createdAt": "2026-09-21T06:18:01.973Z"
-        }
-      ],
-      "legacyFiles": ["badge/record/30.webp"]
-    },
-    {
-      "key": "record-5",
-      "assetId": "77ca7955-f3a0-4cea-b7bc-d4088cad2501",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "2b9c618375e7d4a7ca5e37222f154782f4e5e4531164d491a4a51869c3ea7ca6",
-      "file": "badge/record/77ca7955-f3a0-4cea-b7bc-d4088cad2501-v001.webp",
-      "alt": "體重紀錄徽章 5",
-      "series": "record",
-      "threshold": 5,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/77ca7955-f3a0-4cea-b7bc-d4088cad2501-v001.webp",
-          "contentSha256": "2b9c618375e7d4a7ca5e37222f154782f4e5e4531164d491a4a51869c3ea7ca6",
-          "createdAt": "2026-09-21T04:38:44.675Z"
-        }
-      ]
-    },
-    {
-      "key": "record-5",
-      "assetId": "cbc12826-62f0-4dc6-b3b6-b59d3bc5a477",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "e125947b767b96568c17a7142bc04d68be82eab01d0d891148044716b3c8690f",
-      "file": "badge/record/cbc12826-62f0-4dc6-b3b6-b59d3bc5a477-v001.webp",
-      "alt": "體重紀錄徽章 5",
-      "series": "record",
-      "threshold": 5,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/cbc12826-62f0-4dc6-b3b6-b59d3bc5a477-v001.webp",
-          "contentSha256": "e125947b767b96568c17a7142bc04d68be82eab01d0d891148044716b3c8690f",
-          "createdAt": "2026-09-21T06:18:02.427Z"
-        }
-      ],
-      "legacyFiles": ["badge/record/5.webp"]
-    },
-    {
-      "key": "record-60",
-      "assetId": "5f76b36b-620b-472e-9c3b-c088a65ee0da",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "d8af7e9666cd95ca78e9bcf9613ba7bcb41c4edc7c75adb649a8a8f5a4627fb2",
-      "file": "badge/record/5f76b36b-620b-472e-9c3b-c088a65ee0da-v001.webp",
-      "alt": "體重紀錄徽章 60",
-      "series": "record",
-      "threshold": 60,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/5f76b36b-620b-472e-9c3b-c088a65ee0da-v001.webp",
-          "contentSha256": "d8af7e9666cd95ca78e9bcf9613ba7bcb41c4edc7c75adb649a8a8f5a4627fb2",
-          "createdAt": "2026-09-21T04:38:45.523Z"
-        }
-      ]
-    },
-    {
-      "key": "record-60",
-      "assetId": "226393d3-0650-4063-b59e-10a812c443c3",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "402f920a2ab47eefcbef73988dec2407378624d31cb204c0eadc9ac4aab7aa99",
-      "file": "badge/record/226393d3-0650-4063-b59e-10a812c443c3-v001.webp",
-      "alt": "體重紀錄徽章 60",
-      "series": "record",
-      "threshold": 60,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/226393d3-0650-4063-b59e-10a812c443c3-v001.webp",
-          "contentSha256": "402f920a2ab47eefcbef73988dec2407378624d31cb204c0eadc9ac4aab7aa99",
-          "createdAt": "2026-09-21T06:18:02.888Z"
-        }
-      ],
-      "legacyFiles": ["badge/record/60.webp"]
-    },
-    {
-      "key": "record-90",
-      "assetId": "faf95efb-eca2-4fdb-aca8-54e9218d6532",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "b292a336aa55a5e2c6996bc64ed0cf8b6271ea6551abc00c77af8ceb95e5f5fa",
-      "file": "badge/record/faf95efb-eca2-4fdb-aca8-54e9218d6532-v001.webp",
-      "alt": "體重紀錄徽章 90",
-      "series": "record",
-      "threshold": 90,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/faf95efb-eca2-4fdb-aca8-54e9218d6532-v001.webp",
-          "contentSha256": "b292a336aa55a5e2c6996bc64ed0cf8b6271ea6551abc00c77af8ceb95e5f5fa",
-          "createdAt": "2026-09-21T04:38:45.788Z"
-        }
-      ]
-    },
-    {
-      "key": "record-90",
-      "assetId": "546a3e5f-cfe3-4a70-be26-919d56912c92",
-      "status": "active",
-      "currentVersion": 1,
-      "contentSha256": "2442c7115cdeb606d9baca39a8444337c72cb876d8f637de52c8f387dcd46e59",
-      "file": "badge/record/546a3e5f-cfe3-4a70-be26-919d56912c92-v001.webp",
-      "alt": "體重紀錄徽章 90",
-      "series": "record",
-      "threshold": 90,
-      "versions": [
-        {
-          "version": 1,
-          "file": "badge/record/546a3e5f-cfe3-4a70-be26-919d56912c92-v001.webp",
-          "contentSha256": "2442c7115cdeb606d9baca39a8444337c72cb876d8f637de52c8f387dcd46e59",
-          "createdAt": "2026-09-21T06:18:03.187Z"
-        }
-      ],
-      "legacyFiles": ["badge/record/90.webp"]
     }
   ]
 }

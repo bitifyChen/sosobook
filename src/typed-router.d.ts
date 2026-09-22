@@ -44,13 +44,6 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    'check-in': RouteRecordInfo<
-      'check-in',
-      '/check-in/:date?',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     'competitions': RouteRecordInfo<
       'competitions',
       '/competitions',
@@ -156,12 +149,6 @@ declare module 'vue-router/auto-routes' {
     'src/pages/card/index.vue': {
       routes:
         | 'card'
-      views:
-        | never
-    }
-    'src/pages/check-in/index.vue': {
-      routes:
-        | 'check-in'
       views:
         | never
     }

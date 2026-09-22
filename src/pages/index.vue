@@ -121,6 +121,57 @@ const bmiTrend = computed(() =>
       .filter((point) => point.value !== null)
   )
 );
+const calendarTapWindow = 320;
+const calendarTapMoveTolerance = 12;
+const lastCalendarTap = ref(null);
+const calendarPointerStart = ref(null);
+const openCheckIn = (dateKey) => {
+  if (dateKey > today) return;
+  store.openCheckIn(dateKey);
+};
+const handleCalendarDoubleClick = (dateKey) => {
+  selectedKey.value = dateKey;
+  openCheckIn(dateKey);
+};
+const handleCalendarPointerDown = (event, dateKey) => {
+  if (event.pointerType === 'mouse') return;
+  calendarPointerStart.value = {
+    dateKey,
+    x: event.clientX,
+    y: event.clientY,
+  };
+};
+const handleCalendarPointerUp = (event, dateKey) => {
+  if (event.pointerType === 'mouse') return;
+
+  const start = calendarPointerStart.value;
+  calendarPointerStart.value = null;
+  if (!start || start.dateKey !== dateKey) {
+    lastCalendarTap.value = null;
+    return;
+  }
+
+  const moved = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+  if (moved > calendarTapMoveTolerance) {
+    lastCalendarTap.value = null;
+    return;
+  }
+
+  const now = Date.now();
+  const isDoubleTap =
+    lastCalendarTap.value?.dateKey === dateKey &&
+    now - lastCalendarTap.value.timestamp <= calendarTapWindow;
+  lastCalendarTap.value = isDoubleTap ? null : { dateKey, timestamp: now };
+
+  if (isDoubleTap) {
+    event.preventDefault();
+    handleCalendarDoubleClick(dateKey);
+  }
+};
+const handleCalendarPointerCancel = () => {
+  calendarPointerStart.value = null;
+  lastCalendarTap.value = null;
+};
 const moveMonth = (amount) => {
   shown.value = new Date(shown.value.getFullYear(), shown.value.getMonth() + amount, 1);
 };
@@ -161,14 +212,15 @@ const handleTouchEnd = (event) => {
       @touchstart.passive="handleTouchStart"
       @touchend.passive="handleTouchEnd"
     >
-      <RouterLink
+      <button
         v-if="!selectedIsFuture"
         class="round-button calendar-checkin-button"
-        :to="`/check-in/${selectedKey}`"
+        type="button"
         aria-label="編輯所選日期的打卡"
+        @click="openCheckIn(selectedKey)"
       >
         <Pencil :size="19" />
-      </RouterLink>
+      </button>
       <div class="month-switcher">
         <button aria-label="上個月" @click="moveMonth(-1)"><ChevronLeft /></button>
         <h2>{{ monthLabel(shown.getFullYear(), shown.getMonth()) }}</h2>
@@ -189,8 +241,12 @@ const handleTouchEnd = (event) => {
               selected: cell.key === selectedKey,
             },
           ]"
-          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${store.recordsByDate[cell.key].weightKg.toFixed(1)} kg` : ''}`"
+          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${store.recordsByDate[cell.key].weightKg.toFixed(1)} kg` : ''}${cell.key <= today ? '，雙擊編輯' : ''}`"
           @click="selectedKey = cell.key"
+          @dblclick.stop.prevent="handleCalendarDoubleClick(cell.key)"
+          @pointerdown="handleCalendarPointerDown($event, cell.key)"
+          @pointerup="handleCalendarPointerUp($event, cell.key)"
+          @pointercancel="handleCalendarPointerCancel"
         >
           <span class="calendar-day-number">{{ cell.day }}</span>
           <small
@@ -247,13 +303,15 @@ const handleTouchEnd = (event) => {
         :src="stickerById(selected.stickerId).src"
         :alt="stickerById(selected.stickerId).alt"
       />
-      <RouterLink
+      <button
         v-if="selected || selectedKey <= today"
         class="round-button icon-link"
-        :to="`/check-in/${selectedKey}`"
+        type="button"
         aria-label="編輯這天的打卡"
-        ><Pencil :size="17"
-      /></RouterLink>
+        @click="openCheckIn(selectedKey)"
+      >
+        <Pencil :size="17" />
+      </button>
     </article>
     <section class="body-trend-section">
       <div class="section-title">

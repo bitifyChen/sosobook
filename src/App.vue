@@ -59,15 +59,18 @@ watch(
 </script>
 
 <template>
-  <div v-if="!store.state.authReady" class="splash">
-    <div class="splash-progress" role="progressbar" aria-label="正在載入 SosoBook">
-      <span></span>
+  <div class="app-viewport">
+    <div v-if="!store.state.authReady" class="splash">
+      <div class="splash-progress" role="progressbar" aria-label="正在載入 SosoBook">
+        <span></span>
+      </div>
+      <p>正在翻開手帳…</p>
     </div>
-    <p>正在翻開手帳…</p>
+    <AppShell v-else><RouterView /></AppShell>
   </div>
-  <AppShell v-else><RouterView /></AppShell>
   <ToastNotice />
   <ConfirmDialog />
   <CompetitionCompletionViewer />
   <BadgeViewer />
+  <PwaInstallPrompt />
 </template>

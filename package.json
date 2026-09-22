@@ -12,6 +12,7 @@
     "assets": "node scripts/manage-assets.mjs new",
     "assets:new": "node scripts/manage-assets.mjs new",
     "assets:update": "node scripts/manage-assets.mjs update",
+    "assets:check": "node scripts/validate-assets.mjs",
     "badge": "node scripts/process-badges.mjs",
     "webp": "node scripts/convert-images-to-webp.mjs",
     "test": "vitest run",
