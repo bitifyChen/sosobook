@@ -409,6 +409,23 @@ h2 {
   background: #ffe4dc;
   font-weight: 700;
 }
+.form-info {
+  margin: -4px 0 18px;
+  padding: 10px 12px;
+  color: #365d78;
+  background: #e7f2f7;
+  border: 1px dashed #86b2c4;
+  border-radius: 9px 7px 10px 8px;
+  line-height: 1.55;
+}
+.form-info a {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--blue);
+  font-weight: 850;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* Navigation */
 .bottom-nav {

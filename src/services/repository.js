@@ -273,6 +273,12 @@ export const joinCompetition = async (uid, profile, inviteCode) => {
     throw new Error('找不到這個競賽房間。');
   const invite = inviteSnapshot.data();
   if (invite.endDate < toDateKey()) throw new Error('這場競賽已經結束，無法再加入。');
+  if (invite.createdBy === uid) {
+    const error = new Error('你已經在這場競賽中，請直接前往競賽查看。');
+    error.code = 'ALREADY_JOINED';
+    error.competitionId = invite.competitionId;
+    throw error;
+  }
   const competitionId = invite.competitionId;
   await setDoc(doc(db, 'competitions', competitionId, 'members', uid), {
     uid,

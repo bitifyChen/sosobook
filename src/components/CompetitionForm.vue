@@ -13,6 +13,18 @@ const item = computed(() =>
 const today = toDateKey();
 const form = reactive({ name: '', startDate: today, endDate: addDays(today, 30), code: '' });
 const error = ref('');
+const normalizedCode = computed(() => form.code.trim().toUpperCase());
+const alreadyJoinedCompetition = computed(() => {
+  if (!joining.value || normalizedCode.value.length !== 6) return null;
+  const uid = store.state.user?.uid;
+  return (
+    store.state.competitions.find(
+      (competition) =>
+        competition.inviteCode === normalizedCode.value &&
+        competition.members?.some((member) => member.uid === uid)
+    ) || null
+  );
+});
 const competitionClosed = computed(
   () =>
     editing.value &&
@@ -23,7 +35,12 @@ const datesLocked = computed(
   () => editing.value && Boolean(item.value) && item.value.startDate <= today
 );
 const formDescription = computed(() => {
-  if (joining.value) return '輸入朋友分享的六碼邀請碼。';
+  if (joining.value) {
+    if (alreadyJoinedCompetition.value) {
+      return `你已經在「${alreadyJoinedCompetition.value.name}」中，可以直接查看競賽。`;
+    }
+    return '輸入朋友分享的六碼邀請碼。';
+  }
   if (editing.value) {
     if (competitionClosed.value) return '這場競賽已結束，設定已鎖定。';
     if (datesLocked.value) return '競賽已開始，現在只能修改名稱；開始與結束日期已鎖定。';
@@ -44,6 +61,7 @@ watch(
 );
 const submit = async () => {
   error.value = '';
+  if (joining.value && alreadyJoinedCompetition.value) return;
   try {
     const result = joining.value
       ? await store.joinCompetition(form.code)
@@ -67,7 +85,14 @@ const submit = async () => {
     }
     await router.replace(destination);
   } catch (cause) {
-    if (cause?.code === 'permission-denied' || cause?.code === 'PERMISSION_DENIED') {
+    if (joining.value && cause?.code === 'ALREADY_JOINED') {
+      error.value = '你已經在這場競賽中，請直接前往競賽查看。';
+    } else if (
+      joining.value &&
+      (cause?.code === 'permission-denied' || cause?.code === 'PERMISSION_DENIED')
+    ) {
+      error.value = '目前無法加入這場競賽，請確認邀請碼是否正確，或你是否已經在競賽中。';
+    } else if (cause?.code === 'permission-denied' || cause?.code === 'PERMISSION_DENIED') {
       error.value = competitionClosed.value
         ? '這場競賽已結束，無法再編輯。'
         : datesLocked.value
@@ -102,8 +127,13 @@ const submit = async () => {
             minlength="6"
             required
             placeholder="ABCDEF"
-            @input="form.code = form.code.toUpperCase()" /></label
-      ></template>
+            @input="form.code = form.code.toUpperCase()"
+        /></label>
+        <p v-if="alreadyJoinedCompetition" class="form-info">
+          已經在這場競賽中，不需要再次加入。
+          <RouterLink :to="`/competitions/${alreadyJoinedCompetition.id}`">前往競賽</RouterLink>
+        </p>
+      </template>
       <template v-else>
         <label :class="['field', { 'field--locked': competitionClosed }]"
           ><span>挑戰名稱</span
@@ -132,9 +162,21 @@ const submit = async () => {
       <p v-if="error" class="form-error">{{ error }}</p>
       <button
         class="primary-button"
-        :disabled="store.state.busy || (editing && (!item || competitionClosed))"
+        :disabled="
+          store.state.busy ||
+          Boolean(alreadyJoinedCompetition) ||
+          (editing && (!item || competitionClosed))
+        "
       >
-        {{ joining ? '加入挑戰' : editing ? '保存挑戰設定' : '建立並取得邀請碼' }}
+        {{
+          joining
+            ? alreadyJoinedCompetition
+              ? '已經在競賽中'
+              : '加入挑戰'
+            : editing
+              ? '保存挑戰設定'
+              : '建立並取得邀請碼'
+        }}
       </button>
     </form>
   </section>

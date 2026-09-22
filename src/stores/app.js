@@ -373,6 +373,18 @@ export const useAppStore = defineStore('app', () => {
   };
 
   const joinCompetition = async (code) => {
+    const normalizedCode = code.trim().toUpperCase();
+    const existingCompetition = state.competitions.find(
+      (competition) =>
+        competition.inviteCode === normalizedCode &&
+        competition.members?.some((member) => member.uid === state.user?.uid)
+    );
+    if (existingCompetition) {
+      const error = new Error('你已經在這場競賽中，請直接前往競賽查看。');
+      error.code = 'ALREADY_JOINED';
+      error.competitionId = existingCompetition.id;
+      throw error;
+    }
     const item = await repository.joinCompetition(state.user.uid, state.profile, code);
     await refreshCompetitions();
     await refreshScores();
