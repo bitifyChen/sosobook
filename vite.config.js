@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
       }),
       vue(),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         includeAssets: ['app-128.png', 'app-512.png', 'logo.webp'],
         manifest: {
           name: 'SosoBook 體重日記',

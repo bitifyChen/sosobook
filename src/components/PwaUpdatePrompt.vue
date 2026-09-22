@@ -87,7 +87,7 @@ const updateNow = async () => {
   if (updating.value) return;
   updating.value = true;
   try {
-    await forceReloadPwa();
+    await forceReloadPwa({ expectUpdate: true });
   } finally {
     updating.value = false;
   }
