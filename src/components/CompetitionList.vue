@@ -1,10 +1,6 @@
 <script setup>
 import { Flag } from 'lucide-vue-next';
 import { avatarById } from '@/data/assets';
-import {
-  getViewedCompetitionResultIds,
-  markCompetitionResultViewed,
-} from '@/utils/competitionHistory';
 import { competitionStatus, rankEntries } from '@/utils/competition';
 import { daysBetween, toDateKey } from '@/utils/date';
 
@@ -17,19 +13,12 @@ const props = defineProps({
 
 const store = useAppStore();
 const today = toDateKey();
-const viewedIds = ref(new Set(getViewedCompetitionResultIds(store.state.user?.uid)));
 const statusText = {
   active: '進行中',
   upcoming: '準備開賽',
   'awaiting-settlement': '等待結算',
   settled: '已完賽',
 };
-watch(
-  () => store.state.user?.uid,
-  (uid) => {
-    viewedIds.value = new Set(getViewedCompetitionResultIds(uid));
-  }
-);
 const items = computed(() => {
   const allItems = store.state.competitions.map((item) => {
     const lifecycle = competitionStatus(item, today);
@@ -61,14 +50,13 @@ const items = computed(() => {
       scoreText: scoreValue == null ? '—' : `${Number(scoreValue).toFixed(2)}%`,
       scoreLabel: lifecycle === 'settled' ? '完賽成績' : baselinePending ? '尚未計算' : '目前成績',
       settledResult,
-      resultViewed: viewedIds.value.has(item.id),
       daysLeft: Math.max(0, daysBetween(today, item.endDate)),
     };
   });
 
   const visibleItems = props.history
     ? allItems.filter((item) => item.lifecycle === 'settled')
-    : allItems.filter((item) => item.lifecycle !== 'settled' || !item.resultViewed);
+    : allItems.filter((item) => item.lifecycle !== 'settled');
 
   return visibleItems.sort((left, right) => {
     if (props.history) return right.endDate.localeCompare(left.endDate);
@@ -77,11 +65,6 @@ const items = computed(() => {
     return priority[left.lifecycle] - priority[right.lifecycle];
   });
 });
-
-const openCompetition = (item) => {
-  if (item.lifecycle !== 'settled') return;
-  viewedIds.value = new Set(markCompetitionResultViewed(store.state.user?.uid, item.id));
-};
 </script>
 
 <template>
@@ -98,7 +81,6 @@ const openCompetition = (item) => {
       :key="item.id"
       class="paper-card competition-card"
       :to="'/competitions/' + item.id"
-      @click="openCompetition(item)"
     >
       <div :class="['card-ribbon', 'card-ribbon--' + item.lifecycle]">
         {{ statusText[item.lifecycle] }}
@@ -142,9 +124,6 @@ const openCompetition = (item) => {
             :alt="member.nickname"
           /><span>{{ item.members.length }} 人參賽</span>
         </div>
-        <span v-if="item.lifecycle === 'settled' && !props.history" class="competition-result-cta"
-          >查看結果!</span
-        >
       </div>
     </RouterLink>
   </div>
