@@ -1,6 +1,6 @@
 import { toDateKey } from '@/utils/date';
 import { defaultAchievementStats, normalizeAchievementStats } from '@/utils/badges';
-import { generateInviteCode } from '@/utils/competition';
+import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
 
 const storageKey = 'sosobook-firebase-mock';
 const emptyCompetitionFixtures = { competitions: [] };
@@ -196,6 +196,7 @@ export const listCompetitions = async (uid) => {
 export const getCompetition = async (_uid, competitionId) => loadCompetition(competitionId);
 
 export const createCompetition = async (uid, profile, input) => {
+  validateCompetitionStartDate(input.startDate);
   const state = readState();
   let inviteCode = generateInviteCode();
   while (Object.values(state.competitions).some((item) => item.inviteCode === inviteCode)) {

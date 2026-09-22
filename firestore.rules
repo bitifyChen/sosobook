@@ -244,6 +244,7 @@ service cloud.firestore {
       allow list: if false;
       allow create: if signedIn()
         && validInviteData(inviteCode, request.resource.data)
+        && request.resource.data.startDate >= todayKey()
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.active == true
         && request.resource.data.createdAt == request.time
@@ -273,6 +274,7 @@ service cloud.firestore {
       allow list: if false;
       allow create: if signedIn()
         && validCompetitionData(competitionId, request.resource.data)
+        && request.resource.data.startDate >= todayKey()
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time

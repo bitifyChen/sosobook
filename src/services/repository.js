@@ -17,7 +17,7 @@ import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, db, googleProvider, isFirebaseConfigured } from '@/firebase';
 import * as mockRepository from '@/services/mockRepository';
 import { toDateKey } from '@/utils/date';
-import { generateInviteCode } from '@/utils/competition';
+import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
 
 const isMockMode = import.meta.env.VITE_FIREBASE_MOCK === 'true';
 const toPlain = (snapshot) => ({ id: snapshot.id, ...snapshot.data() });
@@ -190,6 +190,7 @@ const reserveInviteCode = async () => {
 
 export const createCompetition = async (uid, profile, input) => {
   if (isMockMode) return mockRepository.createCompetition(uid, profile, input);
+  validateCompetitionStartDate(input.startDate);
   requireFirebase();
   const inviteCode = await reserveInviteCode();
   const id = doc(collection(db, 'competitions')).id;

@@ -46,7 +46,7 @@ const formDescription = computed(() => {
     if (datesLocked.value) return '競賽已開始，現在只能修改名稱；開始與結束日期已鎖定。';
     return '調整名稱或日期，已加入的成員與邀請碼會保留。';
   }
-  return '現在就可以開一場競賽；有開始日體重的成員，才會列入暫算排名。';
+  return '從今天或未來開始一場競賽；有開始日體重的成員，才會列入暫算排名。';
 });
 watch(
   item,
@@ -59,9 +59,22 @@ watch(
   },
   { immediate: true }
 );
+const validateDates = () => {
+  if (joining.value || datesLocked.value) return true;
+  if (!form.startDate || form.startDate < today) {
+    error.value = '競賽開始日不能早於今天，請選擇今天或未來的日期。';
+    return false;
+  }
+  if (!form.endDate || form.endDate < form.startDate) {
+    error.value = '競賽結束日不能早於開始日。';
+    return false;
+  }
+  return true;
+};
 const submit = async () => {
   error.value = '';
   if (joining.value && alreadyJoinedCompetition.value) return;
+  if (!validateDates()) return;
   try {
     const result = joining.value
       ? await store.joinCompetition(form.code)
@@ -147,7 +160,12 @@ const submit = async () => {
         <div class="date-fields">
           <label :class="['field', { 'field--locked': datesLocked }]"
             ><span><CalendarDays />開始日期</span
-            ><input v-model="form.startDate" type="date" required :disabled="datesLocked" /></label
+            ><input
+              v-model="form.startDate"
+              type="date"
+              :min="today"
+              required
+              :disabled="datesLocked" /></label
           ><label :class="['field', { 'field--locked': datesLocked }]"
             ><span><CalendarDays />結束日期</span
             ><input

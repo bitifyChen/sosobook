@@ -1,3 +1,5 @@
+import { toDateKey } from './date';
+
 export const calculateLossPercent = (baselineWeight, currentWeight) => {
   const baseline = Number(baselineWeight);
   const current = Number(currentWeight);
@@ -14,6 +16,15 @@ export const recordsInRange = (records, startDate, endDate) =>
   [...records]
     .filter((record) => record.dateKey >= startDate && record.dateKey <= endDate)
     .sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+
+export const validateCompetitionStartDate = (startDate, todayKey = toDateKey()) => {
+  if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(startDate) || startDate < todayKey) {
+    const error = new Error('競賽開始日不能早於今天，請選擇今天或未來的日期。');
+    error.code = 'COMPETITION_START_IN_PAST';
+    throw error;
+  }
+  return true;
+};
 
 export const buildPercentageCurve = (records, baselineWeight) =>
   records.map((record) => ({

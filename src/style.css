@@ -1682,6 +1682,20 @@ h2 {
   flex: none;
   margin-left: auto;
 }
+.settings-menu-button {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.settings-menu-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+.settings-menu-button .spinning {
+  animation: spin 0.8s linear infinite;
+}
 .settings-menu-copy {
   display: grid;
   gap: 2px;
@@ -1691,6 +1705,14 @@ h2 {
   color: #657486;
   font-size: 0.78rem;
   line-height: 1.5;
+}
+.settings-version {
+  margin: 42px 0 0;
+  color: rgba(37, 54, 74, 0.58);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  text-align: center;
 }
 .settings-block-heading {
   display: flex;
@@ -2203,9 +2225,194 @@ h2 {
 .badge-viewer-leave-to .badge-viewer-inner {
   transform: translateY(16px) rotate(-1deg) scale(0.97);
 }
+.competition-completion-backdrop {
+  position: fixed;
+  z-index: 71;
+  inset: 0;
+  overflow: auto;
+  overscroll-behavior: none;
+  color: var(--ink);
+  background-color: #f8d56e;
+  background-image: radial-gradient(#f0b843 1.4px, transparent 1.4px);
+  background-size: 15px 15px;
+  border: 3px solid var(--ink);
+}
+.competition-completion-viewer {
+  position: relative;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: max(76px, calc(env(safe-area-inset-top) + 56px)) 24px
+    max(42px, calc(env(safe-area-inset-bottom) + 24px));
+  outline: none;
+}
+.competition-completion-viewer::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 2px dashed rgba(37, 54, 74, 0.42);
+  border-radius: 23px 17px 26px 19px;
+  pointer-events: none;
+}
+.competition-completion-close {
+  position: absolute;
+  z-index: 1;
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: #fffdf6;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 4px 0 var(--ink);
+  cursor: pointer;
+  transform: rotate(4deg);
+}
+.competition-completion-close:active {
+  box-shadow: none;
+  transform: translate(3px, 4px) rotate(4deg);
+}
+.competition-completion-inner {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  padding: 20px 24px 28px;
+  text-align: center;
+}
+.competition-completion-kicker {
+  margin-bottom: 18px;
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+.competition-completion-medallion {
+  position: relative;
+  width: min(42vw, 180px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 24px;
+  color: #a96f17;
+  background: #fffdf6;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 7px 8px 0 var(--ink);
+  transform: rotate(-4deg);
+}
+.competition-completion-medallion::before {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border: 2px dashed rgba(37, 54, 74, 0.35);
+  border-radius: 50%;
+}
+.competition-completion-medallion svg {
+  position: relative;
+  z-index: 1;
+}
+.competition-completion-label {
+  margin-bottom: 4px;
+  color: var(--blue);
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+.competition-completion-inner h2 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 8vw, 3rem);
+  line-height: 1.18;
+}
+.competition-completion-message {
+  max-width: 390px;
+  margin: 0 auto 20px;
+  color: #5f6f7c;
+  line-height: 1.7;
+}
+.competition-completion-note {
+  display: grid;
+  gap: 4px;
+  width: min(100%, 360px);
+  margin: 0 auto 22px;
+  padding: 12px 15px;
+  background: rgba(255, 253, 246, 0.76);
+  border: 2px solid var(--ink);
+  border-radius: 10px 8px 11px 9px;
+  box-shadow: 4px 5px 0 var(--ink);
+  transform: rotate(1deg);
+}
+.competition-completion-note span {
+  color: var(--pink);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+.competition-completion-note small {
+  color: #5f6f7c;
+  line-height: 1.55;
+}
+.competition-completion-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 10px;
+  width: min(100%, 390px);
+  margin: 0 auto;
+}
+.competition-completion-actions button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 11px 9px 12px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.competition-completion-later {
+  color: var(--ink);
+  background: #fffdf6;
+}
+.competition-completion-primary {
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.competition-completion-actions button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+.competition-completion-enter-active,
+.competition-completion-leave-active {
+  transition: opacity 0.2s ease;
+}
+.competition-completion-enter-active .competition-completion-viewer,
+.competition-completion-leave-active .competition-completion-viewer {
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.competition-completion-enter-from,
+.competition-completion-leave-to {
+  opacity: 0;
+}
+.competition-completion-enter-from .competition-completion-viewer,
+.competition-completion-leave-to .competition-completion-viewer {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
 @media (prefers-reduced-motion: reduce) {
   .badge-confetti {
     display: none;
+  }
+  .competition-completion-enter-active,
+  .competition-completion-leave-active,
+  .competition-completion-enter-active .competition-completion-viewer,
+  .competition-completion-leave-active .competition-completion-viewer {
+    transition: none;
   }
 }
 .text-button {
@@ -2235,6 +2442,24 @@ h2 {
   place-content: center;
   justify-items: center;
   color: var(--blue);
+}
+.splash-progress {
+  position: relative;
+  width: min(250px, 66vw);
+  height: 10px;
+  overflow: hidden;
+  background: #cfe2e8;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.splash-progress span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 44%;
+  background: var(--blue);
+  border-radius: inherit;
+  animation: loading-bar 1.35s ease-in-out infinite;
 }
 .loader {
   width: 43px;
@@ -2274,6 +2499,17 @@ h2 {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-110%);
+  }
+  50% {
+    transform: translateX(115%);
+  }
+  100% {
+    transform: translateX(250%);
   }
 }
 

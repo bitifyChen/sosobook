@@ -1,8 +1,11 @@
 <script setup>
-import { ArrowLeft, ArrowRight, BookOpen, LogOut, X } from 'lucide-vue-next';
+import { ArrowLeft, ArrowRight, BookOpen, LogOut, RefreshCw, X } from 'lucide-vue-next';
+import { APP_VERSION_LABEL } from '@/config/appVersion';
+import { forceReloadPwa } from '@/services/pwa';
 
 const store = useAppStore();
 const router = useRouter();
+const forceReloading = ref(false);
 
 const logout = async () => {
   const confirmed = await store.askConfirm({
@@ -16,6 +19,11 @@ const logout = async () => {
 };
 
 const close = () => router.push('/card');
+const forceReload = async () => {
+  if (forceReloading.value) return;
+  forceReloading.value = true;
+  await forceReloadPwa();
+};
 </script>
 
 <template>
@@ -45,6 +53,19 @@ const close = () => router.push('/card');
           </span>
           <ArrowRight :size="20" />
         </RouterLink>
+        <button
+          class="settings-menu-item settings-menu-button"
+          type="button"
+          :disabled="forceReloading"
+          @click="forceReload"
+        >
+          <span class="settings-icon"><RefreshCw :size="20" /></span>
+          <span class="settings-menu-copy">
+            <strong>強制重新載入</strong>
+            <small>強制從伺服器下載最新網頁內容</small>
+          </span>
+          <RefreshCw :class="{ spinning: forceReloading }" :size="20" />
+        </button>
       </section>
 
       <button class="settings-logout" type="button" @click="logout">
@@ -53,6 +74,7 @@ const close = () => router.push('/card');
       <RouterLink class="settings-back-link" to="/card"
         ><ArrowLeft :size="17" />回到健身卡</RouterLink
       >
+      <p class="settings-version" aria-label="應用程式版本">{{ APP_VERSION_LABEL }}</p>
     </div>
   </section>
 </template>

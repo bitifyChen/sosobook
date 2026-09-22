@@ -3,6 +3,12 @@ import { defineStore } from 'pinia';
 import * as repository from '@/services/repository';
 import { addDays, calculateStreak, toDateKey } from '@/utils/date';
 import { badgeSeries, findNewlyUnlockedBadge } from '@/utils/badges';
+import { getViewedCompetitionResultIds } from '@/utils/competitionHistory';
+import {
+  findNewlySettledCompetitions,
+  readCompetitionStatusSnapshot,
+  writeCompetitionStatusSnapshot,
+} from '@/utils/competitionNotifications';
 import {
   buildPercentageCurve,
   calculateLossPercent,
@@ -24,10 +30,12 @@ export const useAppStore = defineStore('app', () => {
     toast: null,
     confirm: null,
     badgeViewerQueue: [],
+    competitionCompletionQueue: [],
     mode: repository.repositoryMode,
   });
 
   let confirmResolver = null;
+  let competitionRefreshPromise = null;
 
   const recordsByDate = computed(() =>
     Object.fromEntries(state.records.map((item) => [item.dateKey, item]))
@@ -92,17 +100,37 @@ export const useAppStore = defineStore('app', () => {
     state.badgeViewerQueue.shift();
   };
 
-  const revealNewBadge = (seriesKey, previousCount, currentCount) => {
-    const badge = findNewlyUnlockedBadge(seriesKey, previousCount, currentCount);
+  const revealNewBadges = (seriesKey, previousCount, currentCount) => {
     const series = badgeSeries.find((item) => item.key === seriesKey);
-    if (!badge || !series) return;
-    openBadgeViewer({
-      ...badge,
-      seriesLabel: series.label,
-      current: currentCount,
-      unlocked: true,
-      mode: 'earned',
+    if (!series) return;
+
+    let cursor = Math.max(0, Number(previousCount) || 0);
+    const current = Math.max(cursor, Number(currentCount) || 0);
+    while (cursor < current) {
+      const badge = findNewlyUnlockedBadge(seriesKey, cursor, current);
+      if (!badge) break;
+      openBadgeViewer({
+        ...badge,
+        seriesLabel: series.label,
+        current,
+        unlocked: true,
+        mode: 'earned',
+      });
+      cursor = badge.threshold;
+    }
+  };
+
+  const openCompetitionCompletion = (competition) => {
+    state.competitionCompletionQueue.push({
+      id: competition.id,
+      name: competition.name,
+      startDate: competition.startDate,
+      endDate: competition.endDate,
     });
+  };
+
+  const closeCompetitionCompletion = () => {
+    state.competitionCompletionQueue.shift();
   };
 
   const competitionAchievementStats = (competitions) => {
@@ -121,6 +149,42 @@ export const useAppStore = defineStore('app', () => {
       completedCompetitionCount: settled.length,
       championCount,
     };
+  };
+
+  const syncCompetitions = (competitions) => {
+    const nextCompetitions = Array.isArray(competitions) ? competitions : [];
+    const previousSnapshot = readCompetitionStatusSnapshot(state.user?.uid);
+    const viewedIds = getViewedCompetitionResultIds(state.user?.uid);
+    const newlySettled = findNewlySettledCompetitions(
+      previousSnapshot,
+      nextCompetitions,
+      viewedIds
+    );
+    const currentStats = competitionAchievementStats(nextCompetitions);
+    const newlySettledChampions = newlySettled.filter((competition) => {
+      if (competition.certificate?.championUids?.includes(state.user?.uid)) return true;
+      return competition.certificateParticipants?.some(
+        (participant) => participant.uid === state.user?.uid && participant.rank === 1
+      );
+    }).length;
+    const previousStats = previousSnapshot?.totals || {
+      completedCompetitionCount: Math.max(
+        0,
+        currentStats.completedCompetitionCount - newlySettled.length
+      ),
+      championCount: Math.max(0, currentStats.championCount - newlySettledChampions),
+    };
+
+    state.competitions = nextCompetitions;
+    writeCompetitionStatusSnapshot(state.user?.uid, nextCompetitions, currentStats);
+
+    newlySettled.forEach(openCompetitionCompletion);
+    revealNewBadges(
+      'finish',
+      previousStats.completedCompetitionCount,
+      currentStats.completedCompetitionCount
+    );
+    revealNewBadges('champion', previousStats.championCount, currentStats.championCount);
   };
 
   const buildCompetitionJoinPrompt = (competition) => {
@@ -176,11 +240,13 @@ export const useAppStore = defineStore('app', () => {
       ]);
       state.profile = profile;
       state.records = Array.isArray(records) ? records : [];
-      state.competitions = Array.isArray(competitionResult.competitions)
-        ? competitionResult.competitions
-        : [];
-      if (competitionResult.indexPending) notifyCompetitionIndexPending();
-      else if (state.competitions.length) {
+      if (competitionResult.indexPending) {
+        state.competitions = [];
+        notifyCompetitionIndexPending();
+      } else {
+        syncCompetitions(competitionResult.competitions);
+      }
+      if (!competitionResult.indexPending && state.competitions.length) {
         try {
           await refreshScores();
         } catch (cause) {
@@ -204,11 +270,13 @@ export const useAppStore = defineStore('app', () => {
         state.records = [];
         state.competitions = [];
         state.badgeViewerQueue = [];
+        state.competitionCompletionQueue = [];
       }
     } catch (cause) {
       state.profile = null;
       state.records = [];
       state.competitions = [];
+      state.competitionCompletionQueue = [];
       state.authError = getAuthErrorMessage(cause);
       notify(state.authError, 'error');
       console.error('[SosoBook] Firebase 初始化失敗。', cause);
@@ -246,6 +314,7 @@ export const useAppStore = defineStore('app', () => {
     state.profile = null;
     state.authError = null;
     state.badgeViewerQueue = [];
+    state.competitionCompletionQueue = [];
   };
 
   const saveProfile = async (profile) => {
@@ -258,10 +327,11 @@ export const useAppStore = defineStore('app', () => {
       state.profile = savedProfile;
       try {
         const competitionResult = await loadCompetitionsWithFallback();
-        state.competitions = competitionResult.competitions;
         if (competitionResult.indexPending) {
+          state.competitions = [];
           notify('會員卡已保存；競賽索引正在建立，稍後重新整理即可載入競賽。', 'warning');
         } else {
+          syncCompetitions(competitionResult.competitions);
           notify('健身卡資料已保存！');
         }
       } catch (cause) {
@@ -280,21 +350,24 @@ export const useAppStore = defineStore('app', () => {
     }
   };
 
-  const refreshCompetitions = async () => {
-    const previousStats = competitionAchievementStats(state.competitions);
-    const competitionResult = await loadCompetitionsWithFallback();
-    if (competitionResult.indexPending) {
-      notifyCompetitionIndexPending();
-      return;
+  const refreshCompetitions = async ({ notifyOnIndexPending = true } = {}) => {
+    if (!state.user) return;
+    if (competitionRefreshPromise) return competitionRefreshPromise;
+
+    competitionRefreshPromise = (async () => {
+      const competitionResult = await loadCompetitionsWithFallback();
+      if (competitionResult.indexPending) {
+        if (notifyOnIndexPending) notifyCompetitionIndexPending();
+        return;
+      }
+      syncCompetitions(competitionResult.competitions);
+    })();
+
+    try {
+      return await competitionRefreshPromise;
+    } finally {
+      competitionRefreshPromise = null;
     }
-    state.competitions = competitionResult.competitions;
-    const currentStats = competitionAchievementStats(state.competitions);
-    revealNewBadge(
-      'finish',
-      previousStats.completedCompetitionCount,
-      currentStats.completedCompetitionCount
-    );
-    revealNewBadge('champion', previousStats.championCount, currentStats.championCount);
   };
 
   const refreshScores = async () => {
@@ -342,7 +415,7 @@ export const useAppStore = defineStore('app', () => {
     await repository.saveWeightRecord(state.user.uid, record);
     state.records = await repository.listRecords(state.user.uid);
     await refreshScores();
-    revealNewBadge('record', previousRecordCount, state.records.length);
+    revealNewBadges('record', previousRecordCount, state.records.length);
     notify('今天的體重已記下！');
   };
 
@@ -414,12 +487,14 @@ export const useAppStore = defineStore('app', () => {
     notify,
     openBadgeViewer,
     closeBadgeViewer,
+    closeCompetitionCompletion,
     askConfirm,
     resolveConfirm,
     init,
     login,
     logout,
     loadAll,
+    refreshCompetitions,
     saveProfile,
     saveRecord,
     deleteRecord,

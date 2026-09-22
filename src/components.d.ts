@@ -14,6 +14,7 @@ declare module 'vue' {
     AppShell: typeof import('./components/AppShell.vue')['default']
     BadgeViewer: typeof import('./components/BadgeViewer.vue')['default']
     CheckInFab: typeof import('./components/CheckInFab.vue')['default']
+    CompetitionCompletionViewer: typeof import('./components/CompetitionCompletionViewer.vue')['default']
     CompetitionForm: typeof import('./components/CompetitionForm.vue')['default']
     CompetitionList: typeof import('./components/CompetitionList.vue')['default']
     ConfirmDialog: typeof import('./components/ConfirmDialog.vue')['default']
