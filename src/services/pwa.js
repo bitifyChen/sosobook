@@ -3,6 +3,13 @@ import { registerSW } from 'virtual:pwa-register';
 let updateServiceWorker = null;
 let pwaRegistration = null;
 let registered = false;
+const PWA_UPDATE_TIMEOUT_MS = 3500;
+
+const waitForUpdateCheck = (task) =>
+  Promise.race([
+    Promise.resolve(task),
+    new Promise((resolve) => window.setTimeout(resolve, PWA_UPDATE_TIMEOUT_MS)),
+  ]);
 
 export const registerPwa = () => {
   if (registered || typeof window === 'undefined') return;
@@ -23,13 +30,17 @@ export const forceReloadPwa = async () => {
   registerPwa();
 
   try {
-    const registration =
-      pwaRegistration ||
-      (typeof navigator !== 'undefined' && 'serviceWorker' in navigator
-        ? await navigator.serviceWorker.getRegistration()
-        : null);
-    await registration?.update();
-    await updateServiceWorker?.(true);
+    await waitForUpdateCheck(
+      (async () => {
+        const registration =
+          pwaRegistration ||
+          (typeof navigator !== 'undefined' && 'serviceWorker' in navigator
+            ? await navigator.serviceWorker.getRegistration()
+            : null);
+        await registration?.update();
+        await updateServiceWorker?.(true);
+      })()
+    );
   } catch (cause) {
     console.warn('[SosoBook] PWA 強制更新檢查失敗，改以重新載入目前頁面。', cause);
   }

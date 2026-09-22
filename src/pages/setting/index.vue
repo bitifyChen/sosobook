@@ -22,7 +22,11 @@ const close = () => router.push('/card');
 const forceReload = async () => {
   if (forceReloading.value) return;
   forceReloading.value = true;
-  await forceReloadPwa();
+  try {
+    await forceReloadPwa();
+  } finally {
+    forceReloading.value = false;
+  }
 };
 </script>
 

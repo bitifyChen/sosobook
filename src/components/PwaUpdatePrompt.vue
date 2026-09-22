@@ -86,7 +86,11 @@ const dismiss = () => {
 const updateNow = async () => {
   if (updating.value) return;
   updating.value = true;
-  await forceReloadPwa();
+  try {
+    await forceReloadPwa();
+  } finally {
+    updating.value = false;
+  }
 };
 
 const handleVisibility = () => {
