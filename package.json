@@ -1,7 +1,7 @@
 {
   "name": "sosobook",
   "private": true,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,7 @@
     "assets": "node scripts/manage-assets.mjs new",
     "assets:new": "node scripts/manage-assets.mjs new",
     "assets:update": "node scripts/manage-assets.mjs update",
+    "assets:optimize": "node scripts/manage-assets.mjs optimize",
     "assets:check": "node scripts/validate-assets.mjs",
     "badge": "node scripts/process-badges.mjs",
     "webp": "node scripts/convert-images-to-webp.mjs",

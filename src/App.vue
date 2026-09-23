@@ -1,4 +1,6 @@
 <script setup>
+import { prefetchDeferredImages } from '@/services/imagePrefetch';
+
 const store = useAppStore();
 const router = useRouter();
 const route = useRoute();
@@ -55,6 +57,13 @@ watch(
   ],
   routeForState,
   { deep: true }
+);
+watch(
+  () => [store.state.authReady, store.state.user?.uid],
+  ([authReady, uid]) => {
+    if (authReady && uid) prefetchDeferredImages();
+  },
+  { immediate: true }
 );
 </script>
 

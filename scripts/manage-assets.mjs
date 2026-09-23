@@ -1,4 +1,5 @@
 import { promises as fs } from 'node:fs';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import readline from 'node:readline';
@@ -7,9 +8,14 @@ import sharp from 'sharp';
 const projectRoot = process.cwd();
 const imageRoot = path.join(projectRoot, 'public', 'img');
 const registryPath = path.join(projectRoot, 'src', 'data', 'asset-registry.json');
-const quality = Number(process.env.WEBP_QUALITY || 84);
+const quality = Number(process.env.WEBP_QUALITY || 88);
+const assetWidth = Number(process.env.WEBP_WIDTH || 512);
+const badgeQuality = Number(process.env.BADGE_WEBP_QUALITY || 90);
 const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp']);
 const sourceExtensions = new Set(['.png', '.jpg', '.jpeg']);
+const badgeRoot = path.join(imageRoot, 'badge');
+const navRoot = path.join(imageRoot, 'nav');
+const logoPath = path.join(projectRoot, 'public', 'logo.webp');
 const definitions = {
   avatar: { folder: 'avatar', collection: 'avatars' },
   sticker: { folder: 'sticker', collection: 'stickers' },
@@ -18,6 +24,14 @@ const managedKinds = Object.keys(definitions);
 
 if (!Number.isInteger(quality) || quality < 1 || quality > 100) {
   throw new Error('WEBP_QUALITY 必須是 1 到 100 之間的整數。');
+}
+
+if (!Number.isInteger(assetWidth) || assetWidth < 64 || assetWidth > 2048) {
+  throw new Error('WEBP_WIDTH 必須是 64 到 2048 之間的整數。');
+}
+
+if (!Number.isInteger(badgeQuality) || badgeQuality < 1 || badgeQuality > 100) {
+  throw new Error('BADGE_WEBP_QUALITY 必須是 1 到 100 之間的整數。');
 }
 
 const legacyMetadata = new Map([
@@ -85,6 +99,25 @@ const listFiles = async (kind, extensions = imageExtensions) => {
       if (entry.isDirectory()) {
         await visit(filePath);
       } else if (entry.isFile() && extensions.has(path.extname(entry.name).toLowerCase())) {
+        files.push(filePath);
+      }
+    }
+  };
+
+  await visit(directory);
+  return files.sort((left, right) => left.localeCompare(right));
+};
+
+const listWebpFiles = async (directory) => {
+  const files = [];
+
+  const visit = async (currentDirectory) => {
+    if (!(await pathExists(currentDirectory))) return;
+    const entries = await fs.readdir(currentDirectory, { withFileTypes: true });
+    for (const entry of entries) {
+      const filePath = path.join(currentDirectory, entry.name);
+      if (entry.isDirectory()) await visit(filePath);
+      else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.webp') {
         files.push(filePath);
       }
     }
@@ -217,7 +250,17 @@ const convertToWebp = async (inputPath, outputPath) => {
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   const temporaryPath = `${outputPath}.tmp-${process.pid}`;
   try {
-    await sharp(inputPath).rotate().webp({ quality, effort: 5 }).toFile(temporaryPath);
+    await sharp(inputPath)
+      .rotate()
+      .resize({
+        width: assetWidth,
+        height: assetWidth,
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        withoutEnlargement: true,
+      })
+      .webp({ quality, effort: 5 })
+      .toFile(temporaryPath);
     await fs.rename(temporaryPath, outputPath);
   } finally {
     await fs.rm(temporaryPath, { force: true });
@@ -234,6 +277,44 @@ const removeSource = async (filePath) => {
       return false;
     }
     throw error;
+  }
+};
+
+const optimizeWebp = async (filePath, { width = assetWidth, outputQuality = quality } = {}) => {
+  const temporaryPath = `${filePath}.tmp-optimize-${process.pid}`;
+  const before = await fs.stat(filePath);
+  const sourceData = await fs.readFile(filePath);
+
+  try {
+    await sharp(sourceData)
+      .rotate()
+      .resize({
+        width,
+        height: width,
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        withoutEnlargement: true,
+      })
+      .webp({ quality: outputQuality, effort: 5 })
+      .toFile(temporaryPath);
+    const optimized = await fs.stat(temporaryPath);
+    const optimizedData = await fs.readFile(temporaryPath);
+    let lastError;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      try {
+        fsSync.writeFileSync(filePath, optimizedData);
+        lastError = null;
+        break;
+      } catch (error) {
+        lastError = error;
+        if (!['EBUSY', 'EPERM', 'UNKNOWN'].includes(error.code)) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+    }
+    if (lastError) throw lastError;
+    return { beforeBytes: before.size, afterBytes: optimized.size };
+  } finally {
+    await fs.rm(temporaryPath, { force: true });
   }
 };
 
@@ -418,6 +499,46 @@ const runNew = async () => {
   console.log(`Registry：${path.relative(projectRoot, registryPath)}`);
 };
 
+const runOptimize = async () => {
+  const targets = [];
+  const addTargets = async (filePaths, label, width, outputQuality) => {
+    for (const filePath of filePaths) {
+      const metadata = await sharp(filePath).metadata();
+      if (Number(metadata.width) <= width && Number(metadata.height) <= width) continue;
+      targets.push({ filePath, label, width, outputQuality });
+    }
+  };
+
+  await addTargets(await listFiles('avatar', new Set(['.webp'])), 'avatar', assetWidth, quality);
+  await addTargets(await listFiles('sticker', new Set(['.webp'])), 'sticker', assetWidth, quality);
+  await addTargets(await listWebpFiles(badgeRoot), 'badge', assetWidth, badgeQuality);
+  await addTargets(await listWebpFiles(navRoot), 'nav', 256, quality);
+  if (await pathExists(logoPath)) await addTargets([logoPath], 'logo', assetWidth, quality);
+
+  let beforeBytes = 0;
+  let afterBytes = 0;
+  for (const target of targets) {
+    const result = await optimizeWebp(target.filePath, target);
+    beforeBytes += result.beforeBytes;
+    afterBytes += result.afterBytes;
+    console.log(
+      `optimized   ${target.label} ${path.relative(projectRoot, target.filePath)} ` +
+        `${(result.beforeBytes / 1024).toFixed(1)} KiB -> ${(result.afterBytes / 1024).toFixed(1)} KiB`
+    );
+  }
+
+  const savedBytes = beforeBytes - afterBytes;
+  const savedPercent = beforeBytes ? (savedBytes / beforeBytes) * 100 : 0;
+  console.log(
+    `\nassets:optimize 完成：替換 ${targets.length} 張，` +
+      `${(beforeBytes / 1024 / 1024).toFixed(2)} MiB -> ` +
+      `${(afterBytes / 1024 / 1024).toFixed(2)} MiB，` +
+      `減少 ${(savedBytes / 1024 / 1024).toFixed(2)} MiB（${savedPercent.toFixed(1)}%）。`
+  );
+  console.log(`尺寸：貼紙、頭像、徽章 ${assetWidth}px；導覽圖 256px。`);
+  console.log('圖片路徑與 assetId 保持不變，請接著執行 npm run assets:check。');
+};
+
 const runUpdate = async () => {
   const registry = await readRegistry();
   if (!allEntries(registry).length) {
@@ -486,4 +607,5 @@ const runUpdate = async () => {
 const mode = process.argv[2] || 'new';
 if (mode === 'new') await runNew();
 else if (mode === 'update') await runUpdate();
-else throw new Error(`不支援的 assets 模式：${mode}。可使用 new 或 update。`);
+else if (mode === 'optimize') await runOptimize();
+else throw new Error(`不支援的 assets 模式：${mode}。可使用 new、update 或 optimize。`);

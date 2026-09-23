@@ -4,11 +4,16 @@ import sharp from 'sharp';
 
 const projectRoot = process.cwd();
 const badgeRoot = path.join(projectRoot, 'public', 'img', 'badge');
-const quality = Number(process.env.WEBP_QUALITY || 84);
+const quality = Number(process.env.WEBP_QUALITY || 90);
+const width = Number(process.env.WEBP_WIDTH || 512);
 const sourceExtensions = new Set(['.png', '.jpg', '.jpeg']);
 
 if (!Number.isInteger(quality) || quality < 1 || quality > 100) {
   throw new Error('WEBP_QUALITY 必須是 1 到 100 之間的整數。');
+}
+
+if (!Number.isInteger(width) || width < 64 || width > 2048) {
+  throw new Error('WEBP_WIDTH 必須是 64 到 2048 之間的整數。');
 }
 
 const toPosix = (value) => value.split(path.sep).join('/');
@@ -39,7 +44,17 @@ const listSourceFiles = async () => {
 const convertToWebp = async (inputPath, outputPath) => {
   const temporaryPath = `${outputPath}.tmp-${process.pid}`;
   try {
-    await sharp(inputPath).rotate().webp({ quality, effort: 5 }).toFile(temporaryPath);
+    await sharp(inputPath)
+      .rotate()
+      .resize({
+        width,
+        height: width,
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        withoutEnlargement: true,
+      })
+      .webp({ quality, effort: 5 })
+      .toFile(temporaryPath);
     await fs.rm(outputPath, { force: true });
     await fs.rename(temporaryPath, outputPath);
   } finally {

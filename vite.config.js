@@ -52,7 +52,13 @@ export default defineConfig(({ mode }) => {
       vue(),
       VitePWA({
         registerType: 'prompt',
-        includeAssets: ['app-128.png', 'app-512.png', 'logo.webp'],
+        includeAssets: [
+          'app-128.png',
+          'app-512.png',
+          'logo.webp',
+          'img/background/*.webp',
+          'img/nav/*.webp',
+        ],
         manifest: {
           name: 'SosoBook 體重日記',
           short_name: 'SosoBook',
@@ -79,6 +85,7 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
+          cleanupOutdatedCaches: true,
           globPatterns: ['**/*.{js,css,html,svg}'],
           globIgnores: ['img/reference/**', 'app-icon.*', '**/*.{png,jpg,jpeg}'],
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
@@ -87,10 +94,11 @@ export default defineConfig(({ mode }) => {
             {
               urlPattern: ({ request, url }) =>
                 request.destination === 'image' && url.origin === self.location.origin,
-              handler: 'CacheFirst',
+              handler: 'NetworkFirst',
               options: {
-                cacheName: 'sosobook-images-v1',
+                cacheName: 'sosobook-images-v2',
                 cacheableResponse: { statuses: [0, 200] },
+                networkTimeoutSeconds: 4,
                 expiration: {
                   maxEntries: 180,
                   maxAgeSeconds: 60 * 60 * 24 * 90,
