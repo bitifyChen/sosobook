@@ -19,6 +19,7 @@ declare module 'vue' {
     CompetitionForm: typeof import('./components/CompetitionForm.vue')['default']
     CompetitionList: typeof import('./components/CompetitionList.vue')['default']
     ConfirmDialog: typeof import('./components/ConfirmDialog.vue')['default']
+    FillRateHelpDialog: typeof import('./components/FillRateHelpDialog.vue')['default']
     PwaInstallPrompt: typeof import('./components/PwaInstallPrompt.vue')['default']
     PwaUpdatePrompt: typeof import('./components/PwaUpdatePrompt.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

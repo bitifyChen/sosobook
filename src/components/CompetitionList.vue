@@ -1,7 +1,13 @@
 <script setup>
 import { Flag } from 'lucide-vue-next';
 import { avatarById } from '@/data/assets';
-import { competitionStatus, rankEntries } from '@/utils/competition';
+import {
+  calculateFillRate,
+  competitionStatus,
+  FILL_RATE_THRESHOLD,
+  memberCompetitionScore,
+  rankEntries,
+} from '@/utils/competition';
 import { daysBetween, toDateKey } from '@/utils/date';
 
 const props = defineProps({
@@ -23,14 +29,16 @@ const items = computed(() => {
   const allItems = store.state.competitions.map((item) => {
     const lifecycle = competitionStatus(item, today);
     const own = item.members.find((member) => member.uid === store.state.user.uid);
-    const eligibleMembers = item.members.filter(
-      (member) => member.provisionalLossPct !== null && member.provisionalLossPct !== undefined
-    );
+    const curveEndDate = lifecycle === 'settled' || today >= item.endDate ? item.endDate : today;
+    const membersWithScore = item.members.map((member) => ({
+      ...member,
+      lossPct: memberCompetitionScore(member),
+      fillRatePercent: calculateFillRate(member, item.startDate, curveEndDate).percent,
+    }));
     const provisionalRankings = rankEntries(
-      eligibleMembers.map((member) => ({
-        ...member,
-        lossPct: member.provisionalLossPct,
-      }))
+      membersWithScore.filter(
+        (member) => member.lossPct !== null && member.fillRatePercent >= FILL_RATE_THRESHOLD
+      )
     );
     const calculatedOwnRank = provisionalRankings.find(
       (member) => member.uid === store.state.user.uid
@@ -39,16 +47,30 @@ const items = computed(() => {
       lifecycle === 'settled'
         ? item.certificateParticipants?.find((participant) => participant.uid === own?.uid)
         : null;
-    const baselinePending = lifecycle !== 'settled' && own?.provisionalLossPct == null;
-    const scoreValue = lifecycle === 'settled' ? settledResult?.lossPct : own?.provisionalLossPct;
+    const ownWithScore = membersWithScore.find((member) => member.uid === own?.uid);
+    const ownScore = ownWithScore?.lossPct ?? null;
+    const scorePending = lifecycle !== 'settled' && ownScore == null;
+    const belowFillRate =
+      !scorePending &&
+      ownWithScore?.fillRatePercent != null &&
+      ownWithScore.fillRatePercent < FILL_RATE_THRESHOLD;
+    const scoreValue = lifecycle === 'settled' ? settledResult?.lossPct : ownScore;
     return {
       ...item,
       lifecycle,
       own,
-      ownRank: baselinePending ? null : (own?.provisionalRank ?? calculatedOwnRank),
-      baselinePending,
+      ownRank: scorePending || belowFillRate ? null : (own?.provisionalRank ?? calculatedOwnRank),
+      scorePending,
+      belowFillRate,
       scoreText: scoreValue == null ? '—' : `${Number(scoreValue).toFixed(2)}%`,
-      scoreLabel: lifecycle === 'settled' ? '完賽成績' : baselinePending ? '尚未計算' : '目前成績',
+      scoreLabel:
+        lifecycle === 'settled'
+          ? '完賽成績'
+          : scorePending
+            ? '尚無期間資料'
+            : belowFillRate
+              ? `未達 ${FILL_RATE_THRESHOLD}%`
+              : '目前成績',
       settledResult,
       daysLeft: Math.max(0, daysBetween(today, item.endDate)),
     };
@@ -101,9 +123,11 @@ const items = computed(() => {
           ><span>{{
             item.lifecycle === 'settled'
               ? '完賽名次'
-              : item.baselinePending
-                ? '待補基準'
-                : '目前名次'
+              : item.scorePending
+                ? '尚無期間資料'
+                : item.belowFillRate
+                  ? `未達 ${FILL_RATE_THRESHOLD}%`
+                  : '目前名次'
           }}</span>
         </div>
         <div>

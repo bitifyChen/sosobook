@@ -12,8 +12,16 @@ import {
 } from 'lucide-vue-next';
 import { avatarById } from '@/data/assets';
 import { markCompetitionResultViewed } from '@/utils/competitionHistory';
-import { competitionStatus, rankEntries, recordsInRange } from '@/utils/competition';
+import {
+  buildDailyCarryForwardCurve,
+  calculateFillRate,
+  competitionStatus,
+  FILL_RATE_THRESHOLD,
+  memberCompetitionScore,
+  rankEntries,
+} from '@/utils/competition';
 import { daysBetween, formatDate, toDateKey } from '@/utils/date';
+import FillRateHelpDialog from '@/components/FillRateHelpDialog.vue';
 
 const store = useAppStore();
 const route = useRoute();
@@ -26,6 +34,15 @@ const lifecycle = computed(() =>
 );
 const isSettled = computed(() => lifecycle.value === 'settled');
 const showCompetitionCurve = computed(() => lifecycle.value !== 'upcoming');
+const competitionCurveEndDate = computed(() => {
+  if (!item.value) return null;
+  const today = toDateKey();
+  return isSettled.value
+    ? item.value.endDate
+    : today < item.value.endDate
+      ? today
+      : item.value.endDate;
+});
 watch(
   [isSettled, item],
   ([settled, competition]) => {
@@ -37,32 +54,39 @@ watch(
 );
 const chartMode = ref('everyone');
 const showPrivateWeights = ref(true);
+const showFillRateHelp = ref(false);
 const rankings = computed(() => {
   if (isSettled.value && item.value?.certificateParticipants?.length) {
-    return [...item.value.certificateParticipants].sort((a, b) => a.rank - b.rank);
-  }
-  const members = item.value?.members || [];
-  const eligible = rankEntries(
-    members
-      .filter(
-        (member) => member.provisionalLossPct !== null && member.provisionalLossPct !== undefined
-      )
+    return [...item.value.certificateParticipants]
       .map((member) => ({
         ...member,
-        lossPct: member.provisionalLossPct,
+        fillRatePercent: member.fillRatePercent ?? fillRateFor(member).percent,
       }))
+      .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+  }
+  const members = item.value?.members || [];
+  const membersWithScore = members.map((member) => ({
+    ...member,
+    lossPct: memberCompetitionScore(member),
+    fillRatePercent: calculateFillRate(member, item.value?.startDate, competitionCurveEndDate.value)
+      .percent,
+  }));
+  const eligible = rankEntries(
+    membersWithScore.filter(
+      (member) => member.lossPct !== null && member.fillRatePercent >= FILL_RATE_THRESHOLD
+    )
   );
-  const pending = members
-    .filter((member) => member.provisionalLossPct == null)
+  const unranked = membersWithScore
+    .filter((member) => member.lossPct == null || member.fillRatePercent < FILL_RATE_THRESHOLD)
     .map((member) => ({
       ...member,
-      lossPct: null,
       rank: null,
     }));
-  return [...eligible, ...pending];
+  return [...eligible, ...unranked];
 });
 const own = computed(() => rankings.value.find((m) => m.uid === store.state.user?.uid));
-const baselinePending = computed(() => !isSettled.value && own.value?.lossPct == null);
+const scorePending = computed(() => !isSettled.value && own.value?.lossPct == null);
+const ownBelowFillRate = computed(() => isBelowFillRate(own.value));
 const left = computed(() =>
   Math.max(0, daysBetween(toDateKey(), item.value?.endDate || toDateKey()))
 );
@@ -73,69 +97,118 @@ const weightDelta = computed(() => {
 });
 const formatSigned = (value) => `${value > 0 ? '+' : ''}${value.toFixed(1)}`;
 const formatLoss = (value) => (value == null ? '—' : `${Number(value).toFixed(2)}%`);
+const fillRateFor = (member) =>
+  calculateFillRate(member, item.value?.startDate, competitionCurveEndDate.value);
+const isBelowFillRate = (member) =>
+  member?.fillRatePercent != null && member.fillRatePercent < FILL_RATE_THRESHOLD;
+const formatFillRatePercent = (member) => {
+  const { percent } = fillRateFor(member);
+  return percent == null ? '—' : `${percent}%`;
+};
+const formatFillRateDays = (member) => {
+  const { filledDays, expectedDays } = fillRateFor(member);
+  return expectedDays ? `${filledDays}/${expectedDays}天` : '—';
+};
 const chartColors = ['#2777c8', '#e27664', '#e1a82e', '#4d9b70', '#8d6bb8', '#d16b9b'];
-const buildSmoothPath = (points) => {
-  if (points.length === 0) return '';
-  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+const desaturateColor = (hex, factor = 0.36) => {
+  const value = hex.replace('#', '');
+  const red = Number.parseInt(value.slice(0, 2), 16) / 255;
+  const green = Number.parseInt(value.slice(2, 4), 16) / 255;
+  const blue = Number.parseInt(value.slice(4, 6), 16) / 255;
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const delta = max - min;
+  const lightness = (max + min) / 2;
+  const saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * lightness - 1));
+  let hue = 0;
 
-  return points.reduce((path, point, index) => {
-    const next = points[index + 1];
-    if (!next) return path;
+  if (delta !== 0) {
+    if (max === red) hue = 60 * (((green - blue) / delta) % 6);
+    else if (max === green) hue = 60 * ((blue - red) / delta + 2);
+    else hue = 60 * ((red - green) / delta + 4);
+  }
+  if (hue < 0) hue += 360;
 
-    const previous = points[index - 1] || point;
-    const afterNext = points[index + 2] || next;
-    const controlOne = {
-      x: point.x + (next.x - previous.x) / 6,
-      y: point.y + (next.y - previous.y) / 6,
-    };
-    const controlTwo = {
-      x: next.x - (afterNext.x - point.x) / 6,
-      y: next.y - (afterNext.y - point.y) / 6,
-    };
+  return `hsl(${Math.round(hue)} ${Math.round(saturation * factor * 100)}% ${Math.round(
+    lightness * 100
+  )}%)`;
+};
+const buildSmoothSegmentPath = (points, index) => {
+  const point = points[index];
+  const next = points[index + 1];
+  const previous = points[index - 1] || point;
+  const afterNext = points[index + 2] || next;
+  const controlOne = {
+    x: point.x + (next.x - previous.x) / 6,
+    y: point.y + (next.y - previous.y) / 6,
+  };
+  const controlTwo = {
+    x: next.x - (afterNext.x - point.x) / 6,
+    y: next.y - (afterNext.y - point.y) / 6,
+  };
 
-    return `${path} C ${controlOne.x} ${controlOne.y}, ${controlTwo.x} ${controlTwo.y}, ${next.x} ${next.y}`;
-  }, `M ${points[0].x} ${points[0].y}`);
+  return `M ${point.x} ${point.y} C ${controlOne.x} ${controlOne.y}, ${controlTwo.x} ${controlTwo.y}, ${next.x} ${next.y}`;
 };
 const personalCurve = computed(() => {
   if (!item.value) return [];
-  if (isSettled.value) return item.value.privateCurve || [];
+  if (isSettled.value) {
+    return buildDailyCarryForwardCurve(
+      item.value.privateCurve || [],
+      item.value.startDate,
+      competitionCurveEndDate.value,
+      (record) => ({ weightKg: Number(record.weightKg) }),
+      { fillBeforeFirst: true }
+    );
+  }
 
-  const baseline = store.state.records.find((record) => record.dateKey === item.value.startDate);
-  const endDate = toDateKey() < item.value.endDate ? toDateKey() : item.value.endDate;
-  if (!baseline || endDate < item.value.startDate) return [];
+  if (competitionCurveEndDate.value < item.value.startDate) return [];
 
-  return recordsInRange(store.state.records, item.value.startDate, endDate).map((record) => ({
-    dateKey: record.dateKey,
-    weightKg: Number(record.weightKg),
-  }));
+  return buildDailyCarryForwardCurve(
+    store.state.records,
+    item.value.startDate,
+    competitionCurveEndDate.value,
+    (record) => ({ weightKg: Number(record.weightKg) }),
+    { fillBeforeFirst: true }
+  );
 });
 const chartSeries = computed(() => {
   if (!showCompetitionCurve.value) return [];
   if (chartMode.value === 'personal') {
     const curve = personalCurve.value
-      .map((point) => ({ dateKey: point.dateKey, value: Number(point.weightKg) }))
+      .map((point) => ({ ...point, value: Number(point.weightKg) }))
       .filter((point) => Number.isFinite(point.value));
     return curve.length
       ? [{ uid: store.state.user?.uid, label: '我的實際體重', curve, kind: 'weight' }]
       : [];
   }
   return rankings.value
-    .map((member) => ({
-      uid: member.uid,
-      label: member.nickname,
-      curve: (member.percentageCurve || [])
-        .map((point) => ({ dateKey: point.dateKey, value: Number(point.value) }))
-        .filter((point) => Number.isFinite(point.value)),
-      kind: 'percentage',
-    }))
+    .map((member) => {
+      const rawCurve = (member.percentageCurve || [])
+        .map((point) => ({ ...point, value: Number(point.value) }))
+        .filter((point) => Number.isFinite(point.value));
+      const isObservedCurve = rawCurve[0]?.dateKey !== item.value.startDate;
+      return {
+        uid: member.uid,
+        label: member.nickname,
+        isObservedCurve,
+        curve: buildDailyCarryForwardCurve(
+          rawCurve,
+          item.value.startDate,
+          competitionCurveEndDate.value,
+          (point) => ({ value: point.value }),
+          { fillBeforeFirst: true }
+        ),
+        kind: 'percentage',
+      };
+    })
     .filter((series) => series.curve.length);
 });
 const curveEmptyMessage = computed(() => {
-  if (chartMode.value === 'personal' && baselinePending.value) {
-    return '尚未有開始日基準，暫時無法繪製個人曲線。';
+  if (chartMode.value === 'personal') {
+    return '競賽期間尚未有體重紀錄，暫時無法繪製個人曲線。';
   }
   if (!rankings.value.some((member) => member.lossPct != null)) {
-    return '參賽者尚未取得開始日基準，暫時沒有可顯示的曲線。';
+    return '參賽者尚未有競賽期間體重資料，暫時沒有可顯示的曲線。';
   }
   return '曲線資料會在成員完成打卡後同步，目前還沒有可顯示的資料。';
 });
@@ -165,17 +238,25 @@ const chart = computed(() => {
       x: xFor(point.dateKey),
       y: yFor(point.value),
     }));
+    const color = chartColors[index % chartColors.length];
     return {
       ...source,
-      color: chartColors[index % chartColors.length],
+      color,
+      mutedColor: desaturateColor(color),
       points,
-      path: buildSmoothPath(points),
+      segments: points.slice(0, -1).map((point, segmentIndex) => ({
+        path: buildSmoothSegmentPath(points, segmentIndex),
+        isCarriedForward: Boolean(
+          point.isCarriedForward || points[segmentIndex + 1].isCarriedForward
+        ),
+      })),
     };
   });
   const unit = chartMode.value === 'personal' ? 'kg' : '%';
   const label = (dateKey) => dateKey.slice(5).replace('-', '/');
   return {
     series,
+    hasObservedCurve: series.some((item) => item.isObservedCurve),
     unit,
     maxLabel: `${rawMax.toFixed(1)} ${unit}`,
     minLabel: `${rawMin.toFixed(1)} ${unit}`,
@@ -241,22 +322,39 @@ const leave = async () => {
       <div v-else class="countdown">
         <Clock3 />
         <div class="countdown-copy">
-          <span>距離結算</span>
           <div class="countdown-value">
             <strong>{{ left }}</strong
             ><b>天</b>
           </div>
+          <span>距離結算</span>
         </div>
+      </div>
+      <div :class="['personal-fill-rate', { 'fill-rate-warning': isBelowFillRate(own) }]">
+        <span class="personal-fill-rate-label">
+          填寫率
+          <button
+            class="fill-rate-help-button"
+            type="button"
+            aria-label="查看填寫率說明"
+            @click="showFillRateHelp = true"
+          >
+            ?
+          </button>
+        </span>
+        <strong>{{ formatFillRatePercent(own) }}</strong>
+        <small>{{ formatFillRateDays(own) }}</small>
       </div>
       <div class="personal-score">
         <span>{{ isSettled ? '我的最終成績' : '我的目前成績' }}</span
         ><strong>{{ formatLoss(own?.lossPct) }}</strong
         ><small>{{
-          isSettled
-            ? '正式結算'
-            : baselinePending
-              ? '待補開始日體重'
-              : `暫定第 ${own?.rank || '—'} 名`
+          ownBelowFillRate
+            ? `未達 ${FILL_RATE_THRESHOLD}% 填寫率`
+            : isSettled
+              ? '正式結算'
+              : scorePending
+                ? '尚無競賽期間資料'
+                : `暫定第 ${own?.rank || '—'} 名`
         }}</small>
       </div>
       <div v-if="isSettled" class="settled-result-ticket">
@@ -294,7 +392,13 @@ const leave = async () => {
       <div
         v-for="member in rankings"
         :key="member.uid"
-        :class="['rank-row', { me: member.uid === store.state.user.uid }]"
+        :class="[
+          'rank-row',
+          {
+            me: member.uid === store.state.user.uid,
+            'below-fill-rate': isBelowFillRate(member),
+          },
+        ]"
       >
         <div class="rank-number">
           <Crown v-if="member.rank === 1" fill="currentColor" /><span v-else>{{
@@ -303,8 +407,13 @@ const leave = async () => {
         </div>
         <img :src="avatarById(member.avatarId).src" :alt="member.nickname" />
         <div class="rank-name">
-          <strong>{{ member.nickname }}</strong
-          ><small v-if="member.uid === store.state.user.uid">這是你</small>
+          <strong class="name">
+            {{ member.nickname
+            }}<span class="label" v-if="member.uid === store.state.user.uid">YOU</span>
+          </strong>
+          <small :class="['rank-fill-rate', { warning: isBelowFillRate(member) }]">
+            填寫率 {{ formatFillRatePercent(member) }}（{{ formatFillRateDays(member) }}）
+          </small>
         </div>
         <b>{{ formatLoss(member.lossPct) }}</b>
       </div>
@@ -338,17 +447,26 @@ const leave = async () => {
       <div class="paper-card curve-card">
         <template v-if="chart.series.length">
           <div class="curve-chart-meta">
-            <span>{{ chartMode === 'personal' ? '實際體重 kg' : '減重百分比 %' }}</span>
+            <span>{{
+              chartMode === 'personal'
+                ? '實際體重 kg'
+                : chart.hasObservedCurve
+                  ? '相對變化 %'
+                  : '減重百分比 %'
+            }}</span>
             <span>{{ chart.maxLabel }} ／ {{ chart.minLabel }}</span>
           </div>
           <svg class="curve-chart" viewBox="0 0 340 150" role="img" aria-label="比賽期間曲線圖">
             <line v-for="y in [35, 80, 125]" :key="y" x1="32" x2="322" :y1="y" :y2="y" />
-            <path
-              v-for="series in chart.series"
-              :key="series.uid"
-              :d="series.path"
-              :stroke="series.color"
-            />
+            <template v-for="series in chart.series" :key="series.uid">
+              <path
+                v-for="(segment, segmentIndex) in series.segments"
+                :key="`${series.uid}-segment-${segmentIndex}`"
+                :class="{ 'curve-segment-dashed': segment.isCarriedForward }"
+                :d="segment.path"
+                :stroke="segment.isCarriedForward ? series.mutedColor : series.color"
+              />
+            </template>
             <template v-for="series in chart.series" :key="`${series.uid}-points`">
               <circle
                 v-for="point in series.points"
@@ -356,7 +474,7 @@ const leave = async () => {
                 :cx="point.x"
                 :cy="point.y"
                 r="4"
-                :fill="series.color"
+                :fill="point.isCarriedForward ? series.mutedColor : series.color"
               />
             </template>
           </svg>
@@ -369,6 +487,9 @@ const leave = async () => {
               <i :style="{ backgroundColor: series.color }"></i>{{ series.label }}
             </span>
           </div>
+          <p class="curve-note">
+            虛線代表該日沒有實際填寫，圖表僅沿用鄰近紀錄補值；補值不計入填寫率。
+          </p>
         </template>
         <div v-else class="curve-empty">
           <Trophy :size="28" />
@@ -377,7 +498,9 @@ const leave = async () => {
       </div>
     </section>
 
-    <p class="privacy-note">大家模式只顯示減重比例；個人模式才會顯示你的實際體重。</p>
+    <p class="privacy-note">
+      大家模式只顯示百分比，不會顯示他人的實際體重；個人模式才會顯示你的實際體重。
+    </p>
     <button
       v-if="item.createdBy !== store.state.user.uid && !isSettled"
       class="text-button danger"
@@ -393,6 +516,7 @@ const leave = async () => {
     </div>
   </section>
   <RouterView v-if="isEditRoute" />
+  <FillRateHelpDialog :open="showFillRateHelp" @close="showFillRateHelp = false" />
 </template>
 
 <route lang="json">

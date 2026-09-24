@@ -5,6 +5,13 @@ on:
     - cron: '20 16 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: settle-completed-competitions
+  cancel-in-progress: false
+
 jobs:
   settle:
     runs-on: ubuntu-latest

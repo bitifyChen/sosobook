@@ -11,7 +11,9 @@ import {
 } from '@/utils/competitionNotifications';
 import {
   buildPercentageCurve,
+  calculateFillRate,
   calculateLossPercent,
+  FILL_RATE_THRESHOLD,
   pickLatestRecordOnOrBefore,
   rankEntries,
   recordsInRange,
@@ -435,35 +437,53 @@ export const useAppStore = defineStore('app', () => {
     const updates = state.competitions.map(async (competition) => {
       if (competition.status === 'settled' || today > competition.endDate) return false;
       const currentMember = competition.members.find((member) => member.uid === state.user.uid);
-      const baseline = state.records.find((record) => record.dateKey === competition.startDate);
       const current = pickLatestRecordOnOrBefore(
         state.records,
         today < competition.endDate ? today : competition.endDate
       );
+      const scoreEndDate = today < competition.endDate ? today : competition.endDate;
+      const records =
+        current && current.dateKey >= competition.startDate
+          ? recordsInRange(state.records, competition.startDate, current.dateKey)
+          : [];
+      const curveBaseline = records[0];
+      const percentageCurve = curveBaseline
+        ? buildPercentageCurve(records, curveBaseline.weightKg)
+        : [];
+      const fillRate = calculateFillRate({ percentageCurve }, competition.startDate, scoreEndDate);
       let payload;
-      if (!baseline || !current || current.dateKey < competition.startDate) {
+      if (!curveBaseline || !current || current.dateKey < competition.startDate) {
         payload = {
           provisionalLossPct: null,
           provisionalRank: null,
-          provisionalAsOf: null,
-          percentageCurve: [],
+          provisionalAsOf: current?.dateKey || null,
+          percentageCurve,
         };
       } else {
-        const provisionalLossPct = calculateLossPercent(baseline.weightKg, current.weightKg);
-        const percentageCurve = buildPercentageCurve(
-          recordsInRange(state.records, competition.startDate, current.dateKey),
-          baseline.weightKg
-        );
+        const provisionalLossPct = calculateLossPercent(curveBaseline.weightKg, current.weightKg);
         const entries = rankEntries(
-          competition.members.map((member) => ({
-            ...member,
-            lossPct: member.uid === state.user.uid ? provisionalLossPct : member.provisionalLossPct,
-          }))
+          competition.members
+            .map((member) => {
+              const memberData =
+                member.uid === state.user.uid
+                  ? { ...member, percentageCurve, provisionalLossPct }
+                  : member;
+              return {
+                ...memberData,
+                lossPct:
+                  member.uid === state.user.uid ? provisionalLossPct : member.provisionalLossPct,
+                fillRatePercent: calculateFillRate(memberData, competition.startDate, scoreEndDate)
+                  .percent,
+              };
+            })
+            .filter(
+              (member) => member.lossPct != null && member.fillRatePercent >= FILL_RATE_THRESHOLD
+            )
         );
         const own = entries.find((entry) => entry.uid === state.user.uid);
         payload = {
           provisionalLossPct,
-          provisionalRank: own?.rank || null,
+          provisionalRank: fillRate.percent >= FILL_RATE_THRESHOLD ? own?.rank || null : null,
           provisionalAsOf: current.dateKey,
           percentageCurve,
         };

@@ -1555,7 +1555,8 @@ h2 {
 }
 .race-hero {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto auto;
   gap: 18px;
   align-items: center;
   padding: 24px;
@@ -1591,18 +1592,65 @@ h2 {
   padding-bottom: 4px;
   font-size: 0.8rem;
 }
+.personal-fill-rate,
 .personal-score {
   display: grid;
+  align-content: center;
+  justify-items: center;
+  min-width: 0;
   text-align: center;
   border-left: 2px dashed #a9c6ca;
 }
+.personal-fill-rate span,
+.personal-fill-rate small,
 .personal-score span,
 .personal-score small {
   font-size: 0.72rem;
 }
+.personal-fill-rate small {
+  color: #4f7182;
+  font-weight: 800;
+}
+.personal-fill-rate-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.fill-rate-help-button {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: #5f7885;
+  background: #fffdf6;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+.fill-rate-help-button:active {
+  transform: translateY(1px);
+}
+.personal-fill-rate strong {
+  color: var(--blue);
+  font-size: 1.65rem;
+  white-space: nowrap;
+}
+.personal-fill-rate.fill-rate-warning,
+.personal-fill-rate.fill-rate-warning small,
+.personal-fill-rate.fill-rate-warning strong {
+  color: #c45e4f;
+}
+.personal-fill-rate.fill-rate-warning .fill-rate-help-button {
+  color: #c45e4f;
+}
 .personal-score strong {
   color: var(--blue);
-  font-size: 2rem;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  white-space: nowrap;
 }
 .invite-ticket {
   display: grid;
@@ -1613,6 +1661,8 @@ h2 {
   border-radius: 8px;
   background: #fff7d2;
   cursor: pointer;
+  grid-column: 1 / -1;
+  width: 100%;
 }
 .invite-ticket span {
   grid-column: 1 / 3;
@@ -1639,6 +1689,7 @@ h2 {
   border: 2px dashed var(--ink);
   border-radius: 8px;
   background: #fff7d2;
+  grid-column: 1 / -1;
 }
 .settled-result-ticket > div {
   display: grid;
@@ -1727,6 +1778,9 @@ h2 {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.curve-chart path.curve-segment-dashed {
+  stroke-dasharray: 6 5;
+}
 .curve-chart circle {
   stroke: #fff;
   stroke-width: 2;
@@ -1757,6 +1811,12 @@ h2 {
   display: inline-block;
   border: 1px solid var(--ink);
   border-radius: 50%;
+}
+.curve-note {
+  margin: 10px 0 0;
+  color: #71808c;
+  font-size: 0.7rem;
+  line-height: 1.5;
 }
 .curve-empty {
   display: grid;
@@ -1819,6 +1879,30 @@ h2 {
 }
 .rank-name small {
   color: var(--pink);
+}
+.rank-name .name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rank-name .name span.label {
+  background: var(--blue);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+}
+.rank-name .rank-fill-rate {
+  color: #5f7885;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+.rank-name .rank-fill-rate.warning {
+  color: #c45e4f;
+  font-weight: 800;
+}
+.rank-row.below-fill-rate .rank-number span {
+  color: #c45e4f;
 }
 .rank-row > b {
   color: var(--blue);
@@ -2775,6 +2859,137 @@ h2 {
   opacity: 0;
   transform: translateY(12px) scale(0.98);
 }
+.fill-rate-help-backdrop {
+  position: fixed;
+  z-index: 72;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  background: rgba(37, 54, 74, 0.28);
+  backdrop-filter: blur(2px);
+}
+.fill-rate-help-dialog {
+  position: relative;
+  width: min(430px, 100%);
+  padding: 32px 24px 22px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 21px 16px 24px 18px;
+  box-shadow: 7px 9px 0 rgba(37, 54, 74, 0.22);
+  outline: none;
+  transform: rotate(-1deg);
+}
+.fill-rate-help-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 5px -6px -6px 6px;
+  z-index: -1;
+  border: 1px solid rgba(37, 54, 74, 0.22);
+  border-radius: inherit;
+  background: #eaf6f8;
+  transform: rotate(1.2deg);
+}
+.fill-rate-help-dialog::after {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 70px;
+  height: 18px;
+  background: #a9d5e3;
+  opacity: 0.82;
+  transform: translateX(-50%) rotate(-3deg);
+}
+.fill-rate-help-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #a8b9bf;
+  border-radius: 50%;
+  color: var(--ink);
+  background: #fff;
+  cursor: pointer;
+}
+.fill-rate-help-icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 45% 52% 48% 46%;
+  color: var(--blue);
+  background: #e5f2ff;
+  transform: rotate(4deg);
+}
+.fill-rate-help-dialog h2 {
+  max-width: calc(100% - 35px);
+  margin-bottom: 9px;
+  font-size: 1.55rem;
+}
+.fill-rate-help-message {
+  margin-bottom: 16px;
+  color: #657486;
+  line-height: 1.7;
+}
+.fill-rate-help-rule {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 21px;
+  padding: 13px 14px;
+  border: 2px dashed #a9c6ca;
+  border-radius: 10px 8px 11px 9px;
+  background: #fff7d2;
+}
+.fill-rate-help-rule strong {
+  color: var(--blue);
+  font-size: 1.1rem;
+}
+.fill-rate-help-rule small {
+  color: #657486;
+  line-height: 1.55;
+}
+.fill-rate-help-primary {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 11px 9px 12px 10px;
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 800;
+  cursor: pointer;
+}
+.fill-rate-help-primary:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+.fill-rate-help-enter-active,
+.fill-rate-help-leave-active {
+  transition: opacity 0.18s ease;
+}
+.fill-rate-help-enter-active .fill-rate-help-dialog,
+.fill-rate-help-leave-active .fill-rate-help-dialog {
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+.fill-rate-help-enter-from,
+.fill-rate-help-leave-to {
+  opacity: 0;
+}
+.fill-rate-help-enter-from .fill-rate-help-dialog,
+.fill-rate-help-leave-to .fill-rate-help-dialog {
+  opacity: 0;
+  transform: translateY(10px) rotate(-1deg) scale(0.98);
+}
 @media (prefers-reduced-motion: reduce) {
   .badge-confetti {
     display: none;
@@ -2783,6 +2998,12 @@ h2 {
   .competition-completion-leave-active,
   .competition-completion-enter-active .competition-completion-viewer,
   .competition-completion-leave-active .competition-completion-viewer {
+    transition: none;
+  }
+  .fill-rate-help-enter-active,
+  .fill-rate-help-leave-active,
+  .fill-rate-help-enter-active .fill-rate-help-dialog,
+  .fill-rate-help-leave-active .fill-rate-help-dialog {
     transition: none;
   }
 }
@@ -3048,23 +3269,43 @@ h2 {
     grid-template-columns: 1fr;
   }
   .race-hero {
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     padding: 18px;
+    gap: 14px 8px;
+  }
+  .countdown {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .countdown svg {
+    margin: 0 auto 4px;
+  }
+  .countdown-copy {
+    text-align: center;
   }
   .countdown-value {
     gap: 5px;
+    justify-content: center;
   }
   .countdown strong {
-    font-size: clamp(2rem, 11vw, 2.55rem);
+    font-size: clamp(1.65rem, 9vw, 2.3rem);
   }
   .countdown b {
     padding-bottom: 3px;
+    font-size: 0.72rem;
+  }
+  .personal-fill-rate strong {
+    font-size: clamp(1.35rem, 7vw, 1.65rem);
+  }
+  .personal-score strong {
+    font-size: clamp(1.3rem, 7vw, 1.8rem);
   }
   .invite-ticket {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
   }
   .settled-result-ticket {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
   }
   .curve-heading {
     align-items: flex-end;
