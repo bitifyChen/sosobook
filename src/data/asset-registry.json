@@ -790,6 +790,63 @@
       ]
     },
     {
+      "key": "sticker-42",
+      "assetId": "60808612-cc13-483d-8711-1036b9c9cd45",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "5e7ee807ac53ec72e1090f3e2e7bb554690d36db9677b1f671e29df22ac292f9",
+      "file": "sticker/60808612-cc13-483d-8711-1036b9c9cd45-v001.webp",
+      "alt": "心情貼紙 42",
+      "label": "心情貼紙 42",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/60808612-cc13-483d-8711-1036b9c9cd45-v001.webp",
+          "contentSha256": "5e7ee807ac53ec72e1090f3e2e7bb554690d36db9677b1f671e29df22ac292f9",
+          "createdAt": "2026-09-24T09:32:09.876Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-43",
+      "assetId": "25ff755f-61be-472b-9fab-77d71c57c758",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "15599cf70a727243fe756055cdf6257a7967739767da05db63d0e3d4c7620646",
+      "file": "sticker/25ff755f-61be-472b-9fab-77d71c57c758-v001.webp",
+      "alt": "心情貼紙 43",
+      "label": "心情貼紙 43",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/25ff755f-61be-472b-9fab-77d71c57c758-v001.webp",
+          "contentSha256": "15599cf70a727243fe756055cdf6257a7967739767da05db63d0e3d4c7620646",
+          "createdAt": "2026-09-24T09:32:10.043Z"
+        }
+      ]
+    },
+    {
+      "key": "sticker-44",
+      "assetId": "c0e5d13f-8329-4ac1-9195-eb3487626ac4",
+      "status": "active",
+      "currentVersion": 1,
+      "contentSha256": "98177f6a0888706c818f25fb05b381f6604dd99687655b880d11204342419f1e",
+      "file": "sticker/c0e5d13f-8329-4ac1-9195-eb3487626ac4-v001.webp",
+      "alt": "心情貼紙 44",
+      "label": "心情貼紙 44",
+      "category": "food",
+      "versions": [
+        {
+          "version": 1,
+          "file": "sticker/c0e5d13f-8329-4ac1-9195-eb3487626ac4-v001.webp",
+          "contentSha256": "98177f6a0888706c818f25fb05b381f6604dd99687655b880d11204342419f1e",
+          "createdAt": "2026-09-24T09:32:10.231Z"
+        }
+      ]
+    },
+    {
       "key": "sticker-5",
       "category": "sport",
       "assetId": "828c817c-7d4c-4851-a449-ef16bc2ae1a1",
