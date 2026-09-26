@@ -31,6 +31,18 @@ const competitionClosed = computed(
     Boolean(item.value) &&
     (item.value.status === 'settled' || item.value.endDate < today)
 );
+const canDeleteCompetition = computed(() => {
+  const uid = store.state.user?.uid;
+  return (
+    editing.value &&
+    item.value?.createdBy === uid &&
+    item.value.status === 'active' &&
+    item.value.endDate >= today &&
+    item.value.members?.length === 1 &&
+    item.value.members[0].uid === uid &&
+    item.value.members[0].role === 'host'
+  );
+});
 const datesLocked = computed(
   () => editing.value && Boolean(item.value) && item.value.startDate <= today
 );
@@ -46,7 +58,7 @@ const formDescription = computed(() => {
     if (datesLocked.value) return '競賽已開始，現在只能修改名稱；開始與結束日期已鎖定。';
     return '調整名稱或日期，已加入的成員與邀請碼會保留。';
   }
-  return '從今天或未來開始一場競賽；有開始日體重的成員，才會列入暫算排名。';
+  return '從今天或未來開始一場競賽；有期間資料的成員會依填寫率列入暫算排名。';
 });
 watch(
   item,
@@ -117,6 +129,24 @@ const submit = async () => {
     } else {
       error.value = cause.message || '暫時無法完成，請稍後再試。';
     }
+  }
+};
+const removeCompetition = async () => {
+  if (!canDeleteCompetition.value) return;
+  const confirmed = await store.askConfirm({
+    tone: 'danger',
+    title: '刪除這場競賽嗎？',
+    message: '這場競賽目前只有你一位主辦人，刪除後邀請碼與競賽資料都會移除。',
+    confirmText: '刪除競賽',
+    cancelText: '先保留',
+  });
+  if (!confirmed) return;
+  error.value = '';
+  try {
+    await store.deleteCompetition(route.params.id);
+    await router.replace('/competitions');
+  } catch (cause) {
+    error.value = cause.message || '暫時無法刪除，請稍後再試。';
   }
 };
 </script>
@@ -198,6 +228,15 @@ const submit = async () => {
               ? '保存挑戰設定'
               : '建立並取得邀請碼'
         }}
+      </button>
+      <button
+        v-if="canDeleteCompetition"
+        class="delete-competition-button"
+        type="button"
+        :disabled="store.state.busy"
+        @click="removeCompetition"
+      >
+        刪除這場競賽
       </button>
     </form>
   </section>

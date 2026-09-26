@@ -2,6 +2,7 @@
 import { ChevronLeft, ChevronRight, Flame, Pencil } from 'lucide-vue-next';
 import { addDays, buildMonthCells, formatDate, monthLabel, toDateKey } from '@/utils/date';
 import { stickerById } from '@/data/assets';
+import { formatWeight } from '@/utils/weight';
 
 const store = useAppStore();
 const today = toDateKey();
@@ -32,7 +33,7 @@ const previous = computed(
 );
 const delta = computed(() =>
   selected.value && previous.value
-    ? Number((selected.value.weightKg - previous.value.weightKg).toFixed(1))
+    ? Number((selected.value.weightKg - previous.value.weightKg).toFixed(2))
     : null
 );
 const trendRecords = computed(() => {
@@ -76,7 +77,7 @@ const buildBezierPath = (points = []) => {
     return `${path} C ${control1.x.toFixed(2)} ${control1.y.toFixed(2)} ${control2.x.toFixed(2)} ${control2.y.toFixed(2)} ${next.x.toFixed(2)} ${next.y.toFixed(2)}`;
   }, `M ${points[0].x} ${points[0].y}`);
 };
-const buildTrendChart = (points = []) => {
+const buildTrendChart = (points = [], precision = 1) => {
   const safePoints = Array.isArray(points)
     ? points.filter((point) => Number.isFinite(Number(point?.value)))
     : [];
@@ -103,15 +104,16 @@ const buildTrendChart = (points = []) => {
     points: plottedPoints,
     path: buildBezierPath(plottedPoints),
     latestValue: values[values.length - 1],
-    minLabel: rawMin.toFixed(1),
-    maxLabel: rawMax.toFixed(1),
+    minLabel: rawMin.toFixed(precision),
+    maxLabel: rawMax.toFixed(precision),
     startLabel: safePoints[0].dateKey.slice(5).replace('-', '/'),
     endLabel: safePoints[safePoints.length - 1].dateKey.slice(5).replace('-', '/'),
   };
 };
 const weightTrend = computed(() =>
   buildTrendChart(
-    trendRecords.value.map((record) => ({ dateKey: record.dateKey, value: record.weightKg }))
+    trendRecords.value.map((record) => ({ dateKey: record.dateKey, value: record.weightKg })),
+    2
   )
 );
 const bmiTrend = computed(() =>
@@ -241,7 +243,7 @@ const handleTouchEnd = (event) => {
               selected: cell.key === selectedKey,
             },
           ]"
-          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${store.recordsByDate[cell.key].weightKg.toFixed(1)} kg` : ''}${cell.key <= today ? '，雙擊編輯' : ''}`"
+          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${formatWeight(store.recordsByDate[cell.key].weightKg)} kg` : ''}${cell.key <= today ? '，雙擊編輯' : ''}`"
           @click="selectedKey = cell.key"
           @dblclick.stop.prevent="handleCalendarDoubleClick(cell.key)"
           @pointerdown="handleCalendarPointerDown($event, cell.key)"
@@ -255,7 +257,7 @@ const handleTouchEnd = (event) => {
               'calendar-day-weight',
               { backfill: store.recordsByDate[cell.key].source === 'backfill' },
             ]"
-            >{{ store.recordsByDate[cell.key].weightKg.toFixed(1) }}</small
+            >{{ formatWeight(store.recordsByDate[cell.key].weightKg) }}</small
           >
           <img
             v-if="store.recordsByDate[cell.key]?.stickerId"
@@ -274,7 +276,7 @@ const handleTouchEnd = (event) => {
           <div class="day-detail-metrics">
             <div class="day-detail-metric weight-metric">
               <span class="metric-label">體重</span>
-              <h2 class="metric-value">{{ selected.weightKg.toFixed(1) }} <small>kg</small></h2>
+              <h2 class="metric-value">{{ formatWeight(selected.weightKg) }} <small>kg</small></h2>
             </div>
             <div class="day-detail-metric bmi-metric">
               <span class="metric-label">BMI</span>
@@ -283,7 +285,7 @@ const handleTouchEnd = (event) => {
             <p :class="['change', { good: delta !== null && delta < 0 }]">
               與上一筆
               <strong>{{
-                delta === null ? '--' : `${delta > 0 ? '+' : ''}${delta.toFixed(1)} kg`
+                delta === null ? '--' : `${delta > 0 ? '+' : ''}${formatWeight(delta)} kg`
               }}</strong>
             </p>
           </div>
@@ -326,7 +328,7 @@ const handleTouchEnd = (event) => {
           <div class="trend-row-header">
             <div><strong>體重</strong><small>kg</small></div>
             <strong v-if="weightTrend.points.length" class="trend-current"
-              >{{ weightTrend.latestValue.toFixed(1) }} kg</strong
+              >{{ formatWeight(weightTrend.latestValue) }} kg</strong
             >
           </div>
           <template v-if="weightTrend.points.length">

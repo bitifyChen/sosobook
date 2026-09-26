@@ -18,6 +18,7 @@ import { auth, db, googleProvider, isFirebaseConfigured } from '@/firebase';
 import * as mockRepository from '@/services/mockRepository';
 import { toDateKey } from '@/utils/date';
 import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
+import { normalizeWeight } from '@/utils/weight';
 
 const isMockMode = import.meta.env.VITE_FIREBASE_MOCK === 'true';
 const toPlain = (snapshot) => ({ id: snapshot.id, ...snapshot.data() });
@@ -109,9 +110,13 @@ export const listRecords = async (uid) => {
 export const saveWeightRecord = async (uid, record) => {
   if (isMockMode) return mockRepository.saveWeightRecord(uid, record);
   requireFirebase();
+  const weightKg = normalizeWeight(record.weightKg);
+  if (weightKg === null || weightKg < 20 || weightKg > 300) {
+    throw new Error('體重請輸入 20 到 300 kg 之間的數值。');
+  }
   const payload = {
     dateKey: record.dateKey,
-    weightKg: Number(record.weightKg),
+    weightKg,
     stickerId: record.stickerId,
     source: record.source || 'normal',
     updatedAt: new Date().toISOString(),
@@ -262,6 +267,35 @@ export const updateCompetition = async (uid, competitionId, input) => {
   });
   await batch.commit();
   return loadFirebaseCompetition(uid, competitionId);
+};
+
+export const deleteCompetition = async (uid, competitionId) => {
+  if (isMockMode) return mockRepository.deleteCompetition(uid, competitionId);
+  requireFirebase();
+  const competitionRef = doc(db, 'competitions', competitionId);
+  const competitionSnapshot = await getDoc(competitionRef);
+  if (!competitionSnapshot.exists()) throw new Error('找不到這場競賽。');
+
+  const competition = competitionSnapshot.data();
+  const membersSnapshot = await getDocs(collection(db, 'competitions', competitionId, 'members'));
+  const isSoloHost =
+    competition.createdBy === uid &&
+    competition.status === 'active' &&
+    competition.endDate >= toDateKey() &&
+    membersSnapshot.size === 1 &&
+    membersSnapshot.docs[0].id === uid &&
+    membersSnapshot.docs[0].data().role === 'host';
+  if (!isSoloHost) {
+    const error = new Error('只有尚未結束且只有主辦人的競賽可以刪除。');
+    error.code = 'COMPETITION_DELETE_NOT_ALLOWED';
+    throw error;
+  }
+
+  const batch = writeBatch(db);
+  batch.delete(competitionRef);
+  batch.delete(doc(db, 'competitions', competitionId, 'members', uid));
+  batch.delete(doc(db, 'competitionInviteCodes', competition.inviteCode));
+  await batch.commit();
 };
 
 export const joinCompetition = async (uid, profile, inviteCode) => {

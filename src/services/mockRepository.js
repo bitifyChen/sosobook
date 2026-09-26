@@ -1,6 +1,7 @@
 import { toDateKey } from '@/utils/date';
 import { defaultAchievementStats, normalizeAchievementStats } from '@/utils/badges';
 import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
+import { normalizeWeight } from '@/utils/weight';
 
 const storageKey = 'sosobook-firebase-mock';
 const emptyCompetitionFixtures = { competitions: [] };
@@ -165,9 +166,13 @@ export const saveWeightRecord = async (uid, record) => {
   const state = readState();
   const records = state.records[uid] || {};
   const previous = records[record.dateKey];
+  const weightKg = normalizeWeight(record.weightKg);
+  if (weightKg === null || weightKg < 20 || weightKg > 300) {
+    throw new Error('體重請輸入 20 到 300 kg 之間的數值。');
+  }
   const payload = {
     dateKey: record.dateKey,
-    weightKg: Number(record.weightKg),
+    weightKg,
     stickerId: record.stickerId,
     source: record.source || 'normal',
     createdAt: previous?.createdAt || now(),
@@ -243,6 +248,22 @@ export const updateCompetition = async (_uid, competitionId, input) => {
   competition.updatedAt = now();
   writeState(state);
   return clone(competition);
+};
+
+export const deleteCompetition = async (uid, competitionId) => {
+  const state = readState();
+  const competition = state.competitions[competitionId];
+  if (!competition) throw new Error('找不到這場競賽。');
+  const isSoloHost =
+    competition.createdBy === uid &&
+    competition.status === 'active' &&
+    competition.endDate >= toDateKey() &&
+    competition.members.length === 1 &&
+    competition.members[0].uid === uid &&
+    competition.members[0].role === 'host';
+  if (!isSoloHost) throw new Error('只有尚未結束且只有主辦人的競賽可以刪除。');
+  delete state.competitions[competitionId];
+  writeState(state);
 };
 
 export const joinCompetition = async (uid, profile, inviteCode) => {

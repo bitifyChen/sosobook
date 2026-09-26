@@ -522,8 +522,15 @@ export const useAppStore = defineStore('app', () => {
 
   const createCompetition = async (input) => {
     const item = await repository.createCompetition(state.user.uid, state.profile, input);
-    await refreshCompetitions();
-    await refreshScores();
+    if (!state.competitions.some((competition) => competition.id === item.id)) {
+      state.competitions = [...state.competitions, item];
+    }
+    try {
+      await refreshCompetitions();
+      await refreshScores();
+    } catch (cause) {
+      console.error('[SosoBook] 競賽已建立，但列表背景同步失敗。', cause);
+    }
     notify(`競賽成立，邀請碼是 ${item.inviteCode}`);
     return item;
   };
@@ -537,6 +544,17 @@ export const useAppStore = defineStore('app', () => {
     await refreshCompetitions();
     notify('競賽設定已更新！');
     return item;
+  };
+
+  const deleteCompetition = async (id) => {
+    state.busy = true;
+    try {
+      await repository.deleteCompetition(state.user.uid, id);
+      state.competitions = state.competitions.filter((competition) => competition.id !== id);
+      notify('競賽已刪除。');
+    } finally {
+      state.busy = false;
+    }
   };
 
   const joinCompetition = async (code) => {
@@ -596,6 +614,7 @@ export const useAppStore = defineStore('app', () => {
     deleteRecord,
     createCompetition,
     updateCompetition,
+    deleteCompetition,
     joinCompetition,
     leaveCompetition,
   };

@@ -266,7 +266,13 @@ service cloud.firestore {
         && competitionDataAfter(resource.data.competitionId).name == request.resource.data.competitionName
         && competitionDataAfter(resource.data.competitionId).startDate == request.resource.data.startDate
         && competitionDataAfter(resource.data.competitionId).endDate == request.resource.data.endDate;
-      allow delete: if false;
+      allow delete: if signedIn()
+        && resource.data.createdBy == request.auth.uid
+        && resource.data.active == true
+        && todayKey() <= resource.data.endDate
+        && competitionData(resource.data.competitionId).createdBy == request.auth.uid
+        && competitionData(resource.data.competitionId).status == 'active'
+        && !existsAfter(/databases/$(database)/documents/competitions/$(resource.data.competitionId));
     }
 
     match /competitions/{competitionId} {
@@ -295,7 +301,9 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.competitionName == request.resource.data.name
         && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.startDate == request.resource.data.startDate
         && getAfter(/databases/$(database)/documents/competitionInviteCodes/$(resource.data.inviteCode)).data.endDate == request.resource.data.endDate;
-      allow delete: if false;
+      allow delete: if isCompetitionHost(competitionId)
+        && resource.data.status == 'active'
+        && todayKey() <= resource.data.endDate;
 
       match /members/{uid} {
         allow read: if isCompetitionMember(competitionId);
@@ -321,9 +329,13 @@ service cloud.firestore {
               && request.resource.data.provisionalAsOf <= competitionData(competitionId).endDate
               && request.resource.data.provisionalAsOf <= todayKey()))
           && request.resource.data.updatedAt == request.time;
-        allow delete: if todayKey() < competitionData(competitionId).startDate
+        allow delete: if todayKey() <= competitionData(competitionId).endDate
           && ((isOwner(uid) && resource.data.role == 'member')
-            || (isCompetitionHost(competitionId) && uid != request.auth.uid));
+            || (isCompetitionHost(competitionId) && uid != request.auth.uid)
+            || (isCompetitionHost(competitionId)
+              && uid == request.auth.uid
+              && resource.data.role == 'host'
+              && !existsAfter(/databases/$(database)/documents/competitions/$(competitionId))));
       }
 
       match /certificate/{documentId} {

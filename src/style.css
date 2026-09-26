@@ -1253,6 +1253,46 @@ h2 {
   align-items: baseline;
   gap: 8px;
 }
+.weight-control {
+  align-items: center !important;
+}
+.weight-stepper {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--ink);
+  background: #fffdf4;
+  border: 2px solid #9db5bd;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 0.14s ease,
+    background-color 0.14s ease,
+    border-color 0.14s ease,
+    transform 0.08s ease;
+}
+
+.weight-stepper:focus {
+  outline: none;
+}
+.weight-stepper:focus-visible {
+  outline: 3px solid rgba(39, 119, 200, 0.28);
+  outline-offset: 2px;
+}
+.weight-stepper:active {
+  transform: translateY(2px);
+}
+.weight-stepper--pressed {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
+}
 .weight-input input {
   width: 190px;
   border: 0;
@@ -3430,6 +3470,12 @@ body.dialog-open {
   grid-column: auto;
   justify-content: flex-end;
 }
+.checkin-modal--sticker-browser .weight-stepper {
+  width: 32px;
+  height: 32px;
+  border-width: 1px;
+  font-size: 1.15rem;
+}
 .checkin-modal--sticker-browser .weight-input input {
   width: 112px;
   border-bottom-width: 3px;
@@ -3550,6 +3596,21 @@ body.dialog-open {
   cursor: pointer;
 }
 .delete-record-button:hover {
+  background: #ffe9e3;
+}
+.delete-competition-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  color: #b64e4e;
+  background: transparent;
+  border: 1px dashed #d28b86;
+  border-radius: 10px 8px 11px 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.delete-competition-button:hover {
   background: #ffe9e3;
 }
 .notification-stack {
@@ -3797,6 +3858,20 @@ body.dialog-open {
   transform: translateY(10px) rotate(-1deg) scale(0.98);
 }
 @media (max-width: 520px) {
+  .checkin-modal .weight-stepper {
+    width: 32px;
+    height: 32px;
+    border-width: 1px;
+    font-size: 1.15rem;
+  }
+  .checkin-modal .weight-input input {
+    width: min(140px, 38vw);
+    font-size: 2.8rem;
+  }
+  .checkin-modal--sticker-browser .weight-input input {
+    width: 112px;
+    font-size: 2.15rem;
+  }
   .checkin-modal--sticker-browser {
     width: 100%;
     max-height: calc(100dvh - 18px);

@@ -93,9 +93,9 @@ const left = computed(() =>
 const weightDelta = computed(() => {
   const curve = item.value?.privateCurve || [];
   if (curve.length < 2) return null;
-  return Number((curve[curve.length - 1].weightKg - curve[0].weightKg).toFixed(1));
+  return Number((curve[curve.length - 1].weightKg - curve[0].weightKg).toFixed(2));
 });
-const formatSigned = (value) => `${value > 0 ? '+' : ''}${value.toFixed(1)}`;
+const formatSigned = (value) => `${value > 0 ? '+' : ''}${value.toFixed(2)}`;
 const formatLoss = (value) => (value == null ? '—' : `${Number(value).toFixed(2)}%`);
 const fillRateFor = (member) =>
   calculateFillRate(member, item.value?.startDate, competitionCurveEndDate.value);
@@ -253,13 +253,14 @@ const chart = computed(() => {
     };
   });
   const unit = chartMode.value === 'personal' ? 'kg' : '%';
+  const precision = unit === 'kg' ? 2 : 1;
   const label = (dateKey) => dateKey.slice(5).replace('-', '/');
   return {
     series,
     hasObservedCurve: series.some((item) => item.isObservedCurve),
     unit,
-    maxLabel: `${rawMax.toFixed(1)} ${unit}`,
-    minLabel: `${rawMin.toFixed(1)} ${unit}`,
+    maxLabel: `${rawMax.toFixed(precision)} ${unit}`,
+    minLabel: `${rawMin.toFixed(precision)} ${unit}`,
     startLabel: label(dateKeys[0]),
     endLabel: label(dateKeys[dateKeys.length - 1]),
   };

@@ -3,6 +3,7 @@ import { Scale, Trash2, X } from 'lucide-vue-next';
 import { stickerCategories, stickers } from '@/data/assets';
 import { readRecentStickerIds, rememberStickerSelection } from '@/utils/recentStickers';
 import { canBackfillDate, formatDate, isFutureDate, toDateKey } from '@/utils/date';
+import { adjustWeight, normalizeWeight, WEIGHT_MAX, WEIGHT_MIN, WEIGHT_STEP } from '@/utils/weight';
 
 const store = useAppStore();
 const isOpen = computed(() => Boolean(store.state.checkIn.open));
@@ -158,8 +159,11 @@ const toggleStickerBrowser = async () => {
 };
 
 const resetForm = () => {
+  const initialWeight = normalizeWeight(
+    existing.value?.weightKg || store.latestRecord?.weightKg || 60
+  );
   Object.assign(form, {
-    weightKg: existing.value?.weightKg || store.latestRecord?.weightKg || 60,
+    weightKg: initialWeight ?? 60,
     stickerId: existing.value?.stickerId ?? null,
   });
   stickerBrowserOpen.value = false;
@@ -207,6 +211,20 @@ const submit = async () => {
   } catch (cause) {
     error.value = cause.message || '暫時無法保存，請稍後再試。';
   }
+};
+const changeWeight = (delta) => {
+  form.weightKg = adjustWeight(form.weightKg, delta);
+};
+const pressedWeightStepper = ref(null);
+const pressWeightStepper = (direction) => {
+  pressedWeightStepper.value = direction;
+};
+const releaseWeightStepper = () => {
+  pressedWeightStepper.value = null;
+};
+const normalizeFormWeight = () => {
+  const normalized = normalizeWeight(form.weightKg);
+  if (normalized !== null) form.weightKg = normalized;
 };
 const remove = async () => {
   if (!existing.value) return;
@@ -268,15 +286,44 @@ const remove = async () => {
           <label ref="weightInput" class="weight-input">
             <Scale :size="28" />
             <span>體重</span>
-            <div ref="weightValue">
+            <div ref="weightValue" class="weight-control">
+              <button
+                class="weight-stepper"
+                :class="{ 'weight-stepper--pressed': pressedWeightStepper === 'decrease' }"
+                type="button"
+                :aria-label="`減少 ${WEIGHT_STEP.toFixed(2)} 公斤`"
+                @pointerdown="pressWeightStepper('decrease')"
+                @pointerup="releaseWeightStepper"
+                @pointercancel="releaseWeightStepper"
+                @pointerleave="releaseWeightStepper"
+                @blur="releaseWeightStepper"
+                @click="changeWeight(-WEIGHT_STEP)"
+              >
+                −
+              </button>
               <input
                 v-model.number="form.weightKg"
                 type="number"
-                min="20"
-                max="300"
-                step="0.1"
+                :min="WEIGHT_MIN"
+                :max="WEIGHT_MAX"
+                :step="WEIGHT_STEP"
                 required
+                @blur="normalizeFormWeight"
               />
+              <button
+                class="weight-stepper"
+                :class="{ 'weight-stepper--pressed': pressedWeightStepper === 'increase' }"
+                type="button"
+                :aria-label="`增加 ${WEIGHT_STEP.toFixed(2)} 公斤`"
+                @pointerdown="pressWeightStepper('increase')"
+                @pointerup="releaseWeightStepper"
+                @pointercancel="releaseWeightStepper"
+                @pointerleave="releaseWeightStepper"
+                @blur="releaseWeightStepper"
+                @click="changeWeight(WEIGHT_STEP)"
+              >
+                +
+              </button>
               <b>kg</b>
             </div>
           </label>

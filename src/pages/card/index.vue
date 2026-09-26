@@ -2,6 +2,7 @@
 import { Pencil, Settings } from 'lucide-vue-next';
 import { avatarById } from '@/data/assets';
 import { badgeSeries, getBadgeProgress, normalizeAchievementStats } from '@/utils/badges';
+import { formatWeight } from '@/utils/weight';
 
 const store = useAppStore();
 const form = reactive({ nickname: '', heightCm: 165, avatarId: 'avatar-1' });
@@ -85,7 +86,7 @@ const openBadge = (series, badge, unlocked) => {
       </div>
       <div class="player-numbers">
         <div>
-          <strong>{{ store.latestRecord?.weightKg?.toFixed(1) || '—' }}</strong
+          <strong>{{ formatWeight(store.latestRecord?.weightKg) }}</strong
           ><span>目前 kg</span>
         </div>
         <div>
