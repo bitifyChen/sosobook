@@ -18,13 +18,17 @@ export const readRecentStickerIds = (uid, availableIds = []) => {
   }
 };
 
-export const rememberStickerSelection = (uid, stickerId, currentIds = []) => {
-  if (!stickerId) return currentIds.slice(0, MAX_RECENT_STICKERS);
-
-  const ids = [stickerId, ...currentIds.filter((id) => id !== stickerId)].slice(
+export const rememberStickerSelection = (uid, stickerSelection, currentIds = []) => {
+  const selectedIds = (Array.isArray(stickerSelection) ? stickerSelection : [stickerSelection])
+    .filter((id) => typeof id === 'string' && id.trim())
+    .filter((id, index, ids) => ids.indexOf(id) === index);
+  const selectedSet = new Set(selectedIds);
+  const ids = [...selectedIds, ...currentIds.filter((id) => !selectedSet.has(id))].slice(
     0,
     MAX_RECENT_STICKERS
   );
+
+  if (!selectedIds.length) return currentIds.slice(0, MAX_RECENT_STICKERS);
 
   try {
     window.localStorage.setItem(storageKey(uid), JSON.stringify({ version: STORAGE_VERSION, ids }));

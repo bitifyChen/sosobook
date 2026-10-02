@@ -3,13 +3,14 @@ import { Scale, Trash2, X } from 'lucide-vue-next';
 import { stickerCategories, stickers } from '@/data/assets';
 import { readRecentStickerIds, rememberStickerSelection } from '@/utils/recentStickers';
 import { canBackfillDate, formatDate, isFutureDate, toDateKey } from '@/utils/date';
+import { getRecordStickerIds, MAX_STICKERS_PER_RECORD } from '@/utils/stickerSelection';
 import { adjustWeight, normalizeWeight, WEIGHT_MAX, WEIGHT_MIN, WEIGHT_STEP } from '@/utils/weight';
 
 const store = useAppStore();
 const isOpen = computed(() => Boolean(store.state.checkIn.open));
 const dateKey = computed(() => store.state.checkIn.dateKey || toDateKey());
 const existing = computed(() => store.recordsByDate[dateKey.value]);
-const form = reactive({ weightKg: 60, stickerId: null });
+const form = reactive({ weightKg: 60, stickerIds: [] });
 const error = ref('');
 const stickerBrowserOpen = ref(false);
 const selectedStickerCategory = ref('all');
@@ -23,9 +24,25 @@ const failedStickerSources = reactive(new Set());
 const isToday = computed(() => dateKey.value === toDateKey());
 const userId = computed(() => store.state.user?.uid || 'guest');
 const stickerIds = stickers.map((sticker) => sticker.id);
-const selectedSticker = computed(
-  () => stickers.find((sticker) => sticker.id === form.stickerId) || null
+const selectedStickers = computed(() =>
+  form.stickerIds.map((id) => stickers.find((sticker) => sticker.id === id)).filter(Boolean)
 );
+
+const canSelectMoreStickers = computed(() => form.stickerIds.length < MAX_STICKERS_PER_RECORD);
+const isStickerSelected = (stickerId) => form.stickerIds.includes(stickerId);
+const clearStickerSelection = () => {
+  form.stickerIds = [];
+};
+const toggleSticker = (stickerId) => {
+  if (isStickerSelected(stickerId)) {
+    form.stickerIds = form.stickerIds.filter((id) => id !== stickerId);
+    return;
+  }
+  if (!canSelectMoreStickers.value) return;
+  form.stickerIds = [...form.stickerIds, stickerId];
+};
+const stickerInputDisabled = (stickerId) =>
+  !isStickerSelected(stickerId) && !canSelectMoreStickers.value;
 
 const stickerImageState = (source) => ({
   'is-loading': !loadedStickerSources.has(source) && !failedStickerSources.has(source),
@@ -164,7 +181,7 @@ const resetForm = () => {
   );
   Object.assign(form, {
     weightKg: initialWeight ?? 60,
-    stickerId: existing.value?.stickerId ?? null,
+    stickerIds: getRecordStickerIds(existing.value),
   });
   stickerBrowserOpen.value = false;
   selectedStickerCategory.value = 'all';
@@ -199,12 +216,12 @@ const submit = async () => {
     await store.saveRecord({
       dateKey: dateKey.value,
       weightKg: form.weightKg,
-      stickerId: form.stickerId,
+      stickerIds: form.stickerIds,
       source: existing.value?.source || (dateKey.value === toDateKey() ? 'normal' : 'backfill'),
     });
     recentStickerIds.value = rememberStickerSelection(
       userId.value,
-      form.stickerId,
+      form.stickerIds,
       recentStickerIds.value
     );
     close();
@@ -266,17 +283,43 @@ const remove = async () => {
         >
           <X :size="20" />
         </button>
-        <img
-          v-if="selectedSticker"
-          class="checkin-selected-sticker"
-          :src="selectedSticker.src"
-          :alt="`目前選擇：${selectedSticker.name}`"
-        />
         <p class="eyebrow">DAILY CHECK-IN</p>
         <h1 id="checkin-title">
           {{ existing ? '修改這一天' : isToday ? '今天，感覺如何？' : '補記這一天' }}
         </h1>
         <p class="checkin-date">{{ formatDate(dateKey, { weekday: true, year: true }) }}</p>
+        <div
+          v-if="selectedStickers.length"
+          class="checkin-selected-stickers"
+          :aria-label="`已選貼紙，共 ${selectedStickers.length} 張`"
+        >
+          <span class="checkin-selected-stickers-label">已選貼紙</span>
+          <div class="checkin-sticker-slots" role="list" aria-label="已選貼紙位置">
+            <span
+              v-for="slotIndex in MAX_STICKERS_PER_RECORD"
+              :key="slotIndex"
+              :class="[
+                'checkin-sticker-slot',
+                { 'checkin-sticker-slot--filled': selectedStickers[slotIndex - 1] },
+              ]"
+              role="listitem"
+            >
+              <button
+                v-if="selectedStickers[slotIndex - 1]"
+                class="checkin-selected-sticker"
+                type="button"
+                :aria-label="`取消選擇${selectedStickers[slotIndex - 1].name}`"
+                @click.stop="toggleSticker(selectedStickers[slotIndex - 1].id)"
+              >
+                <img
+                  :src="selectedStickers[slotIndex - 1].src"
+                  :alt="selectedStickers[slotIndex - 1].alt"
+                />
+              </button>
+              <span v-else class="checkin-sticker-slot-placeholder" aria-hidden="true"></span>
+            </span>
+          </div>
+        </div>
 
         <div v-if="!allowed" class="empty-state">
           <h2>這頁暫時不能補記</h2>
@@ -363,10 +406,15 @@ const remove = async () => {
                     :class="[
                       'sticker-option',
                       'sticker-option--none',
-                      { selected: form.stickerId === null },
+                      { selected: form.stickerIds.length === 0 },
                     ]"
                   >
-                    <input v-model="form.stickerId" type="radio" :value="null" />
+                    <input
+                      type="checkbox"
+                      :checked="form.stickerIds.length === 0"
+                      aria-label="清除貼紙"
+                      @change="clearStickerSelection"
+                    />
                     <span>無</span>
                   </label>
                   <label
@@ -375,12 +423,18 @@ const remove = async () => {
                     :class="[
                       'sticker-option',
                       stickerImageState(sticker.src),
-                      { selected: form.stickerId === sticker.id },
+                      { selected: isStickerSelected(sticker.id) },
                     ]"
                     :title="sticker.name"
                     :aria-busy="!loadedStickerSources.has(sticker.src)"
                   >
-                    <input v-model="form.stickerId" type="radio" :value="sticker.id" />
+                    <input
+                      type="checkbox"
+                      :checked="isStickerSelected(sticker.id)"
+                      :disabled="stickerInputDisabled(sticker.id)"
+                      :aria-label="`選擇${sticker.name}`"
+                      @change="toggleSticker(sticker.id)"
+                    />
                     <img
                       :src="sticker.src"
                       :alt="sticker.alt"
@@ -392,36 +446,52 @@ const remove = async () => {
                   </label>
                 </div>
               </div>
-              <div v-else class="sticker-grid sticker-grid--recent">
-                <label
-                  :class="[
-                    'sticker-option',
-                    'sticker-option--none',
-                    { selected: form.stickerId === null },
-                  ]"
-                >
-                  <input v-model="form.stickerId" type="radio" :value="null" />
-                  <span>無</span>
-                </label>
-                <label
-                  v-for="sticker in recentStickers"
-                  :key="sticker.id"
-                  :class="[
-                    'sticker-option',
-                    stickerImageState(sticker.src),
-                    { selected: form.stickerId === sticker.id },
-                  ]"
-                  :aria-busy="!loadedStickerSources.has(sticker.src)"
-                >
-                  <input v-model="form.stickerId" type="radio" :value="sticker.id" />
-                  <img
-                    :src="sticker.src"
-                    :alt="sticker.alt"
-                    decoding="async"
-                    @load="markStickerLoaded(sticker.src)"
-                    @error="markStickerFailed(sticker.src)"
-                  />
-                </label>
+              <div v-else class="sticker-recent">
+                <p class="sticker-recent-label">最近使用</p>
+                <div class="sticker-grid sticker-grid--recent" aria-label="最近使用的貼紙">
+                  <label
+                    :class="[
+                      'sticker-option',
+                      'sticker-option--none',
+                      { selected: form.stickerIds.length === 0 },
+                    ]"
+                    title="清除貼紙"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="form.stickerIds.length === 0"
+                      aria-label="清除貼紙"
+                      @change="clearStickerSelection"
+                    />
+                    <span>無</span>
+                  </label>
+                  <label
+                    v-for="sticker in recentStickers"
+                    :key="sticker.id"
+                    :class="[
+                      'sticker-option',
+                      stickerImageState(sticker.src),
+                      { selected: isStickerSelected(sticker.id) },
+                    ]"
+                    :aria-busy="!loadedStickerSources.has(sticker.src)"
+                    :title="sticker.name"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="isStickerSelected(sticker.id)"
+                      :disabled="stickerInputDisabled(sticker.id)"
+                      :aria-label="`選擇${sticker.name}`"
+                      @change="toggleSticker(sticker.id)"
+                    />
+                    <img
+                      :src="sticker.src"
+                      :alt="sticker.alt"
+                      decoding="async"
+                      @load="markStickerLoaded(sticker.src)"
+                      @error="markStickerFailed(sticker.src)"
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </fieldset>

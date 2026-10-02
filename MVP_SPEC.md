@@ -70,7 +70,7 @@ GitHub Actions 每日執行一次，並保留手動 `workflow_dispatch` 補跑�
 
 每個日期最多一筆體重紀錄，使用 `YYYY-MM-DD` 作為日期識別。
 
-每筆紀錄包含日期、體重 kg、貼紙 ID、資料來源、建立時間與修改時間。
+每筆紀錄包含日期、體重 kg、貼紙 ID 陣列、資料來源、建立時間與修改時間。正式應用層以 `stickerIds` 為唯一貼紙欄位；`stickerId` 只在相容期保留，不作為新功能的讀取來源。
 
 規則：
 
@@ -81,10 +81,23 @@ GitHub Actions 每日執行一次，並保留手動 `workflow_dispatch` 補跑�
 - 缺少日期時，只能補登最近 7 天
 - 補登資料會計入日曆、連續打卡與競賽計算，並標示為補登
 - 現有全部貼紙均開放
+- 每日貼紙可選 0–5 張；「無」代表空陣列 `stickerIds: []`
+- 舊紀錄只有 `stickerId` 時，讀取映射為 `[stickerId]`；`stickerId` 為空值時映射為 `[]`。讀取相容不可回寫 Firestore
+- 新增與編輯紀錄在相容期雙寫 `stickerIds` 與 `stickerId`；`stickerId` 固定為 `stickerIds` 第一張，沒有貼紙時為 `null`
+- 同一筆紀錄不可讓兩欄位表達不同的第一張貼紙；`stickerIds` 為正式來源，日後完成退場後才移除 `stickerId`
 - 修改體重時可以同步修改貼紙
 - 體重支援到小數點後兩位，調整單位為 0.01 kg
 
 日曆顯示月曆、貼紙、連續打卡天數。點擊日期後顯示當日體重、貼紙、補登狀態與和前一次紀錄的變化。
+
+### 貼紙欄位相容與退場
+
+- 多貼紙正式版以 `0.2.0` 為版本門檻：版本檔的 `minimumVersion` 設為 `0.2.0`，低於門檻的 PWA 必須先更新才能繼續使用
+- 上線順序固定為：先部署要求用戶端寫入必須帶有 `stickerIds` 的 Rules，再發布能讀取舊資料且雙寫兩欄位的 App；發布前要確認版本檔與回滾方案，避免舊版在短暫窗口寫入單欄位
+- Rules 在相容期仍允許並要求 `stickerId`，以確保新舊欄位一致；既有只含 `stickerId` 的資料仍可讀取，Admin 遷移不受用戶端 Rules 限制
+- 提供一次性 Firebase Admin 遷移工具，預設 dry-run，只掃描並統計缺少 `stickerIds` 的紀錄；執行模式只補上 `stickerIds`，不刪除、不改寫 `stickerId`，憑證只能來自環境變數、Application Default Credentials 或 CI Secrets
+- 正式遷移必須由維運者在確認 dry-run 統計、版本門檻生效並驗證結果後手動執行，本專案任務不自動修改雲端資料
+- 待新版普及、最低支援版本生效、遷移結果驗證完成後，另行規劃移除 `stickerId`、讀取相容程式與對應 Rules；本 MVP 不提前移除
 
 ## 競賽規則
 

@@ -971,8 +971,10 @@ h2 {
 }
 .calendar-day {
   position: relative;
+  height: 82px;
   min-height: 82px;
   padding: 6px 5px;
+  overflow: hidden;
   border: 1px solid #d3e0e3;
   background: rgba(255, 255, 255, 0.55);
   cursor: pointer;
@@ -1007,21 +1009,84 @@ h2 {
   outline: 3px solid var(--yellow);
   z-index: 1;
 }
-.calendar-day img {
+.calendar-stickers {
   position: absolute;
   z-index: 1;
-  width: 39px;
-  height: 39px;
-  left: 50%;
-  right: auto;
-  bottom: 3px;
+  inset: 0;
+  pointer-events: none;
+}
+.calendar-sticker {
+  position: absolute;
+  width: 29px;
+  height: 29px;
   object-fit: contain;
-  opacity: 0.8;
-  transform: translateX(-50%) rotate(-6deg);
+  opacity: 0.9;
+  filter: drop-shadow(1px 2px 0 rgba(37, 54, 74, 0.16));
+}
+.calendar-sticker--1 {
+  z-index: 1;
+  --sticker-rotate: -11deg;
+}
+.calendar-sticker--2 {
+  z-index: 2;
+  --sticker-rotate: 7deg;
+}
+.calendar-sticker--3 {
+  z-index: 3;
+  --sticker-rotate: -5deg;
+}
+.calendar-sticker--4 {
+  z-index: 4;
+  --sticker-rotate: 8deg;
+}
+.calendar-sticker--5 {
+  z-index: 5;
+  --sticker-rotate: -6deg;
+}
+.calendar-stickers--1 .calendar-sticker--1,
+.calendar-stickers--3 .calendar-sticker--3 {
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%) rotate(var(--sticker-rotate));
+}
+.calendar-stickers--2 .calendar-sticker--1,
+.calendar-stickers--3 .calendar-sticker--1,
+.calendar-stickers--4 .calendar-sticker--1,
+.calendar-stickers--5 .calendar-sticker--1,
+.calendar-stickers--4 .calendar-sticker--3,
+.calendar-stickers--5 .calendar-sticker--3 {
+  bottom: -1px;
+  left: -2px;
+  transform: rotate(var(--sticker-rotate));
+}
+.calendar-stickers--2 .calendar-sticker--2,
+.calendar-stickers--3 .calendar-sticker--2,
+.calendar-stickers--4 .calendar-sticker--2,
+.calendar-stickers--5 .calendar-sticker--2,
+.calendar-stickers--4 .calendar-sticker--4,
+.calendar-stickers--5 .calendar-sticker--4 {
+  right: -2px;
+  bottom: -2px;
+  transform: rotate(var(--sticker-rotate));
+}
+.calendar-stickers--3 .calendar-sticker--1,
+.calendar-stickers--4 .calendar-sticker--1,
+.calendar-stickers--5 .calendar-sticker--1,
+.calendar-stickers--3 .calendar-sticker--2,
+.calendar-stickers--4 .calendar-sticker--2,
+.calendar-stickers--5 .calendar-sticker--2 {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%) rotate(var(--sticker-rotate));
+}
+.calendar-stickers--5 .calendar-sticker--5 {
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%) rotate(var(--sticker-rotate));
 }
 .calendar-day-weight {
   position: absolute;
-  z-index: 2;
+  z-index: 6;
   top: 30px;
   left: 50%;
   right: auto;
@@ -1065,17 +1130,20 @@ h2 {
 }
 .day-detail {
   position: relative;
-  min-height: 128px;
+  min-height: 138px;
   margin-top: 20px;
   padding: 22px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
+  display: block;
   overflow: visible;
+}
+.day-detail-content {
+  min-width: 0;
+  padding-right: 46px;
+  padding-bottom: 16px;
 }
 .day-detail-metrics {
   display: grid;
-  grid-template-columns: max-content max-content;
+  grid-template-columns: minmax(0, max-content) minmax(56px, max-content);
   align-items: start;
   column-gap: 28px;
   row-gap: 0;
@@ -1127,16 +1195,52 @@ h2 {
   color: var(--blue);
   font: 650 2.2rem / 1 'Chiron GoRound TC Variable';
 }
-.detail-sticker {
+.detail-stickers {
   position: absolute;
-  right: 10px;
-  bottom: -12px;
   z-index: 2;
-  width: 74px;
-  height: 74px;
-  margin-left: auto;
-  object-fit: contain;
+  right: 10px;
+  bottom: -16px;
+  left: 18px;
+  height: 76px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+.detail-stickers > span {
+  position: relative;
+  display: grid;
+  flex: 0 0 72px;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-left: -17px;
+  filter: drop-shadow(1px 3px 0 rgba(37, 54, 74, 0.18));
+}
+.detail-stickers > span:first-child {
+  margin-left: 0;
+}
+.detail-stickers > span:nth-child(odd) {
+  transform: rotate(-6deg);
+}
+.detail-stickers > span:nth-child(even) {
   transform: rotate(7deg);
+}
+.detail-sticker {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+.detail-stickers > span:nth-child(3) {
+  transform: translateY(3px) rotate(-3deg);
+}
+.detail-stickers > span:nth-child(4) {
+  transform: translateY(-2px) rotate(5deg);
+}
+.detail-stickers > span:nth-child(5) {
+  transform: translateY(2px) rotate(-8deg);
 }
 .icon-link {
   position: absolute;
@@ -1372,6 +1476,20 @@ h2 {
   border: 2px solid transparent;
   border-radius: 15px;
   cursor: pointer;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+.sticker-option:focus-within {
+  outline: 3px solid rgba(39, 119, 200, 0.3);
+  outline-offset: 2px;
+}
+.sticker-option:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.38;
 }
 .sticker-option--none span {
   color: var(--ink);
@@ -1405,7 +1523,25 @@ h2 {
 .sticker-option.selected {
   background: #fff3b8;
   border-color: var(--ink);
-  transform: rotate(-3deg);
+  box-shadow: 0 3px 0 rgba(37, 54, 74, 0.28);
+  transform: translateY(-2px) rotate(-3deg);
+}
+.sticker-option.selected::after {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--blue);
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  content: '✓';
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1;
 }
 .sticker-category-tabs {
   width: 100%;
@@ -3211,6 +3347,7 @@ h2 {
     padding: 10px 6px;
   }
   .calendar-day {
+    height: 64px;
     min-height: 64px;
     padding: 3px;
     font-size: 0.72rem;
@@ -3219,16 +3356,15 @@ h2 {
     top: 3px;
     right: 3px;
   }
-  .calendar-day img {
-    width: 30px;
-    height: 30px;
-    left: 50%;
-    right: auto;
-    bottom: 2px;
-    transform: translateX(-50%) rotate(-6deg);
+  .calendar-stickers {
+    inset: 0;
+  }
+  .calendar-sticker {
+    width: 23px;
+    height: 23px;
   }
   .calendar-day-weight {
-    top: 25px;
+    top: 27px;
     left: 50%;
     right: auto;
     font-size: 0.58rem;
@@ -3237,13 +3373,31 @@ h2 {
   .day-detail {
     padding: 17px;
   }
+  .day-detail-content {
+    padding-right: 39px;
+  }
   .day-detail-metrics {
     column-gap: 18px;
     row-gap: 0;
   }
+  .detail-stickers {
+    right: 6px;
+    bottom: -12px;
+    left: 10px;
+    height: 60px;
+  }
+  .detail-stickers > span {
+    flex-basis: 58px;
+    width: 58px;
+    height: 58px;
+    margin-left: -14px;
+  }
+  .detail-stickers > span:first-child {
+    margin-left: 0;
+  }
   .detail-sticker {
-    width: 70px;
-    height: 70px;
+    width: 58px;
+    height: 58px;
   }
   .icon-link {
     top: 7px;
@@ -3436,21 +3590,104 @@ body.dialog-open {
   box-shadow: 7px 9px 0 rgba(37, 54, 74, 0.22);
   outline: none;
 }
-.checkin-selected-sticker {
-  position: absolute;
-  z-index: 0;
-  top: -40px;
-  right: -40px;
-  width: 200px;
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  opacity: 0.3;
-  pointer-events: none;
+.checkin-selected-stickers {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin: 2px 0 16px;
+  padding: 8px 10px 10px;
+  background: rgba(255, 253, 244, 0.82);
+  border: 1px dashed #9db8bd;
+  border-radius: 14px 11px 15px 10px;
+}
+.checkin-selected-stickers-label {
+  color: #647782;
+  font-size: 0.73rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+.checkin-sticker-slots {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px 0 4px 8px;
+  overflow: visible;
+}
+.checkin-sticker-slot {
+  position: relative;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  margin-left: -10px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1.5px dashed #adc0c3;
+  border-radius: 11px 8px 12px 9px;
+  box-shadow: 2px 3px 0 rgba(37, 54, 74, 0.1);
+  transform: rotate(2deg);
+}
+.checkin-sticker-slot:first-child {
+  margin-left: 0;
   transform: rotate(-4deg);
+}
+.checkin-sticker-slot:nth-child(3) {
+  transform: rotate(-2deg);
+}
+.checkin-sticker-slot:nth-child(4) {
+  transform: rotate(4deg);
+}
+.checkin-sticker-slot:nth-child(5) {
+  transform: rotate(-3deg);
+}
+.checkin-sticker-slot--filled {
+  z-index: 1;
+  background: #fffdf5;
+  border-style: solid;
+  border-color: var(--ink);
+}
+.checkin-selected-sticker {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform 0.16s ease;
+}
+.checkin-selected-sticker:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+.checkin-selected-sticker:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.checkin-selected-sticker:active {
+  transform: translateY(1px) scale(0.98);
+}
+.checkin-selected-sticker img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  pointer-events: none;
+}
+.checkin-sticker-slot-placeholder {
+  width: 9px;
+  height: 9px;
+  background: #d6e2df;
+  border-radius: 50%;
+  opacity: 0.8;
 }
 .checkin-modal > .eyebrow,
 .checkin-modal > h1,
 .checkin-modal > .checkin-date,
+.checkin-modal > .checkin-selected-stickers,
 .checkin-modal > .checkin-card,
 .checkin-modal > .empty-state {
   position: relative;
@@ -3534,6 +3771,12 @@ body.dialog-open {
 }
 .checkin-modal .checkin-card fieldset {
   margin-bottom: 19px;
+}
+.sticker-recent-label {
+  margin: 0 0 4px 3px;
+  color: #73808d;
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 .sticker-panel {
   min-width: 0;
@@ -3858,6 +4101,26 @@ body.dialog-open {
   transform: translateY(10px) rotate(-1deg) scale(0.98);
 }
 @media (max-width: 520px) {
+  .checkin-selected-stickers {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    margin-bottom: 13px;
+    padding: 8px 8px 9px;
+  }
+  .checkin-sticker-slots {
+    justify-content: center;
+    padding-left: 4px;
+  }
+  .checkin-sticker-slot {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+    margin-left: -8px;
+  }
+  .checkin-selected-sticker img {
+    width: 41px;
+    height: 41px;
+  }
   .checkin-modal .weight-stepper {
     width: 32px;
     height: 32px;

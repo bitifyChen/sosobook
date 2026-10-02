@@ -31,4 +31,11 @@ describe('recent sticker storage', () => {
     expect(readRecentStickerIds('user-1', ['a', 'b'])).toEqual(['a']);
     expect(readRecentStickerIds('user-2', ['a', 'b'])).toEqual(['b']);
   });
+
+  it('records a successful multi-sticker selection in its chosen order', () => {
+    const ids = rememberStickerSelection('user-1', ['b', 'a', 'b'], ['c']);
+
+    expect(ids).toEqual(['b', 'a', 'c']);
+    expect(readRecentStickerIds('user-1', ['a', 'b', 'c'])).toEqual(ids);
+  });
 });

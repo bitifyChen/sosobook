@@ -1,6 +1,10 @@
 import { toDateKey } from '@/utils/date';
 import { defaultAchievementStats, normalizeAchievementStats } from '@/utils/badges';
 import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
+import {
+  buildStickerCompatibilityFields,
+  normalizeRecordStickerFields,
+} from '@/utils/stickerSelection';
 import { normalizeWeight } from '@/utils/weight';
 
 const storageKey = 'sosobook-firebase-mock';
@@ -159,7 +163,7 @@ export const listRecords = async (uid) => {
   const state = readState();
   return Object.values(state.records[uid] || {})
     .sort((left, right) => left.dateKey.localeCompare(right.dateKey))
-    .map(clone);
+    .map((record) => normalizeRecordStickerFields(clone(record)));
 };
 
 export const saveWeightRecord = async (uid, record) => {
@@ -173,7 +177,7 @@ export const saveWeightRecord = async (uid, record) => {
   const payload = {
     dateKey: record.dateKey,
     weightKg,
-    stickerId: record.stickerId,
+    ...buildStickerCompatibilityFields(record.stickerIds, record.stickerId),
     source: record.source || 'normal',
     createdAt: previous?.createdAt || now(),
     updatedAt: now(),

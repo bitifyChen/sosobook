@@ -2,6 +2,7 @@
 import { ChevronLeft, ChevronRight, Flame, Pencil } from 'lucide-vue-next';
 import { addDays, buildMonthCells, formatDate, monthLabel, toDateKey } from '@/utils/date';
 import { stickerById } from '@/data/assets';
+import { getRecordStickerIds } from '@/utils/stickerSelection';
 import { formatWeight } from '@/utils/weight';
 
 const store = useAppStore();
@@ -15,6 +16,8 @@ const selected = computed(() => {
   const recordsByDate = store.recordsByDate || {};
   return recordsByDate[selectedKey.value];
 });
+const stickersForRecord = (record) => getRecordStickerIds(record).map((id) => stickerById(id));
+const selectedStickers = computed(() => stickersForRecord(selected.value));
 const selectedIsFuture = computed(() => selectedKey.value > today);
 const selectedIsBackfill = computed(() => selected.value?.source === 'backfill');
 const bmiForWeight = (weightKg) => {
@@ -243,7 +246,7 @@ const handleTouchEnd = (event) => {
               selected: cell.key === selectedKey,
             },
           ]"
-          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${formatWeight(store.recordsByDate[cell.key].weightKg)} kg` : ''}${cell.key <= today ? '，雙擊編輯' : ''}`"
+          :aria-label="`${cell.key}${store.recordsByDate[cell.key] ? ` ${formatWeight(store.recordsByDate[cell.key].weightKg)} kg` : ''}${stickersForRecord(store.recordsByDate[cell.key]).length ? `，${stickersForRecord(store.recordsByDate[cell.key]).length} 張貼紙` : ''}${cell.key <= today ? '，雙擊編輯' : ''}`"
           @click="selectedKey = cell.key"
           @dblclick.stop.prevent="handleCalendarDoubleClick(cell.key)"
           @pointerdown="handleCalendarPointerDown($event, cell.key)"
@@ -259,18 +262,29 @@ const handleTouchEnd = (event) => {
             ]"
             >{{ formatWeight(store.recordsByDate[cell.key].weightKg) }}</small
           >
-          <img
-            v-if="store.recordsByDate[cell.key]?.stickerId"
-            :src="stickerById(store.recordsByDate[cell.key].stickerId).src"
-            alt="已打卡"
-          />
+          <span
+            v-if="stickersForRecord(store.recordsByDate[cell.key]).length"
+            :class="[
+              'calendar-stickers',
+              `calendar-stickers--${stickersForRecord(store.recordsByDate[cell.key]).length}`,
+            ]"
+            aria-label="已選貼紙"
+          >
+            <img
+              v-for="(sticker, stickerIndex) in stickersForRecord(store.recordsByDate[cell.key])"
+              :key="sticker.id"
+              :src="sticker.src"
+              :alt="sticker.alt"
+              :class="['calendar-sticker', `calendar-sticker--${stickerIndex + 1}`]"
+            />
+          </span>
         </button>
       </div>
     </div>
 
     <article class="paper-card day-detail">
       <span v-if="selectedIsBackfill" class="backfill-tag">補登</span>
-      <div>
+      <div class="day-detail-content">
         <p class="eyebrow">{{ formatDate(selectedKey, { weekday: true }) }}</p>
         <template v-if="selected">
           <div class="day-detail-metrics">
@@ -298,13 +312,17 @@ const handleTouchEnd = (event) => {
           ><h2 class="empty-title">這天還是空白頁</h2>
           <p>補上一張貼紙，留下今天的狀態。</p></template
         >
+        <div
+          v-if="selectedStickers.length"
+          class="detail-stickers"
+          :aria-label="`這天的貼紙，共 ${selectedStickers.length} 張`"
+          role="list"
+        >
+          <span v-for="sticker in selectedStickers" :key="sticker.id" role="listitem">
+            <img class="detail-sticker" :src="sticker.src" :alt="sticker.alt" />
+          </span>
+        </div>
       </div>
-      <img
-        v-if="selected?.stickerId"
-        class="detail-sticker"
-        :src="stickerById(selected.stickerId).src"
-        :alt="stickerById(selected.stickerId).alt"
-      />
       <button
         v-if="selected || selectedKey <= today"
         class="round-button icon-link"

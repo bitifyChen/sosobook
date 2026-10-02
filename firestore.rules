@@ -42,6 +42,42 @@ service cloud.firestore {
       return dateKeyFor(taipeiNow() - duration.value(7, 'd'));
     }
 
+    function validStickerId(value) {
+      return value is string
+        && value == value.trim()
+        && value.size() >= 1
+        && value.size() <= 128;
+    }
+
+    function validStickerIds(value) {
+      return value is list
+        && value.size() <= 5
+        && (value.size() == 0
+          || (value.size() == 1 && validStickerId(value[0]))
+          || (value.size() == 2 && validStickerId(value[0]) && validStickerId(value[1]))
+          || (value.size() == 3
+            && validStickerId(value[0])
+            && validStickerId(value[1])
+            && validStickerId(value[2]))
+          || (value.size() == 4
+            && validStickerId(value[0])
+            && validStickerId(value[1])
+            && validStickerId(value[2])
+            && validStickerId(value[3]))
+          || (value.size() == 5
+            && validStickerId(value[0])
+            && validStickerId(value[1])
+            && validStickerId(value[2])
+            && validStickerId(value[3])
+            && validStickerId(value[4])));
+    }
+
+    function stickerFieldsAgree(data) {
+      return data.stickerIds.size() == 0
+        ? data.stickerId == null
+        : data.stickerId == data.stickerIds[0];
+    }
+
     function competitionData(competitionId) {
       return get(/databases/$(database)/documents/competitions/$(competitionId)).data;
     }
@@ -87,17 +123,19 @@ service cloud.firestore {
 
     function validWeightRecordData(dateKey, data) {
       return data.keys().hasAll([
-          'dateKey', 'weightKg', 'stickerId', 'source', 'createdAt', 'updatedAt'
+          'dateKey', 'weightKg', 'stickerId', 'stickerIds', 'source', 'createdAt', 'updatedAt'
         ])
         && data.keys().hasOnly([
-          'dateKey', 'weightKg', 'stickerId', 'source', 'createdAt', 'updatedAt'
+          'dateKey', 'weightKg', 'stickerId', 'stickerIds', 'source', 'createdAt', 'updatedAt'
         ])
         && data.dateKey == dateKey
         && validDateKey(data.dateKey)
         && data.weightKg is number
         && data.weightKg >= 20
         && data.weightKg <= 500
-        && (data.stickerId == null || textInRange(data.stickerId, 1, 128))
+        && (data.stickerId == null || validStickerId(data.stickerId))
+        && validStickerIds(data.stickerIds)
+        && stickerFieldsAgree(data)
         && data.source in ['normal', 'backfill']
         && data.createdAt is timestamp
         && data.updatedAt is timestamp;
@@ -232,7 +270,7 @@ service cloud.firestore {
         allow update: if isOwner(uid)
           && validWeightRecordData(dateKey, request.resource.data)
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-            'weightKg', 'stickerId', 'updatedAt'
+            'weightKg', 'stickerId', 'stickerIds', 'updatedAt'
           ])
           && request.resource.data.updatedAt == request.time;
         allow delete: if isOwner(uid);

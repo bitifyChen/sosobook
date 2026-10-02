@@ -18,6 +18,10 @@ import { auth, db, googleProvider, isFirebaseConfigured } from '@/firebase';
 import * as mockRepository from '@/services/mockRepository';
 import { toDateKey } from '@/utils/date';
 import { generateInviteCode, validateCompetitionStartDate } from '@/utils/competition';
+import {
+  buildStickerCompatibilityFields,
+  normalizeRecordStickerFields,
+} from '@/utils/stickerSelection';
 import { normalizeWeight } from '@/utils/weight';
 
 const isMockMode = import.meta.env.VITE_FIREBASE_MOCK === 'true';
@@ -104,7 +108,9 @@ export const listRecords = async (uid) => {
   requireFirebase();
   const recordsQuery = query(collection(db, 'users', uid, 'weightRecords'), orderBy('dateKey'));
   const snapshot = await getDocs(recordsQuery);
-  return snapshot.docs.map(toPlain);
+  return snapshot.docs.map((recordSnapshot) =>
+    normalizeRecordStickerFields(toPlain(recordSnapshot))
+  );
 };
 
 export const saveWeightRecord = async (uid, record) => {
@@ -117,7 +123,7 @@ export const saveWeightRecord = async (uid, record) => {
   const payload = {
     dateKey: record.dateKey,
     weightKg,
-    stickerId: record.stickerId,
+    ...buildStickerCompatibilityFields(record.stickerIds, record.stickerId),
     source: record.source || 'normal',
     updatedAt: new Date().toISOString(),
   };
